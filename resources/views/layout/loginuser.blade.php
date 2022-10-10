@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> @yield('title','Storie di Zoonosi') - Login utente</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-">
+        <meta name="csrf_token" content="{{ csrf_token() }}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <meta name="keywords" content="Zoonosi, one health, malattie, animale, uomo, storie, racconti, medicina, medicina veterinaria, sanità pubblica ,sanità animale, ambiente, istituto zooprofilattico">       
+        <meta name="title" content="Login">
+        <meta name="description" content="Login o autenticazione al portale">
+        <meta name="author" content="Eros Rivosecchi">
+        <meta name="robots" content="index, follow">
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="expires" content="0">
+        <meta http-equiv="pragma" content="no-cache">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet"> 
+        <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" type="text/css" />
+        @section('additionalcss')
+        @show
+        <link rel="stylesheet" href="/css/style.css" type="text/css" />
+        <link rel="stylesheet" href="/css/login.css" type="text/css" />
+        <script src="/js/jquery/jquery-3.6.0.min.js"></script> 
+        <link rel="icon" type="image/x-icon" href="/images/biohazard32x32.ico">
+        <script>
+            var mtcaptchaConfig = {
+                "sitekey": "<?=env('MTCAPTCHA_PUBLIC');?>",
+                "widgetSize": "mini",
+                "theme": "neowhite",
+                "lang": "it"
+            };
+            (function(){var mt_service = document.createElement('script');mt_service.async = true;mt_service.src = 'https://service.mtcaptcha.com/mtcv1/client/mtcaptcha.min.js';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(mt_service);
+            var mt_service2 = document.createElement('script');mt_service2.async = true;mt_service2.src = 'https://service2.mtcaptcha.com/mtcv1/client/mtcaptcha2.min.js';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(mt_service2);}) ();
+        </script>
+    </head>
+  <body>
+        @yield('content')
+        @yield('footerlogin')  
+        @section('additionaljs')
+        <!-- Bootstrap core JS-->
+        <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="/js/custom.js" /></script>
+        <!-- Core theme JS-->
+        @show
+    </body>
+</html>

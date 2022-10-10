@@ -1,0 +1,48 @@
+
+  
+  .toggle {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-right: 10px;
+    -webkit-transition: all .15s ease-out;
+    -moz-transition: all .15s ease-out;
+    -o-transition: all .15s ease-out;
+    transition: all .15s ease-out;
+  }
+  
+  .toggle h3 {
+    color: #fff;
+    /*background: #00a000;*/
+    display: block;
+    font-size: 1em;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    cursor: pointer;
+    /*text-shadow: 1px 1px 0 #fff;*/
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-transition: all .15s ease-out;
+    -moz-transition: all .15s ease-out;
+    -o-transition: all .15s ease-out;
+    transition: all .15s ease-out;
+  }
+
+  .toggle p:last-of-type {
+    margin-bottom: 0;
+  }
+  
+  .toggle h3:hover, .toggle.open h3 { 
+    background: #00a000;
+  }
+  
+  .toggle.open h3 {
+    color: #fff;
+  }
+  
+  .toggle .toggle-info {
+    display: none;
+    padding: 7px 11px;
+  }

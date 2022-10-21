@@ -63,7 +63,7 @@
                     <td><?=($approfondimento->nome_zoonosi)?$approfondimento->nome_zoonosi:'---';?></td>
                     <td class="text-center"><?=($approfondimento->said_genitore)?$approfondimento->said_genitore:'';?></td>
                     <td>
-                        <a href="{{route('adminGestisciApprofondimento')}}/{{$approfondimento->said}}" class="font-dark" title="gestisci"><i class="fa fa-pencil fa-lg"></i></a>
+                        <a href="{{route('adminManageIntegration')}}/{{$approfondimento->said}}" class="font-dark" title="gestisci"><i class="fa fa-pencil fa-lg"></i></a>
                         <!--<a href="#" class="font-red conferma-elimina" idvalore="" sezione=""  title="Nascondi"><i class="fa fa-trash fa-lg"></i></a>-->
                     </td>
                 </tr>

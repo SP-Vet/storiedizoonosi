@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use DB;
 
-class Conferma extends Model
+class Confirm extends Model
 {
     protected $kpu=[];
     protected $kpr=[];
@@ -38,7 +38,7 @@ class Conferma extends Model
         return $this->kpr;
     }
     
-    public function getLinkConfermaEmail($id,$email){
+    public function getEmailConfirmationLink($id,$email){
         //creazione Link conferma
         $a=$this->kpu;
         $b=$id;
@@ -47,7 +47,7 @@ class Conferma extends Model
         return $link;
     }
     
-    public function checkEmailConferma($first,$second,$third){
+    public function checkConfirmationEmail($first,$second,$third){
         $idcheck=$second;
         $kpucheck=$third;
         $stringcheck=$first;

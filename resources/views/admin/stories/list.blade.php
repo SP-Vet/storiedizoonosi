@@ -2,7 +2,7 @@
 @section('content')
 <div class="d-flex justify-content-between mt-2">
     <div class="d-inline-flex"><h5 class="pt-2">{{$title_page}}</h5></div>
-    <div class="d-inline-flex"><a href="{{route('adminAggiungiStoria')}}" class="btn btn-success"><i class="fa fa-plus-circle"></i><strong>Aggiungi STORIA</strong></a></div>
+    <div class="d-inline-flex"><a href="{{route('adminAddStory')}}" class="btn btn-success"><i class="fa fa-plus-circle"></i><strong>Aggiungi STORIA</strong></a></div>
 </div>
 <hr>
 <div class="row mt-2">
@@ -64,9 +64,9 @@
                     <td class="w-15pc"><span class="pt-1 pb-1 ps-2 pe-2 {{$bg_stato}} {{$font_color}}">{{$stato}}</span></td>
                     <td><?=($storia->uid)?$storia->nomeutente:'AMMINISTRATORE';?></td>
                     <td>
-                        <a href="{{route('adminModificaStoria')}}/{{$storia->sid}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>
+                        <a href="{{route('adminModifyStory')}}/{{$storia->sid}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>
                         <!--<a href="#" class="font-red conferma-elimina" idvalore="{{$storia->sid}}" sezione="storie"  title="Elimina"><i class="fa fa-trash fa-lg"></i></a>-->
-                        <a href="{{route('adminDatiContestoStoria')}}/{{$storia->sid}}" class="font-dark" title="Dati di contesto"><i class="fa fa-clipboard fa-lg"></i></a>
+                        <a href="{{route('adminContextDataStory')}}/{{$storia->sid}}" class="font-dark" title="Dati di contesto"><i class="fa fa-clipboard fa-lg"></i></a>
                     </td>
                 </tr>
                 <?php } ?>

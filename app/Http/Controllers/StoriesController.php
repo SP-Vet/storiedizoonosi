@@ -12,17 +12,17 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DateTime;
 use DB;
-use App\Models\Storie;
-use App\Models\Storiesubmit;
-use App\Models\Storiesubmitfile;
+use App\Models\Stories;
+use App\Models\Storiessubmit;
+use App\Models\Storiessubmitfile;
 use App\Models\Home;
 use App\Models\Privacy;
 use App\Http\Controllers\LogPersonal;
-Use App\Models\Allegatimultimediali;
+Use App\Models\Multimediaelements;
 
-class StorieController extends Controller
+class StoriesController extends Controller
 {
-    public $mod_storie;
+    public $mod_stories;
     private $request;
     private $og_url='';
     private $og_type='article';
@@ -33,67 +33,62 @@ class StorieController extends Controller
     private $art_description='';
     private $art_abstract='';
     
-    public $erroriFormSubmission='';
+    public $errorsFormSubmission='';
 
     public function __construct(Request $request)
     {
         $this->request=$request;
-        $this->mod_storie = new Storie;
-        $this->mod_home = new Home;
-        $this->mod_privacy = new Privacy;
-        $this->mod_allegatimultimediali= new Allegatimultimediali();
+        $this->mod_stories = new Stories();
+        $this->mod_home = new Home();
+        $this->mod_privacy = new Privacy();
+        $this->mod_multimediaelements= new Multimediaelements();
         $this->mod_log=new LogPersonal($request);
     }
     
     /**
     *
-    * Elenca tutte le storie presenti nel sistema a seconda dei parametri
-    *   @param $zid id della zoonosi
+    * Lists all the stories present in the system according to the parameters
+    *   @param $slugzoonosi slug of zoonosi
     * @return view
     *
     */
-    public function elencostorie($slugzoonosi=''){
-        //Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] elencostorie', $this->mod_log->getParamFrontoffice());
+    public function list($slugzoonosi=''){
         $title_page='Elenco storie';
         $where=$whereand=$whereor=$wherenot=$wheresame=[];
         $order=[];
-        //se il tipo di chiamata è un POST significa che la richiesta proviene dal form di ricerca
+        //if the type of call is a POST it means that the request comes from the search form
         if($this->request->isMethod('post')){
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] elencostorie', $this->mod_log->getParamFrontoffice('inviato post di ricerca'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] list', $this->mod_log->getParamFrontoffice('inviato post di ricerca'));
             if($this->checkSearchform()){
-                //$this->request->session()->flash('messageinfo', '<b>DATI CORRETTI</b>');
                 $request_post=$this->request->all();
-                $this->setParametriRicerca($where,$whereand,$whereor,$wherenot,$wheresame);
+                $this->setSearchParameters($where,$whereand,$whereor,$wherenot,$wheresame);
             }else{
-                //campi inseriti nel form di ricerca non validi
+                //fields entered in the search form are invalid
                 Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] checkSearchform', $this->mod_log->getParamFrontoffice('parametri di ricerca non validi'));
                 $this->request->session()->flash('messagedanger', '<b>ATTENZIONE</b>! I parametri inseriti non sono corretti, riprovare!');
                 return redirect('/ricerca');
             }
         }elseif($this->request->isMethod('get')){
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] elencostorie', $this->mod_log->getParamFrontoffice('visualizzazione storie da zoonosi'));
-            //se è fatta richiesta di un esplicito elenco di storie a partire da una zoonosi
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] list', $this->mod_log->getParamFrontoffice('visualizzazione storie da zoonosi'));
+            //if an explicit list of stories from a zoonosis is requested
             if(preg_match('/^[a-z0-9]+(-?[a-z0-9]+)*$/', $slugzoonosi)){
-                //$where[]=['s.zid',$zid];
                 $where[]=['zl.slugzoonosi',$slugzoonosi];
-            }else{
-                //elenco di tutte le storie presenti nel sistema
-            }
+            }//else -> list of all the stories in the system
         }
         
-        //solo storie pubblicate
+        //only published stories
         $where[]=['s.stato',2];
         $order['s.data_pubblicazione']='DESC';
-        $storie=$this->mod_storie->getStorie($where,$whereand,$whereor,$wherenot,$wheresame,$order)->toArray();
+        $storie=$this->mod_stories->getStories($where,$whereand,$whereor,$wherenot,$wheresame,$order)->toArray();
         if(count($storie)>0){
-            //ordinamento storie per zoonosi
+            //sorting of stories by zoonoses
             usort($storie, function($a, $b) {
                 return $a->zid <=> $b->zid;
             });
         }
         
         if($this->request->isMethod('post') && count($storie)==0){
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->warning('[OUT] elencostorie', $this->mod_log->getParamFrontoffice('ricerca senza risultati'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->warning('[OUT] list', $this->mod_log->getParamFrontoffice('ricerca senza risultati'));
             $this->request->session()->flash('messagedanger', '<h2>LA RICERCA NON HA FORNITO ALCUN RISULTATO</h2>');
             return redirect('/ricerca');
         }
@@ -102,7 +97,7 @@ class StorieController extends Controller
             $arr_st[$story->nome_zoonosi]=$story->nome_zoonosi;
         $listastorie=implode(', ',$arr_st);
 
-        return view('elencostorie')->with('storie',$storie)
+        return view('listsstories')->with('storie',$storie)
                 ->with('title_page',$title_page)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Elenco storie')
@@ -205,7 +200,7 @@ class StorieController extends Controller
         if($request_post['zoonosi']!='' && !preg_match('/^[1-9][0-9]*$/',$request_post['zoonosi']))
             return false;
         
-        //"PAESE" non è stato ancora inserito in query
+        //"PAESE" has not yet been entered into the query
         if($request_post['paese']!='IT')return false;
         
         if($request_post['data_dal']!=''){
@@ -227,13 +222,11 @@ class StorieController extends Controller
         return true;
     }
     
-    private function setParametriRicerca(&$where,&$whereand,&$whereor,&$wherenot,&$wheresame){
+    private function setSearchParameters(&$where,&$whereand,&$whereor,&$wherenot,&$wheresame){
         $request_post=$this->request->all();
-        //$where[]=['s.stato',2];
         if($request_post['data_dal']!='')$where[]=['s.anno_ambientazione','>=',Carbon::createFromFormat('d/m/Y', $request_post['data_dal'])->format('Y')];
         if($request_post['data_al']!='')$where[]=['s.anno_ambientazione','<=',Carbon::createFromFormat('d/m/Y', $request_post['data_al'])->format('Y')];
         if($request_post['zoonosi']!='')$where[]=['s.zid',(int)$request_post['zoonosi']];
-
         for($i=1;$i<=4;$i++){
             $valori=[];
             unset($tk);
@@ -243,7 +236,6 @@ class StorieController extends Controller
                     $wheresame[$i][]=[$request_post['tiporicerca'.$i],'LIKE',$parola];
                 }else{
                     $valori=explode(' ',trim(strtolower(htmlentities($request_post['valorericerca'.$i],ENT_QUOTES,'UTF-8'))));
-                    //echo '<pre>';print_r($valori);exit;
                     foreach ($valori AS $tk=>$parola){
                         switch($request_post['valoreoperazione'.$i]){
                             case 'AND':
@@ -264,25 +256,24 @@ class StorieController extends Controller
                         }
                     } 
                 }
-                
             } 
         }
     }
     /**
     *
-    * Pagina di atterragio con form di ricerca
+    * Landing page with search form
     * @return view
     *
     */  
-    public function ricerca(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] ricerca', $this->mod_log->getParamFrontoffice());
+    public function search(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] search', $this->mod_log->getParamFrontoffice());
 
         $title_page='Ricerca storie';
         $order=[];
         $order['zu.nome']='ASC';
         $zoonosi=$this->mod_home->getZoonosi('',$order);
         
-        return view('ricercastorie')->with('title_page',$title_page)->with('zoonosi',$zoonosi)
+        return view('searchstories')->with('title_page',$title_page)->with('zoonosi',$zoonosi)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Motore di ricerca')
                 ->with('art_title','Motore di ricerca')
@@ -292,26 +283,24 @@ class StorieController extends Controller
     
     /**
     *
-    * Elenca tutte le storie presenti nel sistema a seconda dei parametri
-    *   @param $sid id della storia 
+    * Extract all the details of a story
+    *   @param $sid id of the story 
     * @return view
     *
     */
-    public function dettagliostoria($slug=''){
-        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] dettagliostoria', $this->mod_log->getParamFrontoffice());
-        //echo '<pre>';print_r($_SERVER);exit;
+    public function storydetail($slug=''){
+        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] storydetail', $this->mod_log->getParamFrontoffice());
         $storia=[];
-        //$storia=$this->mod_storie->getStoria($sid)->toArray();
-        $storia=$this->mod_storie->getStoriaFromSlug($slug)->toArray();
+        $storia=$this->mod_stories->getStoryFromSlug($slug)->toArray();
         if(count($storia)==0){
             return back()->withInput()->with('messageinfo', 'Storia non trovata.');
         }
         
         $collaboratori=[];
-        $collaboratori=$this->mod_storie->getCollaboratoriStoria($storia[0]->sid,1)->toArray();
+        $collaboratori=$this->mod_stories->getStoryCollaborators($storia[0]->sid,1)->toArray();
         
         $fasi=[];
-        $fasi=$this->mod_storie->getFasiStoria($storia[0]->sid)->toArray();
+        $fasi=$this->mod_stories->getStoryPhases($storia[0]->sid)->toArray();
         $approfondimenti=[];
         $approfondimenti_genitori_tmp=[];
         $approfondimenti_genitori=[];
@@ -320,15 +309,13 @@ class StorieController extends Controller
         $numero_approfondimenti_fasi=[];
         if(is_array($fasi) && count($fasi)>0){
             $elencofasi=[];
-            //estrazione approfondimenti
+            //extraction of integrations
             foreach ($fasi AS $kf=>$fase)
                 $elencofasi[]=$fase->sfid;
-         
-            $approfondimenti=$this->mod_storie->getApprofondimentiFasi($elencofasi,[1])->toArray();
-            //echo '<pre>';print_r($approfondimenti);exit;
+        
+            $approfondimenti=$this->mod_stories->getIntegrationsPhases($elencofasi,[1])->toArray();
             if(is_array($approfondimenti) && count($approfondimenti)>0){
-                
-                //creo arrary soli genitori o solo figli
+                //create arrary only parents or only children
                 foreach ($approfondimenti AS $ka=>$approfondimento){
                     if(array_key_exists($approfondimento->sfid, $numero_approfondimenti_fasi))
                         $numero_approfondimenti_fasi[$approfondimento->sfid]+=1;
@@ -340,33 +327,33 @@ class StorieController extends Controller
                         $approfondimenti_genitori_tmp[]=$approfondimento;
                 }
                 
-                //preparo l'array dei figli
+                //prepare the array of children
                 if(is_array($approfondimenti_figli_tmp) && count($approfondimenti_figli_tmp)>0)
                     foreach ($approfondimenti_figli_tmp AS $afk=>$figlio)
                         $approfondimenti_figli[$figlio->said_genitore][]=$figlio;
-                //preparo l'array dei genitori 
+                //prepare the array of parents
                 if(is_array($approfondimenti_genitori_tmp) && count($approfondimenti_genitori_tmp)>0)
                     foreach ($approfondimenti_genitori_tmp AS $afg=>$genitore)
                         $approfondimenti_genitori[$genitore->sfid][]=$genitore;
             }
         }
        
-        //metadati per articolo
-        $this->setMetadatiStoria($storia[0],$collaboratori);
+        //metadata for article
+        $this->setMetadataStory($storia[0],$collaboratori);
         
         $whereallegati1=$whereallegati2=[];
         $podcast=new \Illuminate\Support\Collection();
         $video=new \Illuminate\Support\Collection();
         $pdfstoria=new \Illuminate\Support\Collection();
         $whereallegati1[]=['ams.tipologia',1]; //AUDIO/PODCAST
-        $podcast=$this->mod_allegatimultimediali->getAllegatiMultimedialiFromStoria($storia[0]->sid,$whereallegati1);
+        $podcast=$this->mod_multimediaelements->getMultimediaElementsFromStory($storia[0]->sid,$whereallegati1);
         $whereallegati2=[2,5]; //VIDEO
-        $video=$this->mod_allegatimultimediali->getAllegatiMultimedialiFromStoria($storia[0]->sid,array(),$whereallegati2);
+        $video=$this->mod_multimediaelements->getMultimediaElementsFromStory($storia[0]->sid,array(),$whereallegati2);
         $whereallegati3[]=['ams.tipologia',6]; //PDF
-        $pdfstoria=$this->mod_allegatimultimediali->getAllegatiMultimedialiFromStoria($storia[0]->sid,$whereallegati3);
+        $pdfstoria=$this->mod_multimediaelements->getMultimediaElementsFromStory($storia[0]->sid,$whereallegati3);
                 
         $snippets=new \Illuminate\Support\Collection();
-        $snippets=$this->mod_storie->getSnippetsFromStoria($storia[0]->sid)->toArray();
+        $snippets=$this->mod_stories->getSnippetsFromStory($storia[0]->sid)->toArray();
         $snippetfase=[];
         if(count($snippets)>0){
             foreach ($snippets AS $snippet){
@@ -374,7 +361,7 @@ class StorieController extends Controller
             }
         }
         
-        return view('storia')->with('title_page',$storia[0]->titolo)->with('storia',$storia[0])->with('collaboratori',$collaboratori)->with('fasi',$fasi)
+        return view('story')->with('title_page',$storia[0]->titolo)->with('storia',$storia[0])->with('collaboratori',$collaboratori)->with('fasi',$fasi)
                 ->with('approfondimenti',$approfondimenti)
                 ->with('approfondimenti_figli',$approfondimenti_figli)
                 ->with('approfondimenti_genitori',$approfondimenti_genitori)
@@ -387,7 +374,7 @@ class StorieController extends Controller
                 ->with('art_datapublic',$this->art_datapublic);
     }
     
-    private function setMetadatiStoria($storia,$collaboratori=''){
+    private function setMetadataStory($storia,$collaboratori=''){
         $this->og_url=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->og_title=$storia->titolo;
         $this->og_description=$storia->descrizione;
@@ -403,11 +390,11 @@ class StorieController extends Controller
         return;
     }
     
-    public function getdaticontestostoria(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getdaticontestostoria', $this->mod_log->getParamFrontoffice());
+    public function getcontextdatastory(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getcontextdatastory', $this->mod_log->getParamFrontoffice());
         if(preg_match('/^[1-9][0-9]*$/',$this->request->sid)){
             $quesiti=[];
-            $quesiti=$this->mod_storie->getDaticontestoFromStoria($this->request->sid);
+            $quesiti=$this->mod_stories->getContextdataFromStory($this->request->sid);
             
             //concludere parte
             $quesiti=$quesiti->toArray();
@@ -416,10 +403,10 @@ class StorieController extends Controller
                     $quesito->risposta=html_entity_decode($quesito->risposta,ENT_QUOTES,'utf-8');
                 }
             }
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[OUT] getdaticontestostoria', $this->mod_log->getParamFrontoffice());
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[OUT] getcontextdatastory', $this->mod_log->getParamFrontoffice());
             return response()->json(['error'=>false,'message'=>'','quesiti'=>$quesiti]);
         }else{
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] getdaticontestostoria', $this->mod_log->getParamFrontoffice('errore richiesta dati di contesto storia'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] getcontextdatastory', $this->mod_log->getParamFrontoffice('errore richiesta dati di contesto storia'));
             return response()->json(['error'=>true,'message'=>'Errore. Impossibile estrarre i dati di contesto. Riprovare']);
         }
     }
@@ -429,7 +416,7 @@ class StorieController extends Controller
         if(preg_match('/^[1-9][0-9]*$/',$this->request->zid)){
             $reviews=[];
             $urldownloadpdf='';
-            $reviews=$this->mod_storie->getReviewsFromZoonosi($this->request->zid)->toArray();
+            $reviews=$this->mod_stories->getReviewsFromZoonosi($this->request->zid)->toArray();
             //preparare URL download PDF
             if(count($reviews)>0)
                 $urldownloadpdf=url('storagereview/'.$reviews[0]->zid.'/'.$reviews[0]->file_memorizzato.'/'.$reviews[0]->titolo_visualizzato);              
@@ -445,7 +432,7 @@ class StorieController extends Controller
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getsnippet', $this->mod_log->getParamFrontoffice());
         if(preg_match('/^[1-9][0-9]*$/',$this->request->snid)){
             $snippet=array();
-            $snippet=$this->mod_storie->getSnippet($this->request->snid);
+            $snippet=$this->mod_stories->getSnippet($this->request->snid);
             $snippet=$snippet->toArray();
             if(is_array($snippet) && count($snippet)>0){
                 $snippet=$snippet[0];
@@ -459,17 +446,17 @@ class StorieController extends Controller
         }
     }
     
-    public function segnalastoria(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] segnalastoria', $this->mod_log->getParamFrontoffice());
+    public function reportstory(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] reportstory', $this->mod_log->getParamFrontoffice());
         $title_page='Crowdsourcing storie';
         $datisubmit=[];
-        //se post, controllo dati provenienti dal form
+        //if post, check data from the form
         if($this->request->isMethod('post')){
-            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] segnalastoria', $this->mod_log->getParamFrontoffice('invio post della storia'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] reportstory', $this->mod_log->getParamFrontoffice('invio post della storia'));
             $datisubmit=$this->request->all();
             if($this->checkSubmissionform() && Auth::check()){
-                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] segnalastoria', $this->mod_log->getParamFrontoffice('form valido ed utente autenticato'));
-                //memorizzazione storia + file
+                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] reportstory', $this->mod_log->getParamFrontoffice('form valido ed utente autenticato'));
+                //story + file storage
                 $files_video=$files_immagini=[];
                 $request_post=$this->request->all();
                 $lang=($request_post['language']=='EN')?'_en':'';
@@ -480,9 +467,9 @@ class StorieController extends Controller
               
                 DB::beginTransaction();
                 try {
-                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[IN TRY] segnalastoria', $this->mod_log->getParamFrontoffice());
-                    //memo storia        
-                    $storia = new Storie();
+                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[IN TRY] reportstory', $this->mod_log->getParamFrontoffice());
+                    //memo story        
+                    $storia = new Stories();
                     $storia->data_inserimento = 'NOW()';
                     $storia->data_lavorazione = NULL;
                     $storia->data_pubblicazione = NULL;
@@ -497,8 +484,8 @@ class StorieController extends Controller
                     $storia->linkspvet = '';
                     $storia->save();
                     
-                    //creazione record per dati inseriti dall'utente per la storia
-                    $storiasubmit = new Storiesubmit();
+                    //record creation for data entered by the user
+                    $storiasubmit = new Storiessubmit();
                     $storiasubmit->titolo_inserito = trim(htmlentities($request_post['titolo'.$lang],ENT_QUOTES,'utf-8'));
                     $storiasubmit->tipozoonosi_inserito = trim(htmlentities($request_post['zoonosi'.$lang],ENT_QUOTES,'utf-8'));
                     $storiasubmit->annoambientazione_inserito = trim(htmlentities($request_post['annoambientazione'.$lang],ENT_QUOTES,'utf-8'));
@@ -510,23 +497,23 @@ class StorieController extends Controller
                     $storiasubmit->sid = $storia->sid;
                     $storiasubmit->save();
                     
-                    //set privacy policy presa visione
-                    $this->mod_privacy->setAccettazione(Auth::id(),1);
+                    //set privacy policy acknowledgment
+                    $this->mod_privacy->setAccept(Auth::id(),1);
                     
-                    //creazione cartella per files
+                    //folder creation for files
                     $path = storage_path('app/storiesubmit/'.$storiasubmit->ssid);
                     File::ensureDirectoryExists($path);
                     
                     $paths=[];
-                    //memorizzazione files inseriti alla tabella della storia submit
+                    //storage of files added to the submit story table
                     if($_FILES['filetesto'.$lang]['name']!=''){
                         $now = new DateTime();
                         for($i=0;$i<20;$i++){
                             $file_testo_nomecreato='FILETESTO_'.$now->format("YmdHisu").'.'.$file_testo->getClientOriginalExtension();
                             if(!file_exists($path.'/'.$file_testo_nomecreato)){
                                 $paths[]=$file_testo->storeAs('/storiesubmit/'.$storiasubmit->ssid,$file_testo_nomecreato ,'local');
-                               //memorizzazione record nel db collegandolo alla storia submitted
-                               $storiafile = new Storiesubmitfile();
+                               //record storage in the db linking it to the submitted story
+                               $storiafile = new Storiessubmitfile();
                                $storiafile->ssid=$storiasubmit->ssid;
                                $storiafile->nome_file_memorizzato=$file_testo_nomecreato;
                                $storiafile->nome_file_originale=$file_testo->getClientOriginalName();
@@ -535,7 +522,7 @@ class StorieController extends Controller
                                $storiafile->save();
                                break;
                             }else{
-                                usleep(250000); //un quarto di secondo di attesa
+                                usleep(250000); //a quarter of a second to wait
                                 $now = new DateTime();
                             }
                         }
@@ -547,8 +534,8 @@ class StorieController extends Controller
                             if(!file_exists($path.'/'.$file_audio_nomecreato)){
                                $paths[]=$file_audio->storeAs('/storiesubmit/'.$storiasubmit->ssid, $file_audio_nomecreato ,'local');
                                
-                               //memorizzazione record nel db collegandolo alla storia submitted
-                               $storiafile = new Storiesubmitfile();
+                               //record storage in the db linking it to the submitted story
+                               $storiafile = new Storiessubmitfile();
                                $storiafile->ssid=$storiasubmit->ssid;
                                $storiafile->nome_file_memorizzato=$file_audio_nomecreato;
                                $storiafile->nome_file_originale=$file_audio->getClientOriginalName();
@@ -557,7 +544,7 @@ class StorieController extends Controller
                                $storiafile->save();
                                break;
                             }else{
-                                usleep(250000); //un quarto di secondo di attesa
+                                usleep(250000); //a quarter of a second to wait
                                 $now = new DateTime();
                             }
                         }
@@ -570,8 +557,8 @@ class StorieController extends Controller
                                 if(!file_exists($path.'/'.$file_video_nomecreato)){
                                    $paths[]=$file_video->storeAs('/storiesubmit/'.$storiasubmit->ssid, $file_video_nomecreato ,'local');
 
-                                   //memorizzazione record nel db collegandolo alla storia submitted
-                                   $storiafile = new Storiesubmitfile();
+                                   //record storage in the db linking it to the submitted story
+                                   $storiafile = new Storiessubmitfile();
                                    $storiafile->ssid=$storiasubmit->ssid;
                                    $storiafile->nome_file_memorizzato=$file_video_nomecreato;
                                    $storiafile->nome_file_originale=$file_video->getClientOriginalName();
@@ -580,7 +567,7 @@ class StorieController extends Controller
                                    $storiafile->save();
                                    break;
                                 }else{
-                                    usleep(250000); //un quarto di secondo di attesa
+                                    usleep(250000); //a quarter of a second to wait
                                     $now = new DateTime();
                                 }
                             }
@@ -594,8 +581,8 @@ class StorieController extends Controller
                                 if(!file_exists($path.'/'.$file_immagini_nomecreato)){
                                    $paths[]=$file_immagini->storeAs('/storiesubmit/'.$storiasubmit->ssid, $file_immagini_nomecreato ,'local');
 
-                                   //memorizzazione record nel db collegandolo alla storia submitted
-                                   $storiafile = new Storiesubmitfile();
+                                   //record storage in the db linking it to the submitted story
+                                   $storiafile = new Storiessubmitfile();
                                    $storiafile->ssid=$storiasubmit->ssid;
                                    $storiafile->nome_file_memorizzato=$file_immagini_nomecreato;
                                    $storiafile->nome_file_originale=$file_immagini->getClientOriginalName();
@@ -604,48 +591,48 @@ class StorieController extends Controller
                                    $storiafile->save();
                                    break;
                                 }else{
-                                    usleep(250000); //un quarto di secondo di attesa
+                                    usleep(250000); //a quarter of a second to wait
                                     $now = new DateTime();
                                 }
                             }
                         }
                     }
                     
-                    //invio email verso amministratore
+                    //sending email to administrator
                     $datimail=array('titolostoria'=>$storiasubmit->titolo_inserito,'nomeutente'=>Auth::user()->name,'emailutente'=>Auth::user()->email,'nome_sito'=>env('NOME_SITO'));
-                    Mail::send('emails.newstoria_amminsitratore', $datimail, function($message){
+                    Mail::send('emails.newstory_admin', $datimail, function($message){
                         $message->subject('Nuova storia inserita');
                         $message->to('e.rivosecchi@izsum.it');
                         $message->cc('r.ciappelloni@izsum.it');
                     });
                             
-                    //inserire email verso utente
+                    //sending email to user
                     $datimail=array('nome_sito'=>env('NOME_SITO'));
-                    Mail::send('emails.newstoria', $datimail, function($message){
+                    Mail::send('emails.newstory', $datimail, function($message){
                         $message->subject('Nuova storia inserita');
                         $message->to(Auth::user()->email);
                     });
                     
                     DB::commit();
-                    //testare file video ancora più grande per timeout
-                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[OUT TRY] segnalastoria', $this->mod_log->getParamFrontoffice());
-                    //redirect a pagina con messaggio di compiuto invio
+                    //test even larger video files for timeout
+                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[OUT TRY] reportstory', $this->mod_log->getParamFrontoffice());
+                    //redirect to page with completed sending message
                     $this->request->session()->flash('messageinfo', '<h2>Storia inoltrata con successo!</h2><h3>Riceverai ulteriori email sullo stato di avanzamento della storia inviata.</h3>');   
                     return redirect('/');
                 } catch (Throwable $e) {
                     DB::rollBack();
-                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] segnalastoria', $this->mod_log->getParamFrontoffice($e->getMessage()));
+                    Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] reportstory', $this->mod_log->getParamFrontoffice($e->getMessage()));
                     echo $e->getMessage();
                     exit;
                 }
             }else{
-                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] segnalastoria', $this->mod_log->getParamFrontoffice($e->getMessage('dati del form non corretti')));
-                $this->request->session()->flash('formerrato', '<h2>Dati non corretti</h2>'."<br />".$this->erroriFormSubmission);
+                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] reportstory', $this->mod_log->getParamFrontoffice($e->getMessage('dati del form non corretti')));
+                $this->request->session()->flash('formerrato', '<h2>Dati non corretti</h2>'."<br />".$this->errorsFormSubmission);
             }
         }
         
-        $privacy_policy=$this->mod_privacy->getPrivacyAttuale();
-        return view('segnalastoria')->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('datapost',$datisubmit)
+        $privacy_policy=$this->mod_privacy->getCurrentPrivacy();
+        return view('reportstory')->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('datapost',$datisubmit)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Sottomissione nuova storia')
                 ->with('art_title','Sottomissione nuova storia')
@@ -675,21 +662,21 @@ class StorieController extends Controller
                 if(!$request_post['descrizionebreve'.$lang])$datimancanti[]='Missing short description';
                 if(!preg_match('/[0-9]+/', $request_post['annoambientazione'].$lang))$datimancanti[]='Invalid year selected';
                 
-                //controlli sui file testo
+                //checks on text files
                 if($_FILES['filetesto'.$lang]['name']!=''){
                     if(isset($_FILES['filetesto'.$lang]) && $_FILES['filetesto'.$lang]['error']!=0)$datimancanti[]='Error loading the text file <<'.$_FILES['filetesto'.$lang]['name'].'>>';
                     $ext_text = pathinfo($_FILES['filetesto'.$lang]['name'], PATHINFO_EXTENSION);
                     if (!in_array($ext_text, $allowed_text)) {$datimancanti[]='Invalid text file format';}
                     if($_FILES['filetesto'.$lang]['size']>10485760){$datimancanti[]='Text file too large';}
                 }
-                //controlli sui file audio
+                //checks on audio file
                 if($_FILES['fileaudio'.$lang]['name']!=''){
                     if($_FILES['fileaudio'.$lang]['error']!=0)$datimancanti[]='Error loading the audio file <<'.$_FILES['fileaudio'.$lang]['name'].'>>';
                     $ext_audio = pathinfo($_FILES['fileaudio'.$lang]['name'], PATHINFO_EXTENSION);
                     if (!in_array($ext_audio, $allowed_audio)) {$datimancanti[]='Invalid audio file format';}
                     if($_FILES['fileaudio'.$lang]['size']>20971520){$datimancanti[]='Audio file too large';}
                 }
-                //controlli sui file video
+                //checks on video file
                 if(count($_FILES['filevideo'.$lang]['name'])>2){
                     $datimancanti[]='Exceeded the maximum allowed number of video files';
                 }elseif($_FILES['filevideo'.$lang]['name'][0]!=''){
@@ -708,7 +695,7 @@ class StorieController extends Controller
                     foreach ($_FILES['filevideo'.$lang]['size'] AS $kvs=>$szv)
                         if($szv>419430400)$datimancanti[]='Video file too large <<'.$_FILES['filevideo'.$lang]['name'][$kvs].'>>';
                 }
-                //controlli sui file immagini
+                //checks on image files
                 if(count($_FILES['fileimmagini'.$lang]['name'])>10){
                     $datimancanti[]='Exceeded the maximum allowed number of images files';
                 }elseif($_FILES['fileimmagini'.$lang]['name'][0]!=''){
@@ -736,21 +723,21 @@ class StorieController extends Controller
                 if(!$request_post['descrizionebreve'])$datimancanti[]='Breve descrizione mancante';
                 if(!preg_match('/[0-9]+/', $request_post['annoambientazione']))$datimancanti[]='Anno ambientazione non valido';
                 
-                //controlli sui file testo
+                //checks on text files
                 if($_FILES['filetesto']['name']!=''){
                     if($_FILES['filetesto']['error']!=0)$datimancanti[]='Errore di carimento per il file di testo <<'.$_FILES['filetesto']['name'].'>>';
                     $ext_text = pathinfo($_FILES['filetesto']['name'], PATHINFO_EXTENSION);
                     if (!in_array($ext_text, $allowed_text)) {$datimancanti[]='Formato del file di testo non valido';}
                     if($_FILES['filetesto']['size']>10485760){$datimancanti[]='File di testo troppo grande';}
                 }
-                //controlli sui file audio
+                //checks on audio file
                 if($_FILES['fileaudio']['name']!=''){
                     if($_FILES['fileaudio']['error']!=0)$datimancanti[]='Errore di carimento per il file audio <<'.$_FILES['fileaudio']['name'].'>>';
                     $ext_audio = pathinfo($_FILES['fileaudio']['name'], PATHINFO_EXTENSION);
                     if (!in_array($ext_audio, $allowed_audio)) {$datimancanti[]='Formato del file audio non valido';}
                     if($_FILES['fileaudio']['size']>20971520){$datimancanti[]='File audio troppo grande';}
                 }
-                //controlli sui file video
+                //checks on video file
                 if(count($_FILES['filevideo']['name'])>2){
                     $datimancanti[]='Superato il massimo numero consentito di file video';
                 }elseif($_FILES['filevideo']['name'][0]!=''){
@@ -765,7 +752,7 @@ class StorieController extends Controller
                     foreach ($_FILES['filevideo']['size'] AS $kvs=>$szv)
                         if($szv>419430400)$datimancanti[]='File video troppo grande <<'.$_FILES['filevideo']['name'][$kvs].'>>';
                 }
-                //controlli sui file immagini
+                //checks on image files
                 if(count($_FILES['fileimmagini']['name'])>10){
                     $datimancanti[]='Superato il massimo numero consentito di file immagine';
                 }elseif($_FILES['fileimmagini']['name'][0]!=''){
@@ -785,15 +772,15 @@ class StorieController extends Controller
         }
         
         if(count($datimancanti)>0){
-            $this->setVisualErrori($datimancanti);
+            $this->setVisualErrors($datimancanti);
             return false;
         }
         return true;
     }
     
-     private function setVisualErrori($arrayErr){
+     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
-            $this->erroriFormSubmission.='<b>'.$textErrore.'</b><br />';
+            $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
         return;

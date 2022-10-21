@@ -14,14 +14,14 @@ use Session;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
-use App\Models\Storie;
-use App\Models\Storiesubmit;
-use App\Models\Approfondimenti;
+use App\Models\Stories;
+use App\Models\Storiessubmit;
+use App\Models\Integrations;
 
 class AdminController extends Controller
 {    
     
-    public $erroriFormSubmission='';
+    public $errorsFormSubmission='';
     private $request;
 
     public function __construct(Request $request)
@@ -40,17 +40,17 @@ class AdminController extends Controller
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] dashboard', $this->mod_log->getParamFrontoffice());
         $title_page='';
         
-        $mod_storiesubmit= new Storiesubmit();
+        $mod_storiessubmit= new Storiessubmit();
         $storie_sottomesse=[];
-        $storie_sottomesse=$mod_storiesubmit->getStorieSubmitNONgestite();        
-        $mod_storie= new Storie();
+        $storie_sottomesse=$mod_storiessubmit->getStorieSubmitNONgestite();        
+        $mod_stories= new Stories();
         $storie_bozze=[];
         $filterstorie=[['s.stato',1]]; //in lavorazione (bozza)
-        $storie_bozze=$mod_storie->getStorie($filterstorie);        
-        $mod_approfondimenti= new Approfondimenti();
+        $storie_bozze=$mod_stories->getStories($filterstorie);        
+        $mod_integrations= new Integrations();
         $approf_inseriti=[];
         $filterapprof=[['sa.stato',0]]; //inseriti non ancora approvati
-        $approf_inseriti=$mod_approfondimenti->getAll($filterapprof);
+        $approf_inseriti=$mod_integrations->getAll($filterapprof);
         
         return view('admin.dashboard')->with([
                     'title_page'=>$title_page,
@@ -84,7 +84,7 @@ class AdminController extends Controller
                 return redirect(route('dashboard'));    
             }else{
                 Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] cambiapasswrod', $this->mod_log->getParamFrontoffice('form errato'));
-                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->erroriFormSubmission);
+                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->errorsFormSubmission);
             }
         }
         
@@ -96,20 +96,20 @@ class AdminController extends Controller
     
     private function checkControlPassword(){
         $request_post=$this->request->all();
-        //controllo dati required mancanti
+        //check for missing required data
         $datiintegri=[];
         if(!preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%-*_£()])[0-9A-Za-z!@#$%-*_£()]{8,}$/', trim($request_post['password'])))$datiintegri[]='La password non rispetta gli standard di sicurezza';
         if(trim($request_post['password'])!==trim($request_post['ripetipassword']))$datiintegri[]='Le password fornite non coincidono';
         if(count($datiintegri)>0){
-            $this->setVisualErrori($datiintegri);
+            $this->setVisualErrors($datiintegri);
             return false;
         }
         return true;
     }
     
-    private function setVisualErrori($arrayErr){
+    private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
-            $this->erroriFormSubmission.='<b>'.$textErrore.'</b><br />';
+            $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
         return;

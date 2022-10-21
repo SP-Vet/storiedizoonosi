@@ -17,7 +17,7 @@ $(document).ready(function(){
                 //invio commento tramite ajax
                 return  $.ajax({
                     type:'POST',
-                    url:"/admin/ajx-pubblicastoria",
+                    url:"/admin/ajx-publishstory",
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                     data:{sid:idstoria},
                     success:function(data){return data;},
@@ -71,7 +71,7 @@ $(document).ready(function(){
                 //invio commento tramite ajax
                 return  $.ajax({
                     type:'POST',
-                    url:"/admin/ajx-pubblicaapprofondimento",
+                    url:"/admin/ajx-publishintegrations",
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                     data:{said:idapprofondimento},
                     success:function(data){return data;},

@@ -12,7 +12,7 @@ $.idzoonosi=$('#zoonosiid').val();
 function getdaticontesto(){
     $.ajax({
         type:'POST',
-        url:"/ajx-getdaticontesto",
+        url:"/ajx-getcontextdata",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
         data:{sid:$.idstoria},
         success:function(data){

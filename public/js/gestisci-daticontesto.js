@@ -57,7 +57,7 @@ $(document).ready(function(){
     }) 
 })
 
-function checkValidityCKEDITORDaticontesto(){
+function checkValidityCKEDITORContextdata(){
     let flagerr=0;
     
     //descrizioni dati contesto

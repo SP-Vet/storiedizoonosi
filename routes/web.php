@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{UsersController,HomeController,StorieController,MailController,ApprofondimentiController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController};
+use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController};
 
 /*
 |--------------------------------------------------------------------------
@@ -15,44 +15,43 @@ use App\Http\Controllers\{UsersController,HomeController,StorieController,MailCo
 */
 
 Route::resource('/',HomeController::class);
-Route::get('/ilprogetto',[HomeController::class,'ilprogetto']);
+Route::get('/ilprogetto',[HomeController::class,'project']);
 
-//Route::get('/elencostorie/{zid?}',[StorieController::class,'elencostorie'])->where(['zid'=>'^[1-9][0-9]*$']);
-Route::get('/elencostorie/{slugzoonosi?}',[StorieController::class,'elencostorie'])->where(['slugzoonosi'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
-//Route::get('/storia/{sid}',[StorieController::class,'dettagliostoria'])->where(['sid'=>'[1-9][0-9]?+']);
-Route::get('/storia/{slug}',[StorieController::class,'dettagliostoria'])->where(['slug'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
+//Route::get('/elencostorie/{zid?}',[StoriesController::class,'elencostorie'])->where(['zid'=>'^[1-9][0-9]*$']);
+Route::get('/elencostorie/{slugzoonosi?}',[StoriesController::class,'list'])->where(['slugzoonosi'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
+//Route::get('/storia/{sid}',[StoriesController::class,'storydetail'])->where(['sid'=>'[1-9][0-9]?+']);
+Route::get('/storia/{slug}',[StoriesController::class,'storydetail'])->where(['slug'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
 
 /*login and logout routes*/
 Route::get('/login', [UsersController::class,'login']);
 Route::get('/checklogin', [UsersController::class,'checklogin']);
 Route::post('/checklogin', [UsersController::class,'checklogin']);
 Route::get('/logout', [UsersController::class,'logout']);
-/*registrazione routes*/
-Route::get('/registrazione', [UsersController::class,'registrazione']);
-Route::post('/registrazione', [UsersController::class,'registrazione']);
-/*ricerca routes*/
-Route::get('/ricerca', [StorieController::class,'ricerca']);
-Route::post('/elencostorie',[StorieController::class,'elencostorie']);
-/*inserimento storie routes*/
-Route::get('/crowdsourcing/submission',[StorieController::class,'segnalastoria']);
-Route::post('/crowdsourcing/submission',[StorieController::class,'segnalastoria']);
+/*registration routes*/
+Route::get('/registrazione', [UsersController::class,'registration']);
+Route::post('/registrazione', [UsersController::class,'registration']);
+/*search routes*/
+Route::get('/ricerca', [StoriesController::class,'search']);
+Route::post('/elencostorie',[StoriesController::class,'list']);
+/*sending stories routes*/
+Route::get('/crowdsourcing/submission',[StoriesController::class,'reportstory']);
+Route::post('/crowdsourcing/submission',[StoriesController::class,'reportstory']);
 
-/*altro*/
+/*other*/
 Route::get('/comingsoon', function () {return view('comingsoon')->with('title_page','Coming Soon');});
-Route::get('/privacy-policy',[PrivacyController::class,'visualizza']);
+Route::get('/privacy-policy',[PrivacyController::class,'view']);
 Route::get('/faq',function () {return view('faq')->with('title_page','FAQ');});
-//Route::get('/faq2',function () {return view('faq2');});
 Route::get('/developmentby', function () {return view('developmentby')->with('title_page','Sviluppatore');});
-Route::get('/contatti', function () {return view('contatti')->with('title_page','Contatti');});
+Route::get('/contatti', function () {return view('contacts')->with('title_page','Contatti');});
 
 /*ajax calls*/
-Route::post('ajx-getdaticontesto', [StorieController::class, 'getdaticontestostoria']);
-Route::post('ajx-getreview', [StorieController::class, 'getreviewzoonosi']);
-Route::post('ajx-getsnippet', [StorieController::class, 'getsnippet']);
-Route::post('ajx-putintegrationmessage', [ApprofondimentiController::class, 'setnewapprofondimento']);
+Route::post('ajx-getcontextdata', [StoriesController::class, 'getcontextdatastory']);
+Route::post('ajx-getreview', [StoriesController::class, 'getreviewzoonosi']);
+Route::post('ajx-getsnippet', [StoriesController::class, 'getsnippet']);
+Route::post('ajx-putintegrationmessage', [IntegrationsController::class, 'setnewintegration']);
 
-/*verifica email*/
-Route::get('/confermaemail/{first?}/{second?}/{third?}', [UsersController::class,'checkemailconferma'])->where(['second'=>'^[1-9][0-9]*$']);
+/*verify email*/
+Route::get('/confermaemail/{first?}/{second?}/{third?}', [UsersController::class,'checkconfirmationemail'])->where(['second'=>'^[1-9][0-9]*$']);
 
 /*testemail*/
 Route::get('sendbasicemail',[MailController::class, 'basic_email']);

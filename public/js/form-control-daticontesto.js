@@ -18,7 +18,7 @@ $(document).ready(function(){
                 svuotaContainerMSGError();
                 nascondiContainerMSGError();
                 
-                if (!form.checkValidity() || !checkValidityCKEDITORDaticontesto()){
+                if (!form.checkValidity() || !checkValidityCKEDITORContextdata()){
                     event.preventDefault();
                     event.stopPropagation();
                     hideloader();

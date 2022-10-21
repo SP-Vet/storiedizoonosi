@@ -108,7 +108,7 @@ $(document).ready(function(){
                 if($.isNumeric(collid)){
                     $.ajax({
                         type:'POST',
-                        url:"/admin/ajx-getcollaboratore",
+                        url:"/admin/ajx-getcollaborator",
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
                         data:{collid:collid},
                         success:function(data){

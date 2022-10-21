@@ -84,7 +84,7 @@ class User extends Authenticatable
         return true;
     }
     
-    public function setCodiceFiscaleUtente($id,$codfis){
+    public function setUserTaxCode($id,$codfis){
       $queryBuilder=DB::table($this->table_codfis)->insert(array('uid' => $id, 'codfis' => strtoupper($codfis)));
         return true;  
     }

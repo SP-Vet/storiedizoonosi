@@ -9,14 +9,10 @@ use DB;
 class Home extends Model
 {
     use HasFactory;
-    //protected $table='meoh_zoonosi';
     protected $table_zoonosilingue='meoh_zoonosilingue_ass';
     protected $table_zoonosi='meoh_zoonosi';
 
     //protected $primaryKey='zid';
-   
-    
-    
     /**
      * The attributes that are mass assignable.
      *

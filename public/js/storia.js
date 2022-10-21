@@ -74,10 +74,10 @@ function checkSlug(sid){
 
 
 
-function getintegrazionifase(sfid){
+function getphaseintegrations(sfid){
     $.ajax({
         type:'POST',
-        url:"/admin/ajx-getintegrazionifase",
+        url:"/admin/ajx-getphaseintegrations",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
         data:{sfid:sfid},
         success:function(data){

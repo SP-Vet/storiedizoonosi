@@ -28,7 +28,7 @@
                     <td><?=($utente->created_at)?Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $utente->created_at)->format('d/m/Y'):'';?></td>
                     <td>
                         <?php if($utente->id==$admin->id){ ?>
-                            <!--<a href="{{route('adminModificaUtente')}}/{{$utente->id}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>-->
+                            <!--<a href="{{route('adminModifyUser')}}/{{$utente->id}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>-->
                         <?php } ?>
                         <!--<a href="#" class="font-red conferma-elimina" idvalore="{{$utente->id}}" sezione="storie"  title="Elimina"><i class="fa fa-trash fa-lg"></i></a>-->
                     </td>

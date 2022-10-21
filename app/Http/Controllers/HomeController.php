@@ -16,19 +16,18 @@ class HomeController extends Controller
     public function __construct(Request $request)
     {
         $this->request=$request;
-        $this->mod_home = new Home;
+        $this->mod_home = new Home();
         $this->mod_log=new LogPersonal($request);
     }
     
     /**
     *
-    * Elenca tutte le zoonosi presenti nel sistema
+    * List all zoonoses in the system
     *
     * @return view
     *
     */
     public function index(){
-        //echo '<pre>';print_r($_SERVER);exit;
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] homepage', $this->mod_log->getParamFrontoffice());
         $title_page='Homepage';
         $order=[];
@@ -42,14 +41,14 @@ class HomeController extends Controller
     
     /**
     *
-    * Pagina statica di descrizione del progetto
+    * Static project description page
     *
     * @return view
     *
     */
-    public function ilprogetto(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] ilprogetto', $this->mod_log->getParamFrontoffice());
-        return view('ilprogetto');
+    public function project(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] project', $this->mod_log->getParamFrontoffice());
+        return view('project');
     }
     
   

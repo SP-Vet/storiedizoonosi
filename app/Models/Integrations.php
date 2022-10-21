@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
-class Approfondimenti extends Model
+class Integrations extends Model
 {
    
     use HasFactory;
-    //non salvare created_at ed updated_at
+    //not save created_at ed updated_at
     public $timestamps = false;
     
     protected $table='meoh_storie_approfondimenti';
@@ -41,13 +41,13 @@ class Approfondimenti extends Model
     protected $table_utenti='users';
     protected $lang=1;
     
-    /* stati approfondimenti
+    /* integration statuts
      * 
-     * 0-in attesa di approvazione, 1-pubblicato, 2-nascosto
+     * 0-pending approval, 1-published, 2-hidden
      * 
      */
  
-    public function setNewApprofondimento($uid,$sfid,$approfondimento,$testoapprofondimento='',$idcomrisp=NULL){
+    public function setNewIntegration($uid,$sfid,$approfondimento,$testoapprofondimento='',$idcomrisp=NULL){
         $app_inserito=trim(stripslashes(htmlspecialchars($approfondimento)));
         $app_selezionato=trim(stripslashes(htmlspecialchars($testoapprofondimento)));
         
@@ -78,7 +78,7 @@ class Approfondimenti extends Model
         return $queryBuilder->get();
     }
     
-    public function getApprofondimento($said){
+    public function getIntegration($said){
         $queryBuilder=DB::table($this->table.' AS sa')->select('sa.*','u.name AS nomeutente','u.email','sl.titolo','zl.nome AS nome_zoonosi','sfl.testofase')
                 ->leftJoin($this->table_storiefasi.' AS sf','sf.sfid','sa.sfid')
                 ->leftJoin($this->table_storiefasilingue.' AS sfl','sfl.sfid','sf.sfid')
@@ -93,7 +93,7 @@ class Approfondimenti extends Model
         return $queryBuilder->get();
     }
     
-    public function getNumeroApprofondimentiStoria($sid){
+    public function getNumberIntegrationsStory($sid){
         $queryBuilder=DB::table($this->table.' AS sa')->select(DB::raw('COUNT(sa.*) AS totalefase'),'sf.sfid')
                 ->leftJoin($this->table_storiefasi.' AS sf','sf.sfid','sa.sfid')
                 ->leftJoin($this->table_storie.' AS s','s.sid','sf.sid')
@@ -102,7 +102,7 @@ class Approfondimenti extends Model
         return $queryBuilder->get();
     }
     
-    public function pubblicaApprofondimento($said,$dati=[]){
+    public function publishIntegration($said,$dati=[]){
         DB::table($this->table)
             ->where('said', $said)
             ->update($dati);

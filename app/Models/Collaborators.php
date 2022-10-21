@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
-class Collaboratori extends Model
+class Collaborators extends Model
 {
     public $whereand=[];
     public $whereor=[];
@@ -15,7 +15,7 @@ class Collaboratori extends Model
     public $wheresame=[];
     public $keyindex=0;
     
-    //non salvare created_at ed updated_at
+    //do not save created_at ed updated_at
     public $timestamps = false;
     
     use HasFactory;
@@ -43,12 +43,12 @@ class Collaboratori extends Model
         return $queryBuilder->get();
     }
     
-    public function deleteStorieCollaboratoriAss($sid){
+    public function deleteStoriesCollaboratorsAss($sid){
         $queryBuilder=DB::table($this->table_storiecollaboratori)->where('sid', $sid)->delete();
         return true; 
     }
     
-    public function addCollaboratoriStoria($sid,$collaboratori,$ruoli){
+    public function addCollaboratorsStory($sid,$collaboratori,$ruoli){
         foreach ($collaboratori AS $tc=>$collid){
             DB::table($this->table_storiecollaboratori)->insert( ['collid' =>$collid, 'sid'=>$sid ,'rid'=>$ruoli[$tc]]);
         }

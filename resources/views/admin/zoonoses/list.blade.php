@@ -8,7 +8,7 @@
 @section('content')
 <div class="d-flex justify-content-between mt-2">
     <div class="d-inline-flex"><h5 class="pt-2">{{$title_page}}</h5></div>
-    <div class="d-inline-flex"><a href="{{route('adminAggiungiZoonosi')}}" class="btn btn-success"><i class="fa fa-plus-circle"></i><strong>Aggiungi ZOONOSI</strong></a></div>
+    <div class="d-inline-flex"><a href="{{route('adminAddZoonoses')}}" class="btn btn-success"><i class="fa fa-plus-circle"></i><strong>Aggiungi ZOONOSI</strong></a></div>
 </div>
 <hr>
 <div class="row mt-2">
@@ -51,7 +51,7 @@
                     </td>
                     <td class="text-center"><?=($zoo->linktelegram)?'<a href="'.$zoo->linktelegram.'" class="font-primary"><i class="fa fa-telegram fa-lg"></i></a>':'NO';?></td>
                     <td>
-                        <a href="{{route('adminModificaZoonosi')}}/{{$zoo->zid}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>
+                        <a href="{{route('adminModifyZoonoses')}}/{{$zoo->zid}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>
                         <a href="#" class="font-red conferma-elimina" idvalore="{{$zoo->zid}}" sezione="zoonosi"  title="Elimina"><i class="fa fa-trash fa-lg"></i></a>
                     </td>
                 </tr>

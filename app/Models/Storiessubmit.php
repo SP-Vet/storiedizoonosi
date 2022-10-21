@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
-class Storiesubmit extends Model
+class Storiessubmit extends Model
 {
     public $whereand=[];
     public $whereor=[];
@@ -15,7 +15,7 @@ class Storiesubmit extends Model
     public $wheresame=[];
     public $keyindex=0;
     
-    //non salvare created_at ed updated_at
+    //do not save created_at ed updated_at
     public $timestamps = false;
     
     use HasFactory;

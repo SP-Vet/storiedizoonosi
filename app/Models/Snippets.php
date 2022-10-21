@@ -16,7 +16,7 @@ class Snippets extends Model
     public $keyindex=0;
     
     
-    //non salvare created_at ed updated_at
+    //do not save created_at ed updated_at
     public $timestamps = false;
     
     use HasFactory;
@@ -28,7 +28,7 @@ class Snippets extends Model
     protected $lang=1;
     
     
-    public function setSnippetslinguaAss($snid,$dati){
+    public function setSnippetslanguageAss($snid,$dati){
         if (DB::table($this->table_snippetslingue)->where('lid', 1)->where('snid',$snid)->exists()) {
             //update
             DB::table($this->table_snippetslingue)

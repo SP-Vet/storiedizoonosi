@@ -404,7 +404,7 @@
                             <input type="hidden" name="sfid[]" value="<?=$fase->sfid;?>" />
                             <div class="testo-numero-parte h5">Parte&nbsp;<span class="numero-parte"><?=$i;?></span>
                                 <?php if(array_key_exists($fase->sfid,$approfondimentifasi)){ ?>
-                                    <span class="d-inline-flex ms-3"><button type="button" class="btn bg-info fw-bold w-100 hover-color-white btn-sm" onclick="getintegrazionifase(<?=$fase->sfid;?>);" data-bs-toggle="modal" data-bs-target="#modalIntegrazioni">
+                                    <span class="d-inline-flex ms-3"><button type="button" class="btn bg-info fw-bold w-100 hover-color-white btn-sm" onclick="getphaseintegrations(<?=$fase->sfid;?>);" data-bs-toggle="modal" data-bs-target="#modalIntegrazioni">
                                        <?='Leggi '.$approfondimentifasi[$fase->sfid].' integrazione/i pubblicate';?>
                                        </button>
                                     </span>

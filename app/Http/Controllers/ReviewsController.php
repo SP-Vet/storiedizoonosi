@@ -18,7 +18,7 @@ use App\Http\Controllers\LogPersonal;
 
 class ReviewsController extends Controller
 {
-    public $mod_approfondimenti;
+    public $mod_integrations;
     private $request;
     
     public function __construct(Request $request)

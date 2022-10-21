@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
-class Zoonosi extends Model
+class Zoonoses extends Model
 {
     public $whereand=[];
     public $whereor=[];
@@ -15,7 +15,7 @@ class Zoonosi extends Model
     public $wheresame=[];
     public $keyindex=0;
     
-    //non salvare created_at ed updated_at
+    //do not save created_at ed updated_at
     public $timestamps = false;
     
     use HasFactory;
@@ -28,10 +28,10 @@ class Zoonosi extends Model
     protected $lang=1;
     
     /**
-     * Metodo che ricerca le zoonosi all'interno del sistema
+     * Method for searches zoonoses in the system
      *
-     *  @param array $where le condizioni di where in query
-     *  @param array $order le condizioni di ordinamento in query
+     *  @param array $where the conditions of where in query
+     *  @param array $order the sorting conditions in queries
      *  @return 
      */
     public function getAll($where=[],$order=[]){
@@ -100,7 +100,7 @@ class Zoonosi extends Model
             $queryBuilder->where('zl.zid','!=',$zid);
          return $queryBuilder->get();
     }
-    public function checkExistNomezoonosi($nome,$zid=0){
+    public function checkExistNamezoonosi($nome,$zid=0){
         $queryBuilder=DB::table($this->table_zoonosilingue.' AS zl')->select('zl.*')
                 ->where('zl.nome',$nome);
         if($zid>0)

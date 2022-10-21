@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
-class Allegatimultimediali extends Model
+class Storiessubmitfile extends Model
 {
     public $whereand=[];
     public $whereor=[];
@@ -15,12 +15,12 @@ class Allegatimultimediali extends Model
     public $wheresame=[];
     public $keyindex=0;
     
-    //non salvare created_at ed updated_at
+    //do not save created_at ed updated_at
     public $timestamps = false;
     
     use HasFactory;
-    protected $table='meoh_allegati_multimediali_storia';
-    protected $primaryKey='amsid';
+    protected $table='meoh_storie_submit_files';
+    protected $primaryKey='ssfileid';
     protected $table_storie='meoh_storie';
     protected $table_storielingue='meoh_storielingue_ass';
     protected $table_storie_review='meoh_storie_review';
@@ -29,25 +29,13 @@ class Allegatimultimediali extends Model
     protected $table_utenti='users';
     protected $lang=1;
     
+    public function getFilesFromSSID($ssid){
+        $queryBuilder=DB::table($this->table.' AS sf')->select('sf.*')
+                ->where('sf.ssid',$ssid);
+    
+        return $queryBuilder->get();
+    }
+    
 
-    public function getAllegatiMultimedialiFromStoria($sid,$where=[],$wherein=[]){
-        $queryBuilder=DB::table($this->table.' AS ams')->select('ams.*')
-                ->where('ams.sid',$sid)->where($where);
-        if(count($wherein)>0){
-            $queryBuilder->whereIn('ams.tipologia',$wherein);
-        }
-        
-        return $queryBuilder->get();
-    }
-    
-    
-    public function getAllegatiMultimediali($where=[]){
-        $queryBuilder=DB::table($this->table.' AS ams')->select('ams.*')->where($where);
-        return $queryBuilder->get();
-    }
-    
-    
-    
-    
 
 }

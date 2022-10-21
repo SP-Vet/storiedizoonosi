@@ -12,34 +12,34 @@ use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use DateTime;
 use DB;
-use App\Models\Zoonosi;
+use App\Models\Zoonoses;
 Use App\Models\Reviews;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
-class AdminZoonosiController extends Controller
+class AdminZoonosesController extends Controller
 {
-    public $mod_zoonosi;
+    public $mod_zoonoses;
     private $request;
-    public $erroriFormSubmission='';
+    public $errorsFormSubmission='';
     public $menuactive='zoonosi';
     
     public function __construct(Request $request)
     {
         $this->request=$request;
-        $this->mod_zoonosi = new Zoonosi;
+        $this->mod_zoonoses = new Zoonoses;
         $this->mod_review= new Reviews();
         $this->mod_log=new LogPersonal($request);
     }
     
     /**
     *
-    * Elenca tutte le zoonosi presenti nel sistema
+    * List all zoonoses in the system
     *   
     * @return view
     *
     */
-    public function elenco(){
+    public function list(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] elenco', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] elenco', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
@@ -49,15 +49,15 @@ class AdminZoonosiController extends Controller
         $where=$whereand=$whereor=$wherenot=$wheresame=[];
         $order=[];
         $order['zl.nome']='ASC';
-        $zoonosi=$this->mod_zoonosi->getAll([],$order);
+        $zoonosi=$this->mod_zoonoses->getAll([],$order);
         $review=$revfiles=[];
         $review=$this->mod_review->getAllReview()->toArray();
         if(count($review)>0){
-            foreach ($review AS $documento)
-                $revfiles[$documento->zid]=$documento;
+            foreach ($review AS $document)
+                $revfiles[$document->zid]=$document;
         }
-        $zoonosi=$this->mod_zoonosi->getAll([],$order);
-        return view('admin.zoonosi.elenco')->with('zoonosi',$zoonosi)->with('revfiles',$revfiles)
+        $zoonosi=$this->mod_zoonoses->getAll([],$order);
+        return view('admin.zoonoses.list')->with('zoonosi',$zoonosi)->with('revfiles',$revfiles)
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
@@ -65,49 +65,50 @@ class AdminZoonosiController extends Controller
                 ]);;
     }
     
-     public function aggiungi(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] aggiungi', $this->mod_log->getParamFrontoffice());
+     public function adding(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] add', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] aggiungi', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] add', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
         $title_page='Aggiungi zoonosi';
         $datizoo=[];
         
         if($this->request->isMethod('post')){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] aggiungi', $this->mod_log->getParamFrontoffice('invio del post'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] add', $this->mod_log->getParamFrontoffice('invio del post'));
             $datizoo=$this->request->all();
             if($this->checkform()){
                 DB::beginTransaction();
                 try {
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] aggiungi', $this->mod_log->getParamFrontoffice());
-                    //memorizzazione zoonosi
-                    $zoonosi = new Zoonosi;
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] add', $this->mod_log->getParamFrontoffice());
+                    //memorization zoonoses
+                    $zoonosi = new Zoonoses;
                     $zoonosi->linktelegram = $datizoo['linktelegram'];
                     $zoonosi->linkraccoltereview = $datizoo['linkraccoltereview'];
                     $zoonosi->save();
 
-                    //memorizzazione parametri
-                    $this->mod_zoonosi->setZoonosiLang($datizoo,$zoonosi->zid);
+                    //memorization parameters
+                    $this->mod_zoonoses->setZoonosiLang($datizoo,$zoonosi->zid);
                     
                     DB::commit();
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] aggiungi', $this->mod_log->getParamFrontoffice());
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] add', $this->mod_log->getParamFrontoffice());
                     $this->request->session()->flash('messageinfo', 'Zoonosi inserita correttamente');
-                    return redirect(route('adminListZoonosi'));
+                    return redirect(route('adminListZoonoses'));
                     
                 } catch (Throwable $e) {
                     DB::rollBack();
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] aggiungi', $this->mod_log->getParamFrontoffice($e->getMessage()));
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] add', $this->mod_log->getParamFrontoffice($e->getMessage()));
                     echo $e->getMessage();
                     exit;
                 }
             }else{
-                Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] aggiungi', $this->mod_log->getParamFrontoffice('form errato'));
-                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->erroriFormSubmission);
+                Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] add', $this->mod_log->getParamFrontoffice('form errato'));
+                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->errorsFormSubmission);
             }
         }
    
-        return view('admin.zoonosi.aggiungimodifica')->with('datapost',$datizoo)->with('form','adminSalvaNewZoonosi')
+       
+        return view('admin.zoonoses.addmod')->with('datapost',$datizoo)->with('form','adminSaveNewZoonoses')
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
@@ -115,10 +116,10 @@ class AdminZoonosiController extends Controller
                 ]);;
     }
     
-    public function modifica(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] modifica', $this->mod_log->getParamFrontoffice());
+    public function modify(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] modify', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] modifica', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] modify', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
         $title_page='Modifica zoonosi';
@@ -131,35 +132,35 @@ class AdminZoonosiController extends Controller
                 //UPDATE ZOONOSI
                 DB::beginTransaction();
                 try {
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] modifica', $this->mod_log->getParamFrontoffice());
-                    $zoonosi = Zoonosi::find($datizoo['zid']);
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] modify', $this->mod_log->getParamFrontoffice());
+                    $zoonosi = Zoonoses::find($datizoo['zid']);
                     $zoonosi->linktelegram = $datizoo['linktelegram'];
                     $zoonosi->linkraccoltereview = $datizoo['linkraccoltereview'];
                     $zoonosi->save();
 
-                    //update parametri
-                    $this->mod_zoonosi->setZoonosiLang($datizoo,$zoonosi->zid,1);
+                    //update parameters
+                    $this->mod_zoonoses->setZoonosiLang($datizoo,$zoonosi->zid,1);
                     
                     DB::commit();
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] modifica', $this->mod_log->getParamFrontoffice());
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] modify', $this->mod_log->getParamFrontoffice());
                     $this->request->session()->flash('messageinfo', 'Zoonosi aggiornata correttamente');
-                    return redirect(route('adminListZoonosi'));
+                    return redirect(route('adminListZoonoses'));
                 } catch (Throwable $e) {
                     DB::rollBack();
-                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT TRY] modifica', $this->mod_log->getParamFrontoffice($e->getMessage()));
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT TRY] modify', $this->mod_log->getParamFrontoffice($e->getMessage()));
                     echo $e->getMessage();
                     exit;
                 }
             }else{
-                Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] modifica', $this->mod_log->getParamFrontoffice('form errato'));
-                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->erroriFormSubmission);
+                Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] modify', $this->mod_log->getParamFrontoffice('form errato'));
+                $this->request->session()->flash('formerrato', '<h5>Dati non corretti</h5>'."".$this->errorsFormSubmission);
             }
         }else{
-            $datizoo=$this->mod_zoonosi->getZoonosi($this->request->zid);
+            $datizoo=$this->mod_zoonoses->getZoonosi($this->request->zid);
             $datizoo=get_object_vars($datizoo->toArray()[0]);
         }
      
-        return view('admin.zoonosi.aggiungimodifica')->with('datapost',$datizoo)->with('form','adminSalvaModificaZoonosi')
+        return view('admin.zoonoses.addmod')->with('datapost',$datizoo)->with('form','adminSaveModifyZoonoses')
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
@@ -167,23 +168,23 @@ class AdminZoonosiController extends Controller
                 ]);
     }
   
-    public function cancella(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] cancella', $this->mod_log->getParamFrontoffice());
+    public function erase(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] erase', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] cancella', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] erase', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
-        $zoonosi = Zoonosi::find($this->request->zid);
+        $zoonosi = Zoonoses::find($this->request->zid);
         $zoonosi->delete();
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] cancella', $this->mod_log->getParamFrontoffice());
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] erase', $this->mod_log->getParamFrontoffice());
         $this->request->session()->flash('messageinfo', 'Zoonosi eliminata correttamente');
-        return redirect(route('adminListZoonosi'));
+        return redirect(route('adminListZoonoses'));
     }
     
     public function checkslugzoonosi(){
         $zid=0;
         if(preg_match('/^[1-9][0-9]*$/',$this->request->zid))$zid=$this->request->zid;
-        $zoonosi=$this->mod_zoonosi->checkExistSlugzoonosi($this->request->slug,$zid);
+        $zoonosi=$this->mod_zoonoses->checkExistSlugzoonosi($this->request->slug,$zid);
         if(count($zoonosi->toArray())>0){
             return response()->json(['error'=>true,'message'=>'Slug già presente nel sistema, modificare il nome della zoonosi']);
         }
@@ -192,13 +193,13 @@ class AdminZoonosiController extends Controller
     
     /**
     *
-    * Metodo di controllo validità dei dati del form di inserimento/modifica
+    * Method for checking validation data of the insert/modify form
     * @return boolean
     *
     */
     private function checkform(){
         $request_post=$this->request->all();
-        //controllo dati required mancanti
+        //check for missing required data
         $datimancanti=[];
         if(!$request_post['nome'])$datimancanti[]='Nome zoonosi mancante';
         if(!$request_post['descrizione'])$datimancanti[]='Descrizione zoonosi mancante';
@@ -208,20 +209,20 @@ class AdminZoonosiController extends Controller
       
         $zid=0;
         if(preg_match('/^[1-9][0-9]*$/',$request_post['zid']))$zid=$request_post['zid'];
-        $zoonosi=$this->mod_zoonosi->checkExistSlugzoonosi($request_post['slugzoonosi'],$zid);
+        $zoonosi=$this->mod_zoonoses->checkExistSlugzoonosi($request_post['slugzoonosi'],$zid);
         if(count($zoonosi->toArray())>0)$datimancanti[]='Slug zoonosi già presente, cambiare il nome della zoonosi';
-        $zoonosinome=$this->mod_zoonosi->checkExistNomezoonosi($request_post['nome'],$zid);
+        $zoonosinome=$this->mod_zoonoses->checkExistNamezoonosi($request_post['nome'],$zid);
         if(count($zoonosinome->toArray())>0)$datimancanti[]='Nome zoonosi già presente, cambiare il nome della zoonosi';
         if(count($datimancanti)>0){
-            $this->setVisualErrori($datimancanti);
+            $this->setVisualErrors($datimancanti);
             return false;
         }
         return true;
     }
     
-    private function setVisualErrori($arrayErr){
+    private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
-            $this->erroriFormSubmission.='<b>'.$textErrore.'</b><br />';
+            $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
         return;

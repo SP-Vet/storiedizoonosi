@@ -6,7 +6,7 @@
             </small>
         </div>
         <div class="col-12 col-md-3 text-end">
-            <a class="text-decoration-none" href="/comingsoon" title="Codice Sorgente del progetto MEOH">
+            <a class="text-decoration-none" href="https://spvet.it/microepidemic/app.html" title="Codice Sorgente del progetto MEOH">
                 <img src="/images/logo-github.png" width="100"><br/>
                 <p class="text-dark text-end">
                     <strong>Codice sorgente del progetto</strong>

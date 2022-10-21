@@ -17,7 +17,7 @@ class LogPersonal extends Controller
     private $post;
     private $file;
     private $fullurl;    
-    public $erroriFormSubmission='';
+    public $errorsFormSubmission='';
     
     public function __construct(Request $request)
     {

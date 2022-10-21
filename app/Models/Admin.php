@@ -42,8 +42,8 @@ class Admin extends Authenticatable
       /**
      * Metodo che ricerca i membri del gruppo di lavoro nel sistema
      *
-     *  @param array $where le condizioni di where in query
-     *  @param array $order le condizioni di ordinamento in query
+     *  @param array $where the conditions of where in query
+     *  @param array $order the sorting conditions in queries
      *  @return 
      */
     public function getAll($where=[],$order=[]){

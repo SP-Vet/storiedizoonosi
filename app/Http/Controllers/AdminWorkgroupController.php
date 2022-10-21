@@ -16,31 +16,31 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
 
-class AdminGruppodilavoroController extends Controller
+class AdminWorkgroupController extends Controller
 {
     public $mod_admin;
     private $request;
     public $menuactive='gruppodilavoro';
-    public $erroriFormSubmission='';
+    public $errorsFormSubmission='';
     
     public function __construct(Request $request)
     {
         $this->request=$request;
-        $this->mod_admin = new Admin;
+        $this->mod_admin = new Admin();
         $this->mod_log=new LogPersonal($request);
     }
     
     /**
     *
-    * Elenca tutti gli utenti presenti nel sistema come gruppo di lavoro
+    * Lists all users on the system as a workgroup
     *   
     * @return view
     *
     */
-    public function elenco(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] elenco', $this->mod_log->getParamFrontoffice());
+    public function list(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] list', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] elenco', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] list', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
         $title_page='Elenco utenti del gruppo di lavoro';
@@ -48,7 +48,7 @@ class AdminGruppodilavoroController extends Controller
         $order=[];
         $order['a.name']='ASC';
         $utenti=$this->mod_admin->getAll([],$order);
-        return view('admin.gruppodilavoro.elenco')->with('gruppo',$utenti)
+        return view('admin.workgroup.list')->with('gruppo',$utenti)
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
@@ -56,14 +56,14 @@ class AdminGruppodilavoroController extends Controller
                 ]);
     }
     
-    public function aggiungi(){
-        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] aggiungi', $this->mod_log->getParamFrontoffice());
+    public function adding(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] adding', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
-            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] aggiungi', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] adding', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
         
-        return view('admin.gruppodilavoro.aggiungi')->with('gruppo',$utenti)
+        return view('admin.workgroup.adding')->with('gruppo',$utenti)
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
@@ -71,9 +71,9 @@ class AdminGruppodilavoroController extends Controller
                 ]);
     }
   
-    private function setVisualErrori($arrayErr){
+    private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
-            $this->erroriFormSubmission.='<b>'.$textErrore.'</b><br />';
+            $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
         return;

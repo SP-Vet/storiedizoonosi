@@ -19,7 +19,7 @@
 <section class="gradient-form h-100" style="background-color: #eee;">
     
     <div class="container py-5 h-100">
-        <div class="text-center w-98 p-2 border-blue-dark border-1">DEBUG VERSIONE 1.0 - PUBBLICAZIONE PROVVISORIA IN FASE DI TEST. La versione funzionante sarà disponibile il 31 Ottobre 2022.<br />ALLEGATO ALL'E-JOURNAL SPVET.IT [ISSN 1592-1581] -  redazione-spvet@izsum.it  Tel. 075-343207.</div>
+        <div class="text-center w-98 p-2 border-blue-dark border-1">DEBUG VERSIONE 1.0 - PUBBLICAZIONE PROVVISORIA IN FASE DI TEST. La versione funzionante sarà disponibile il 15 Aprile 2023.<br />ALLEGATO ALL'E-JOURNAL SPVET.IT [ISSN 1592-1581] -  redazione-spvet@izsum.it  Tel. 075-343207.</div>
             @if (session('messageinfo'))
                 <div class="container-fluid pb-2 pt-2">
                     <div class="alert alert-success">

@@ -46,7 +46,7 @@ class AdminStoriesController extends Controller
         $this->mod_ruoli = new Ruoli();    
         $this->mod_multimediaelements= new Multimediaelements();
         $this->mod_collaborators=new Collaborators();
-        $this->mod_storiesfasi=new Storiesphases();
+        $this->mod_storiesphases=new Storiesphases();
         $this->mod_snippets=new Snippets();
         $this->mod_integrations=new Integrations();
         $this->mod_log=new LogPersonal($request);
@@ -299,7 +299,7 @@ class AdminStoriesController extends Controller
                         
                         $datisfid['titolofase']=$this->dataready($request_post['titolofase'][$ks]);
                         $datisfid['testofase']=$this->dataready($request_post['testofase'][$ks]);
-                        $this->mod_storiesfasi->setStoriafaselinguaAss($idsfid,$datisfid);
+                        $this->mod_storiesphases->setStoriafaselinguaAss($idsfid,$datisfid);
                         $ordine++;
                     }
                     //delete all sfid not in insert and update

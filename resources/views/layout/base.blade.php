@@ -58,7 +58,7 @@
         @yield('modal_3')
         @yield('modal_4')
         <!-- END modal -->
-        <div class="text-center w-98 p-2 m-2 border-blue-dark border-1">DEBUG VERSIONE 1.0 - PUBBLICAZIONE PROVVISORIA IN FASE DI TEST. La versione funzionante sarà disponibile il 31 Ottobre 2022.<br />ALLEGATO ALL'E-JOURNAL SPVET.IT [ISSN 1592-1581] -  redazione-spvet@izsum.it  Tel. 075-343207.</div>
+        <div class="text-center w-98 p-2 m-2 border-blue-dark border-1">DEBUG VERSIONE 1.0 - PUBBLICAZIONE PROVVISORIA IN FASE DI TEST. La versione funzionante sarà disponibile il 15 Aprile 2023.<br />ALLEGATO ALL'E-JOURNAL SPVET.IT [ISSN 1592-1581] -  redazione-spvet@izsum.it  Tel. 075-343207.</div>
         <div class="d-flex" id="wrapper">
           <!-- Page content wrapper-->
           <div id="page-content-wrapper">

@@ -5,11 +5,11 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
     <a href="https://storiedizoonosi.spvet.it/">
       <img src="public/images/logo_zoonosi_300.png" alt="LOGO Storie di zoonosi" width="150"><br>
       <b>https://storiedizoonosi.spvet.it</b>
-    </a><br>
+    </a><br><br><br>
     <a href="https://izsum.it/">
         <img src="public/images/logo_izsum_transp.png" alt="LOGO IZSUM" width="100"><br>
         <b>https://izsum.it</b>
-    </a><br>
+    </a><br><br><br>
     <a href="https://spvet.it/">
         <img src="public/images/spvet_header.jpg" alt="LOGO SPVET.it" width="250"><br>
         <b>https://spvet.it</b>

@@ -3,13 +3,13 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
 
 <div align="center">
   <a href="https://storiedizoonosi.spvet.it/">
-    <img src="public/images/logo_zoonosi.png" alt="LOGO Storie di zoonosi" width="200"><br>
+    <img src="public/images/logo_zoonosi.png" alt="LOGO Storie di zoonosi" width="150"><br>
     <b>https://storiedizoonosi.spvet.it</b>
   </a>
 </div>
 <div align="center">
     <a href="https://izsum.it/">
-        <img src="public/images/logo_izsum_transp.png" alt="LOGO IZSUM" width="200"><br>
+        <img src="public/images/logo_izsum_transp.png" alt="LOGO IZSUM" width="100"><br>
         <b>https://izsum.it</b>
     </a><br>
     <a href="https://spvet.it/">
@@ -85,8 +85,8 @@ After agreeing with the organization (**redazione-spvet@izsum.it**) install the 
 Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information.
 
 ## Contacts
-Redazione SPVET - redazione-spvet@izsum.it
-Raoul Ciappelloni - r.ciappelloni@izsum.it
+Redazione SPVET - redazione-spvet@izsum.it<br>
+Raoul Ciappelloni - r.ciappelloni@izsum.it<br>
 Eros Rivosecchi - e.rivosecchi@izsum.it
 
 

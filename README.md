@@ -2,12 +2,10 @@
 The Micro Epidemic One Health Project (Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC)
 
 <div align="center">
-  <a href="https://storiedizoonosi.spvet.it/">
-    <img src="public/images/logo_zoonosi.png" alt="LOGO Storie di zoonosi" width="150"><br>
-    <b>https://storiedizoonosi.spvet.it</b>
-  </a>
-</div>
-<div align="center">
+    <a href="https://storiedizoonosi.spvet.it/">
+      <img src="public/images/logo_zoonosi_300.png" alt="LOGO Storie di zoonosi" width="150"><br>
+      <b>https://storiedizoonosi.spvet.it</b>
+    </a><br>
     <a href="https://izsum.it/">
         <img src="public/images/logo_izsum_transp.png" alt="LOGO IZSUM" width="100"><br>
         <b>https://izsum.it</b>

@@ -74,7 +74,8 @@ MTCAPTCHA_PRIVATE = [private key released after the registration on mtcaptcha.co
 MTCAPTCHA_PUBLIC = [public key released after the registration on mtcaptcha.com]<br>
 
 In your copy of the new .env files modify:<br>
-DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD with the parameters of the PostgreSQL database
+DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD with the parameters of the PostgreSQL database<br><br>
+MAIL_MAILER, MAIL_HOST,MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS with your email parameters
 
 ## Import Database
 After agreeing with the organization (**redazione-spvet@izsum.it**) install the database dump that will be provided

@@ -13,7 +13,7 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
         <b>https://izsum.it</b>
     </a><br>
     <a href="https://spvet.it/">
-        <img src="public/images/spvet_header.jpg" alt="LOGO SPVET.it"><br>
+        <img src="public/images/spvet_header.jpg" alt="LOGO SPVET.it" width="250"><br>
         <b>https://spvet.it</b>
     </a>
 </div>

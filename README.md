@@ -66,14 +66,14 @@ Install the DBMS PostgreSQL on your machine [https://www.postgresql.org/download
 and create a new database
 
 ## Configuration
-In your copy of the new .env files add:<br>
+**In your copy of the new .env files add:**<br>
 PUBLIC_KEY_STRING = [string of sixteen characters with uppercase, lowercase and numbers]<br>
 PRIVATE_KEY_STRING = [string of sixteen characters with uppercase, lowercase and numbers]<br>
 NOME_SITO = [name of the project without empty spaces]<br>
 MTCAPTCHA_PRIVATE = [private key released after the registration on mtcaptcha.com]<br>
 MTCAPTCHA_PUBLIC = [public key released after the registration on mtcaptcha.com]<br>
 
-In your copy of the new .env files modify:<br>
+**In your copy of the new .env files modify:**<br>
 DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD with the parameters of the PostgreSQL database<br><br>
 MAIL_MAILER, MAIL_HOST,MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_ENCRYPTION, MAIL_FROM_ADDRESS with your email parameters
 

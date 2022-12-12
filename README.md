@@ -57,11 +57,14 @@ The Micro Epidemic One Health Project, aims to create an open repository of narr
 
 ### Front-end
 
-<img src="/public/images/screen-front-1.png" width="400" alt="Screenshot Fron-end 1" />
-<img src="/public/images/screen-front-2.png" width="400" alt="Screenshot Fron-end 2" />
+<img src="/public/images/screen-front-1.png" width="400" alt="Screenshot Front-end 1" />
+<img src="/public/images/screen-front-2.png" width="400" alt="Screenshot Front-end 2" />
 
 ### Back-end
 
+<img src="/public/images/screen-back-1.png" width="400" alt="Screenshot Back-end 1" />
+<img src="/public/images/screen-back-2.png" width="400" alt="Screenshot Back-end 2" />
+<img src="/public/images/screen-back-3.png" width="400" alt="Screenshot Back-end 3" />
 
 ## Before installation
 Register a new free account on https://www.mtcaptcha.com/ 

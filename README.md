@@ -58,6 +58,7 @@ The Micro Epidemic One Health Project, aims to create an open repository of narr
 ### Front-end
 
 <img src="/public/images/screen-front-1.png" width="400" alt="Screenshot Fron-end 1" />
+<img src="/public/images/screen-front-2.png" width="400" alt="Screenshot Fron-end 2" />
 
 ### Back-end
 

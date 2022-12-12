@@ -31,8 +31,8 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
     <li><a href="#built-with">Built With</a></li>
     <li><a href="#screenshots">Screenshots</a>
     <ol>
-      <li><a href="#screen-front-end">Front-End</li>
-      <li><a href="#screen-back-end">Back-End</li>
+      <li><a href="#front-end">Front-End</li>
+      <li><a href="#back-end">Back-End</li>
     </ol>
     </li>
     <li><a href="#before-installation">Before Installation</a></li>

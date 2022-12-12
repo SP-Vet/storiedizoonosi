@@ -1,4 +1,12 @@
 # Storie di Zoonosi
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/github/repo-size/SP-Vet/storiedizoonosi?style=for-the-badge" alt="Repo Size"></a>
+  <a href="#"><img src="https://img.shields.io/github/commit-activity/m/SP-Vet/storiedizoonosi" alt="Commits"></a>
+  <a href="https://github.com/SP-Vet/storiedizoonosi/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SP-Vet/storiedizoonosi?style=for-the-badge" alt="License"></a>
+  <a href="https://storiedizoonosi.spvet.it"><img src="https://img.shields.io/website?down_color=orange&down_message=On%20maintenance&style=for-the-badge&up_color=green&up_message=Online&url=https%3A%2F%2Fstoriedizoonosi.spvet.it" alt="Website"></a>
+  <a href="mailto:redazione-spvet@izsum.it"><img src="https://img.shields.io/badge/MAIL-redazione--spvet%40izsum.it-lightblue" alt="Mail"></a>
+</p>
+<hr>
 The Micro Epidemic One Health Project (Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC)
 
 <div align="center">
@@ -49,11 +57,21 @@ The Micro Epidemic One Health Project, aims to create an open repository of narr
 Register a new free account on https://www.mtcaptcha.com/ 
 
 ## Installation
-First clone this repository, install the dependencies, and setup your .env file.
+First clone this repository
 
 ```
 git clone git@github.com:SP-Vet/storiedizoonosi.git stories
+```
+
+Install the dependencies
+
+```
 composer install
+```
+
+Setup your .env file
+
+```
 cp .env.example .env
 ```
 

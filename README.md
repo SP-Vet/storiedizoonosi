@@ -43,6 +43,7 @@ The Micro Epidemic One Health Project, aims to create an open repository of narr
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
+* [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
 
 ## Before installation
 Register a new free account on https://www.mtcaptcha.com/ 
@@ -61,6 +62,14 @@ Generate a new app encryption key
 ```
 php artisan key:generate
 ```
+
+Create the symbolic link
+
+```
+php artisan storage:link
+```
+
+
 
 Install the DBMS PostgreSQL on your machine [https://www.postgresql.org/download/]
 and create a new database
@@ -120,3 +129,5 @@ Eros Rivosecchi - e.rivosecchi@izsum.it
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[PostgreSQL.org]: https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=PostgreSQL&logoColor=white
+[PostgreSQL-url]: https://www.postgresql.org/

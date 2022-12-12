@@ -27,15 +27,15 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-      <li><a href="#built-with">Built With</a></li>
-      </ul>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#built-with">Built With</a></li>
+    <li><a href="#screenshots">Screenshots</a>
+    <ol>
+      <li><a href="#screen-front-end">Front-End</li>
+      <li><a href="#screen-back-end">Back-End</li>
+    </ol>
     </li>
-    <li>
-      <a href="#before-installation">Before Installation</a>
-    </li>
+    <li><a href="#before-installation">Before Installation</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#configuration">Configuration</a></li>
     <li><a href="#import-database">Import Database</a></li>
@@ -47,11 +47,20 @@ The Micro Epidemic One Health Project (Italian Ministry of Health Research Proje
 ## About The Project
 The Micro Epidemic One Health Project, aims to create an open repository of narratives concerning zoonoses; diseases transmitted from animals to humans and vice versa. These zoonoses tales, derive from the recording of interviews or free narrations of privileged witnesses (Veterinarians, Healthcare Professionals, Researchers) who really faced and experienced them in their professional activity. The narratives - case studies, are made freely available to readers through a Web hypertext accessible from the Internet and a Smartphone App. Texts, annotated through crowdsourcing, are linked to peer reviewed scientific literature by experts and documentalists. They represent valid teaching material for young doctors and veterinarians, as well as an informational instrument for the civilian population. So that way, the Micro Epidemic One Health Project will contribute to promote a greater sharing of scientific knowledge on zoonoses making it easier to detect them early and contrast them in the appropriate ways.
 
-### Built With
+## Built With
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 * [![PostgreSQL][PostgreSQL.org]][PostgreSQL-url]
+
+## Screenshots
+
+### Front-end
+
+<img src="/public/images/screen-front-1.png" width="400" alt="Screenshot Fron-end 1" />
+
+### Back-end
+
 
 ## Before installation
 Register a new free account on https://www.mtcaptcha.com/ 

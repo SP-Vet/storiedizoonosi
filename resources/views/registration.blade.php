@@ -34,7 +34,7 @@
 
 <script>
     var mtcaptchaConfig = {
-        "sitekey": "<?=env('MTCAPTCHA_PUBLIC');?>",
+        "sitekey": "<?=config('app.MTCAPTCHApublic');?>",
         "widgetSize": "mini",
         "theme": "neowhite",
         "lang": "it"

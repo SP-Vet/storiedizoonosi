@@ -40,6 +40,8 @@ class UsersController extends Controller
     */
     public function login(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] login', $this->mod_log->getParamFrontoffice());
+        
+        
         return view('login');
     }
     
@@ -52,7 +54,7 @@ class UsersController extends Controller
     
     public function checklogin(Request $request){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] checklogin', $this->mod_log->getParamFrontoffice());
-        $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.env('MTCAPTCHA_PRIVATE').'&token='.$request->input('mtcaptcha-verifiedtoken'));
+        $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$request->input('mtcaptcha-verifiedtoken'));
         $dataRresponse=$responseMTCaptcha->json();
         
         if($dataRresponse['success']){
@@ -95,7 +97,7 @@ class UsersController extends Controller
         if($this->request->isMethod('post')){
             Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] registration', $this->mod_log->getParamFrontoffice('invio del post'));
             $datireg=$this->request->all();      
-            $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.env('MTCAPTCHA_PRIVATE').'&token='.$request->input('mtcaptcha-verifiedtoken'));
+            $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$request->input('mtcaptcha-verifiedtoken'));
             $dataRresponse=$responseMTCaptcha->json();
             if($dataRresponse['success']){
                 if($this->checkRegistrationform()){

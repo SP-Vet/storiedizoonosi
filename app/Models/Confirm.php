@@ -19,8 +19,8 @@ class Confirm extends Model
   
     public function __construct()
     {
-        $this->kpu=env('PUBLIC_KEY_STRING');
-        $this->kpr=env('PRIVATE_KEY_STRING');
+        $this->kpu=config('app.publickeystring');
+        $this->kpr=config('app.privatekeystring');
         
          /*
          * STRUTTURA LINK CONFERMA EMAIL

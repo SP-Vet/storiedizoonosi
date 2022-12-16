@@ -65,7 +65,7 @@ class AdminAuthController extends Controller
     public function postLogin(Request $request)
     {
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] postLogin', $this->mod_log->getParamFrontoffice());
-        $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.env('MTCAPTCHA_PRIVATE').'&token='.$request->input('mtcaptcha-verifiedtoken'));
+        $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$request->input('mtcaptcha-verifiedtoken'));
         $dataRresponse=$responseMTCaptcha->json();
         if($dataRresponse['success']){
             $this->validate($request, [

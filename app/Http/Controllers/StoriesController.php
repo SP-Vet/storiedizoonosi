@@ -599,7 +599,7 @@ class StoriesController extends Controller
                     }
                     
                     //sending email to administrator
-                    $datimail=array('titolostoria'=>$storiasubmit->titolo_inserito,'nomeutente'=>Auth::user()->name,'emailutente'=>Auth::user()->email,'nome_sito'=>env('NOME_SITO'));
+                    $datimail=array('titolostoria'=>$storiasubmit->titolo_inserito,'nomeutente'=>Auth::user()->name,'emailutente'=>Auth::user()->email,'nome_sito'=>config('app.NOMESITO'));
                     Mail::send('emails.newstory_admin', $datimail, function($message){
                         $message->subject('Nuova storia inserita');
                         $message->to('e.rivosecchi@izsum.it');
@@ -607,7 +607,7 @@ class StoriesController extends Controller
                     });
                             
                     //sending email to user
-                    $datimail=array('nome_sito'=>env('NOME_SITO'));
+                    $datimail=array('nome_sito'=>config('app.NOMESITO'));
                     Mail::send('emails.newstory', $datimail, function($message){
                         $message->subject('Nuova storia inserita');
                         $message->to(Auth::user()->email);

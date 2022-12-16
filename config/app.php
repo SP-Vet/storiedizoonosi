@@ -233,4 +233,9 @@ return [
 
     ],
 
+    'MTCAPTCHApublic' => env('MTCAPTCHA_PUBLIC'),
+    'MTCAPTCHAprivate' => env('MTCAPTCHA_PRIVATE'),
+    'NOMESITO'=> env('NOME_SITO'),
+    'publickeystring'=> env('PUBLIC_KEY_STRING'),
+    'privatekeystring'=> env('PRIVATE_KEY_STRING'),
 ];

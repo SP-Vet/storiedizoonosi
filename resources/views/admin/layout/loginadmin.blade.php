@@ -24,7 +24,7 @@
         <!-- MTCaptcha javascript configuration and import, copy start -->
         <script>
             var mtcaptchaConfig = {
-                "sitekey": "<?=env('MTCAPTCHA_PUBLIC');?>",
+                "sitekey": "<?=config('app.MTCAPTCHApublic');?>",
                 "widgetSize": "mini",
                 "theme": "neowhite",
                 "lang": "it"

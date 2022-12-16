@@ -1,18 +1,24 @@
-body{
-    Font-family: 'Lustria', serif;
-    /*font-family: 'Cormorant Garamond', serif;*/
+@font-face {
+  font-family: 'Lustria';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/css/Lustria/Lustria-Regular.ttf') format('woff2');
 }
+body{
+    font-family: "Lustria";
+}
+
 div.container ul.navbar-nav{
     font-size: 0.8rem !important;
 }
 div.custom-loader-mask{
-    font-family: 'Cormorant Garamond', serif;
+    /*font-family: 'Cormorant Garamond', serif;*/
 }
 .testo-blocco, div.bloccostoria p.card-text{
     text-align: justify;
     text-justify: inter-word;
 }
-
 
 
 .mrgT6{margin-top: 6rem;}

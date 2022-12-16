@@ -197,7 +197,18 @@ $(document).ready(function(){
         $('#filepdf').val('');
         $(this).parent().remove();
     })
-    
+    $('span.removeimgpredeffile').click(function(){$("#imgpredef").val('');})
+    $('span.removeimgpredefAJAX').click(function(){
+        $('#fileimgpredef').val('');
+        $(this).parent().remove();
+    })
+    $('input.imgpredef').change(function(){
+        if($(this).val()=='2'){ //no imgpredef
+            $('.containeruploadimgpredef').removeClass('d-none');
+        }else{
+            if(!$('.containeruploadimgpredef').hasClass('d-none'))$('.containeruploadimgpredef').addClass('d-none');
+        }
+    })
 })
 
 function checkValidityCKEDITORGestionestoria(){
@@ -241,13 +252,8 @@ function checkValidityCKEDITORGestionestoria(){
             }
         })
     }
-    
-    
-
     if(flagerr==1)return false;
-    
     return true;
-    
 }
 
 
@@ -256,7 +262,6 @@ function checkValidityCollaboratori(){
         aggiungiErroreMSGError('<p>Aggiungere almeno un collaboratore (autore) alla storia</p>');
         return false;
     }
-    
     return true;
 }
 
@@ -504,16 +509,13 @@ function checkValidSnip(snip){
         || $(snip).find('.chiavesnippet').val()==='' 
         ||  CKEDITOR.instances[$(snip).find('.testosnippet').attr('id')].getData()==='')
     return false;
-
     return true;
-    
 }
 
 function chiudiSnippets(snip,salva){
     $(snip).closest('.contenitoresnippetsfase').find('.snippetsfase').prop("selected", false);
     $(snip).closest('.contenitoresnippetsfase').find('.snippetsfase').val('').change();
     $(snip).addClass('d-none');
-    
     /*if(!$.isNumeric($('#sid').val()) && salva==0){
         //svuotacampi
         $(snip).find('.titolosnippet').val('');
@@ -540,7 +542,6 @@ function initChooseVideo(){
                     $('div.containerurlvideo').addClass("d-none");
                 break;
         }
-        
     })
 }
 
@@ -603,7 +604,6 @@ function confermaEliminazioneCollaboratore(collaboratore){
     }) 
 }
 
-
 function ricalcolaNumerazioneParti(){
     let numparti=1;
     $('.contenitore-parte').each(function(){
@@ -616,7 +616,5 @@ function ricalcolaNumerazioneParti(){
         //$(this).find('.descrizione-parte textarea').attr("name",'descrizione-parte-'+numparti);
         $(this).find('.descrizione-parte textarea').attr("id",'descrizione-parte-'+numparti);
         numparti+=1;
-
     })
-
 }

@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/laragon/www/storiedizoonosi/LICENSE</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/login.blade.php</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/.env.example</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/README.md</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/routes/web.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/Auth/AdminAuthController.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/admin/stories/addmod.blade.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/AdminStoriesController.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/public/css/style.css</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/public/js/gestisci-storia.js</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/story.blade.php</file>
             <file>file:/C:/laragon/www/storiedizoonosi/resources/views/layout/base.blade.php</file>
         </group>
     </open-files>

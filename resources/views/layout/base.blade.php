@@ -30,9 +30,8 @@
         <meta property="og:title" content="<?php if(isset($og_title) && $og_title!='')echo $og_title;else echo 'Storie di Zoonosi';?>">
         <meta property="og:description" content="<?php if(isset($og_description) && $og_description!='')echo $og_description;else echo 'Open Access Repository';?>">
         <meta property="og:locale" content="it_IT">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lustria&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
+        <link as="style" href="/css/Lustria/Lustria-Regular.ttf" rel="preload"/>
+        <link href="/css/Lustria/Lustria-Regular.ttf" rel="stylesheet" />
         <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel="stylesheet" href="/libraries/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.css" type="text/css" />

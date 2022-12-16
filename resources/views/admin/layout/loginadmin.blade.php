@@ -12,9 +12,8 @@
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="expires" content="0">
         <meta http-equiv="pragma" content="no-cache">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet"> 
+        <link as="style" href="/css/Lustria/Lustria-Regular.ttf" rel="preload"/>
+        <link href="/css/Lustria/Lustria-Regular.ttf" rel="stylesheet" />
         <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" type="text/css" />
         @section('additionalcss')
         @show

@@ -46,6 +46,11 @@ class AdminAuthController extends Controller
         $this->mod_log=new LogPersonal($request);
     }
 
+    /**
+    * Login page
+    *
+    * @return view()
+    */ 
     public function getLogin()
     {
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] login', $this->mod_log->getParamFrontoffice());

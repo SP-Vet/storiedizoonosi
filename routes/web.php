@@ -96,6 +96,15 @@ Route::get('storagereview/{zid}/{file}/{filename}', function ($zid,$file,$filena
         ];
     return response()->download($path, $filename, $headers);
 });
+
+Route::get('storageviewimage/{sid}/{file}', function ($sid,$file) {
+    $path = storage_path('app' . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'storieallegatimultimediali' . DIRECTORY_SEPARATOR  . $sid . DIRECTORY_SEPARATOR . $file);
+        $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
 //route sottostante per aprire il media all'interno del browser
 /*Route::get('storagestoriesubmit/{ssid}/{file}/{filename}', function ($ssid,$file,$filename) {
     $path = storage_path('app' . DIRECTORY_SEPARATOR . 'storiesubmit' . DIRECTORY_SEPARATOR  . $ssid . DIRECTORY_SEPARATOR . $file);

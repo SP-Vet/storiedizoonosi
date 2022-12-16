@@ -157,25 +157,24 @@
         <p>Hai delle domande? Leggi le <a href="/faq"><strong>FAQ</strong>...</a></p>
         <div class="mt-2">
             <hr>
-            <p class="mt-5 mb-0"><i><a href="/comingsoon">Ascolta il podcast della storia</a></i></p>
-        </div>
-        <?php if(count($podcast->all())>0){ 
+            <?php if(count($podcast->all())>0){ 
             foreach ($podcast AS $singolopodcast){
                 if(!$singolopodcast->linkurlhtml){
                     $linkpod=asset(Storage::url('storieallegatimultimediali/'.$storia->sid.'/'.$singolopodcast->nome_file_memorizzato));
                     $pathpod = storage_path('app/public/storieallegatimultimediali/'.$storia->sid.'/'. $singolopodcast->nome_file_memorizzato);?>    
                     <div class="mt-2">
-                        <hr>
                         <p class="mt-5 mb-0"><i>Ascolta il podcast della storia</i></p>
                         <audio controls>
                             <source src="{{$linkpod}}" type="<?=mime_content_type($pathpod);?>">
                             Il browser che stai utilizzando non supporta la riproduzione di questo file audio.
                         </audio> 
-                       
                     </div>
                 <?php } ?>
             <?php }
-        } ?>
+            }else{?>
+                <p class="mt-5 mb-0"><i><a href="/comingsoon">Ascolta il podcast della storia</a></i></p>
+            <?php } ?>
+        </div>
     </div>
     <div class="col-12 col-sm-4 border p-2 text-center">
         <?php 
@@ -190,8 +189,13 @@
                             web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                         </p>
                     </video-js>
-                <?php }else{ ?>
-                    <div class="videoWrapper"><?=html_entity_decode($singolovideo->linkurlhtml,ENT_QUOTES,'utf-8');?></div>
+                <?php }else{ 
+                    $link_imgpredef='/images/img_video_predef.png';
+                    if($singolovideo->imgpredef!='')
+                        $link_imgpredef=url('storageviewimage/'.$storia->sid.'/'.$singolovideo->imgpredef);
+                    ?>
+                    <a href="<?=$singolovideo->linkurlhtml;?>" target="_blank"><img src="<?=$link_imgpredef;?>" class="img-responsive" style="width: 100%;"/></a>        
+                    <!--<div class="videoWrapper"><?=html_entity_decode($singolovideo->linkurlhtml,ENT_QUOTES,'utf-8');?></div>-->
                 <?php } ?>
             <?php }
         }?>

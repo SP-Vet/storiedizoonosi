@@ -10,9 +10,8 @@
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="expires" content="0">
         <meta http-equiv="pragma" content="no-cache">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lustria&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
+        <link as="style" href="/css/Lustria/Lustria-Regular.ttf" rel="preload"/>
+        <link href="/css/Lustria/Lustria-Regular.ttf" rel="stylesheet" />
         <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" type="text/css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link rel="stylesheet" href="/libraries/bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.css" type="text/css" />

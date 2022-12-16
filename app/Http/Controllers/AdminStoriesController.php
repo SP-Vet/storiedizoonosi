@@ -29,12 +29,26 @@ use Carbon\Carbon;
 
 class AdminStoriesController extends Controller
 {
+     /*
+    |--------------------------------------------------------------------------
+    | Admin Stories Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller manages all the functions that an administrator 
+    | can use regarding the stories that are uploaded to the system
+    |
+    */
     public $mod_stories;
     public $mod_storiessubmit;
     private $request;
     public $menuactive='storie';
     public $errorsFormSubmission='';
     
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
     public function __construct(Request $request)
     {
         $this->request=$request;
@@ -78,6 +92,13 @@ class AdminStoriesController extends Controller
                 ]);
     }
     
+    /**
+    *
+    * Manage the editing and posting page of stories
+    *   
+    * @return view
+    *
+    */
     public function modify(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] modify', $this->mod_log->getParamFrontoffice());
         $title_page='Aggiungi/Modifica Storia';
@@ -94,6 +115,7 @@ class AdminStoriesController extends Controller
                 $file_testo = $this->request->file('pdfstoria');
                 $file_audio = $this->request->file('podcast');
                 $file_video = $this->request->file('linkvideo');
+                $file_imgpredef = $this->request->file('imgpredef');
                 DB::beginTransaction();
                 try {
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] modify', $this->mod_log->getParamFrontoffice());
@@ -235,8 +257,26 @@ class AdminStoriesController extends Controller
                         $allegatovideo->tipologia=5;
                         $allegatovideo->linkurlhtml=$this->dataready($request_post['linkurlhtml']);
                         $allegatovideo->sid=$storia->sid;
+                        
+                        if(isset($_FILES['imgpredef']['name']) && $_FILES['imgpredef']['name']!=''){
+                            $originImgpredefName = $this->request->file('imgpredef')->getClientOriginalName();
+                            $fileImgpredefName = pathinfo($originImgpredefName, PATHINFO_FILENAME);
+                            $extensionImgpredef = $this->request->file('imgpredef')->getClientOriginalExtension();
+
+                            $newImgpredefName = 'FILEIMGPREDEF_'.time().'.'.$extensionImgpredef;
+                            $this->request->file('imgpredef')->move($pathst, $newImgpredefName);
+                            $urlImgpredef=asset(Storage::url('storieallegatimultimediali/'.$storia->sid.'/'.$newImgpredefName));
+                            
+                            $allegatovideo->imgpredef=$newImgpredefName;
+                        }elseif($request_post['fileimgpredef']){
+                            $allegatovideo->imgpredef=$request_post['fileimgpredef'];
+                        }else{
+                            $allegatovideo->imgpredef='';
+                        }
                         $allegatovideo->save();
                     }
+                    
+                   
                     
                     //pdf
                     $whereallegati3=[];
@@ -506,7 +546,13 @@ class AdminStoriesController extends Controller
      
     }
     
-     public function checkslug(){
+    /**
+    *
+    * Check the uniqueness of the url for story
+    * @return json
+    *
+    */
+    public function checkslug(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] checkslug', $this->mod_log->getParamFrontoffice());
         $sid=0;
         if(preg_match('/^[1-9][0-9]*$/',$this->request->sid))$sid=$this->request->sid;
@@ -518,6 +564,12 @@ class AdminStoriesController extends Controller
         return response()->json(['error'=>false,'message'=>'']);
     }
     
+    /**
+    *
+    * Publish the story
+    * @return json
+    *
+    */
     public function publishstory(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] pubblicastoria', $this->mod_log->getParamFrontoffice());
         if(!preg_match('/^[1-9][0-9]*$/',$this->request->sid)){
@@ -529,13 +581,29 @@ class AdminStoriesController extends Controller
         return response()->json(['error'=>false,'message'=>'']);
     }
     
+    /**
+    *
+    * Prepare the text to be published for errors
+    * 
+    * @param $arrayErr array with the list of form errors
+    * @return boolean
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore)
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         unset($arrayErr);
-        return;
+        return true;
     }
     
+    /**
+    *
+    * Prepare the data for storage
+    * 
+    * @param $data string value to set
+    * @return string
+    *
+    */
     private function dataready($data) {
         if(!$data)return '';
         $data = trim($data);

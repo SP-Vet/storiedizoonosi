@@ -326,7 +326,21 @@
             <div class="row m-3 ps-1 pe-1 pt-3 border rounded overflow-hidden flex-md-row mb-4 container-list-story position-relative">
                 <h5>Video</h5>
                 <div class="mb-3">
-                    <?php $showlink='d-none';$checkradiourl='';if(count($video->all())>0){foreach ($video AS $singolovideo){if($singolovideo->linkurlhtml!=''){$showlink='';$checkradiourl='checked';}}}?>
+                    <?php $showlink='d-none';$checkradiourl='';$showimage='d-none';$checkimage='';$checkimagepredef='checked';
+                    if(count($video->all())>0){
+                            foreach ($video AS $singolovideo){
+                                if($singolovideo->linkurlhtml!=''){
+                                    $showlink='';
+                                    $checkradiourl='checked';
+                                }
+                                if($singolovideo->imgpredef!=''){
+                                    $showimage='';
+                                    $checkimage='checked';
+                                    $checkimagepredef='';
+                                }    
+                            }
+                        }
+                    ?>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input tipovideo" type="radio" name="tipovideo" id="tipovideo1" value="1" {{$checkradiourl}} />
                         <label class="form-check-label" for="tipovideo1">URL/HTML</label>
@@ -337,7 +351,45 @@
                     </div>
                     <hr class="mt-0">
                     <div class="containerurlvideo {{$showlink}}">
-                        <textarea class="form-control linkurlhtml" name="linkurlhtml" placeholder="Inserisci l'url o l'HTML del video"><?=(isset($singolovideo))?$singolovideo->linkurlhtml:'';?> </textarea>
+                        <p>Inserisci l'url</p>
+                        <textarea class="form-control linkurlhtml" name="linkurlhtml" placeholder="Inserisci l'url"><?=(isset($singolovideo))?$singolovideo->linkurlhtml:'';?> </textarea>
+                        
+                        
+                        <?php ?>
+                        
+                        <div class="container-imgpredef mt-2">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input imgpredef" type="radio" name="imgpredef" id="imgpredef1" value="1" {{$checkimagepredef}}   />
+                                <label class="form-check-label" for="imgpredef1">Usa IMG predefinita</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input imgpredef" type="radio" name="imgpredef" id="imgpredef2" value="2"  {{$checkimage}} />
+                                <label class="form-check-label" for="imgpredef2">Carica immagine</label>
+                            </div>
+                            
+                            
+                            <div class="containeruploadimgpredef {{$showimage}}">
+                                <div class="input-group input-group-sm ">
+                                    <input type="file" class="form-control" id="imgpredef" name="imgpredef" />
+                                    <span class="input-group-text btn-danger removeimgpredeffile">elimina selezione</span>
+                                </div>
+                                
+                                 <?php if(count($video->all())>0){ 
+                                foreach ($video AS $singolovideo){
+                                    if($singolovideo->imgpredef!=''){?>
+                                        <div class="col-12 mt-2">
+                                            <!--<input class="form-control mb-3" type="file" id="video" name="video" />-->
+                                            <img src="/images/png-icon.png" width="50" /><span class="ms-2"><?=html_entity_decode($singolovideo->imgpredef,ENT_QUOTES,'utf-8')?></span></a>
+                                            <span class="btn btn-danger btn-sm removeimgpredefAJAX fRight">cancella immagine</span>
+                                        </div>
+                                    <?php }?>
+                                <?php }
+                            } ?>
+                            </div>
+
+                    </div>
+
+                        
                     </div>
                     <div class="containeruploadvideo d-none">
                         <div class="input-group input-group-sm ">
@@ -355,7 +407,7 @@
                                 <div class="col-12 mt-2">
                                     <!--<input class="form-control mb-3" type="file" id="video" name="video" />-->
                                     <a href="{{$urldownload}}"><img src="/images/mp4-icon.png" width="50" /><span class="ms-2"><?=html_entity_decode($singolovideo->nome_file_originale,ENT_QUOTES,'utf-8')?></span></a>
-                                    <span class="btn btn-danger btn-sm removevideoAJAX fRight">cancella video</span>
+                                    <span class="btn btn-danger btn-sm removeimgpredefAJAX fRight">cancella video</span>
                                 </div>
                             <?php }?>
                         <?php }
@@ -386,6 +438,8 @@
             <input type="hidden" id="filepodcast" name="filepodcast" value="<?=(isset($singolopodcast->nome_file_memorizzato))?$singolopodcast->nome_file_memorizzato:'';?>" />
             <input type="hidden" id="filevideo" name="filevideo" value="<?=(isset($singolovideo->nome_file_memorizzato))?$singolovideo->nome_file_memorizzato:'';?>" />
             <input type="hidden" id="filepdf" name="filepdf" value="<?=(isset($singolopdf->nome_file_memorizzato))?$singolopdf->nome_file_memorizzato:'';?>" />
+            <input type="hidden" id="fileimgpredef" name="fileimgpredef" value="<?=(isset($singolovideo->imgpredef))?$singolovideo->imgpredef:'';?>" />
+
         </div>
     </div>
     <hr>

@@ -43,6 +43,8 @@
         @section('additionaljs')
         <!-- Bootstrap core JS-->
         <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="/libraries/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript" src="/libraries/bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.it.min.js" charset="UTF-8"></script>
         <script type="text/javascript" src="/js/custom.js" /></script>
         <!-- Core theme JS-->
         @show

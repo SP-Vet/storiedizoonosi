@@ -73,7 +73,7 @@ Register a new free account on https://www.mtcaptcha.com/
 First clone this repository
 
 ```
-git clone git@github.com:SP-Vet/storiedizoonosi.git stories
+git clone https://github.com/SP-Vet/storiedizoonosi.git stories
 ```
 
 Install the dependencies

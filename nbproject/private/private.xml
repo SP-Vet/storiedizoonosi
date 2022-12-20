@@ -3,14 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/laragon/www/storiedizoonosi/routes/web.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/.env</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/auth.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/UsersController.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/sitemap.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/mail.php</file>
             <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/Auth/AdminAuthController.php</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/admin/stories/addmod.blade.php</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/AdminStoriesController.php</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/public/css/style.css</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/public/js/gestisci-storia.js</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/story.blade.php</file>
-            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/layout/base.blade.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/app/Http/Controllers/StoriesController.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/view.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/app/Models/Confirm.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/layout/loginuser.blade.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/resources/views/admin/layout/loginadmin.blade.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/session.php</file>
+            <file>file:/C:/laragon/www/storiedizoonosi/config/app.php</file>
         </group>
     </open-files>
 </project-private>

@@ -24,7 +24,7 @@
         <meta name="DC.Date" content="<?php if(isset($art_datapublic) && $art_datapublic!='')echo Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $art_datapublic)->format('d/m/Y');else echo date('Y-m-d');?>" /> 
         <meta name="DC.Language" content="it_IT" /> 
         <meta property="og:url" content="<?php if(isset($og_url) && $og_url!='')echo $og_url;else echo '';?>">
-        <meta property="og:image" content="<?php if(isset($og_image) && $og_image!='')echo $og_image;else echo 'https://'.$_SERVER['HTTP_HOST'].'/images/logo_zoonosi.png';?>">
+        <meta property="og:image" content="<?php if(isset($og_image) && $og_image!='')echo $og_image;else { ?>{{ URL::to('/') }}<?php echo '/images/logo_zoonosi.png';}?>">
         <meta property="og:site_name" content="Storie di Zoonosi">
         <meta property="og:type" content="<?php if(isset($og_type) && $og_type!='')echo $og_type;else echo 'website';?>">
         <meta property="og:title" content="<?php if(isset($og_title) && $og_title!='')echo $og_title;else echo 'Storie di Zoonosi';?>">

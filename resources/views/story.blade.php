@@ -143,7 +143,7 @@
             <div><i class="fa fa-newspaper-o me-2"></i></div>
             <div><h6 class="editore-zoonosi"><?=($storia->editore!='')?$storia->editore:'';?></h6>
                 <figcaption class="blockquote-footer mt-1">
-                    Redazione <a target="_blank" href="http://spvet.it/">SPVet.it</a>; <a target="_blank" href="http://spvet.it/microepidemic/gl.html">Comitato Scientifico MEOH</a>
+                    Redazione <a target="_blank" href="https://spvet.it/">SPVet.it</a>; <a target="_blank" href="https://spvet.it/microepidemic/gl.html">Comitato Scientifico MEOH</a>
                 </figcaption>
             </div>
         </div>

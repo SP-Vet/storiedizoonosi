@@ -344,12 +344,13 @@ class AdminStoriesController extends Controller
                     }
                     //delete all sfid not in insert and update
                     Storiesphases::whereNotIn('sfid',$elencosfid)->where('sid',$storia->sid)->delete();
-                    unset($elencosfid);unset($ordine);
+                    //unset($elencosfid);
+                    unset($ordine);
                     unset($sfid);
                     unset($idsfid);
                  
                     //memo snippets phases
-                    if(isset($request_post['snid']) && is_array($request_post['snid']) && count($request_post['snid'])>0){
+                    /*if(isset($request_post['snid']) && is_array($request_post['snid']) && count($request_post['snid'])>0){
                         foreach ($request_post['snid'] AS $sfid=>$snippets){
                             $idsfid=$sfid;
                             if(!is_numeric($sfid))
@@ -375,7 +376,50 @@ class AdminStoriesController extends Controller
                             //delete snippets non più presenti per ogni determinata parte
                             Snippets::whereNotIn('snid',$nuovisnip)->where('sfid',$idsfid)->delete();
                         }
+                    }*/
+                    //memo snippets phases
+                    if(isset($request_post['snid']) && is_array($request_post['snid']) && count($request_post['snid'])>0){
+                        $sfid_snidesistenti=[];
+                        foreach ($request_post['snid'] AS $sfid=>$snippets){
+                            $idsfid=$sfid;
+                            if(!is_numeric($sfid))
+                                $idsfid=$elencoPOSTsfid[$sfid];
+
+                            $nuovisnip=[];
+                            //all new snippets
+                            foreach ($snippets AS $ksn=>$snid){
+                                $datisnip=[];
+                                $idsnip=$snid;
+                                if(!is_numeric($snid)){
+                                    $nuovosnip=new Snippets();
+                                    $nuovosnip->sfid=$idsfid;
+                                    $nuovosnip->save();
+                                    $idsnip=$nuovosnip->snid;
+                                }
+                                $datisnip['chiave']=$this->dataready($request_post['chiavesnippet'][$sfid][$ksn]);
+                                $datisnip['titolo']=$this->dataready($request_post['titolosnippet'][$sfid][$ksn]);
+                                $datisnip['testo']=$this->dataready($request_post['testosnippet'][$sfid][$ksn]);
+                                $this->mod_snippets->setSnippetslanguageAss($idsnip,$datisnip);
+                                $nuovisnip[]=$idsnip;
+                            }
+                            //delete snippets non più presenti per ogni determinata parte
+                            Snippets::whereNotIn('snid',$nuovisnip)->where('sfid',$idsfid)->delete();
+                            $sfid_snidesistenti[]=$idsfid;
+                        }
+                        /*DB::enableQueryLog();
+                        Snippets::where('sfid',array_diff($elencosfid,$sfid_snidesistenti))->delete();
+                        $query = DB::getQueryLog();
+                        dd(end($query));exit;*/                        
+                        //delete all snippets in $elencosfid and not in $sfid_snidesistenti
+                        if(isset($sfid_snidesistenti) && is_array($sfid_snidesistenti) && count($sfid_snidesistenti)>0)
+                            Snippets::where('sfid',array_diff($elencosfid,$sfid_snidesistenti))->delete();
+                    }else{
+                        //delete all snippets from all phases of the story
+                        Snippets::where('sfid',$elencosfid)->delete();
                     }
+
+
+                    
                     
                     DB::commit();
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT TRY] modify', $this->mod_log->getParamFrontoffice());

@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
@@ -15,6 +41,14 @@ use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use DB;
 
+/**
+ * Manage all functions of a user's personal data  
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class UsersController extends Controller
 {
     public $mod_user;
@@ -35,7 +69,7 @@ class UsersController extends Controller
     *
     * Login user page
     *   
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function login(){
@@ -45,6 +79,13 @@ class UsersController extends Controller
         return view('login');
     }
     
+    /**
+    *
+    * Logout method
+    *   
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function logout(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] logout', $this->mod_log->getParamFrontoffice());
         $this->request->session()->flush();
@@ -52,6 +93,13 @@ class UsersController extends Controller
         return redirect('/');
     }
     
+    /**
+    *
+    * Check credential's login validity of a user 
+    *   
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function checklogin(Request $request){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] checklogin', $this->mod_log->getParamFrontoffice());
         $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$request->input('mtcaptcha-verifiedtoken'));
@@ -86,8 +134,8 @@ class UsersController extends Controller
     
     /**
     *
-    * New user registration form
-    * @return view
+    * New user registration form and store procedure
+    * @return \Illuminate\Http\Response
     *
     */
     public function registration(){
@@ -183,7 +231,7 @@ class UsersController extends Controller
     /**
     *
     * Method of checking the validity of the registration form data
-    * @return boolean
+    * @return BOOL
     *
     */
     private function checkRegistrationform(){
@@ -230,14 +278,30 @@ class UsersController extends Controller
         return true;
     }
 
+    /**
+    *
+    * Prepare the text to be published for errors
+    * 
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->formRegistrationError.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
     
+    /**
+    *
+    * Check the exists of an email address
+    * 
+    * @param String $check_email email address
+    * @return BOOL
+    *
+    */
     private function checkExistMail($check_email){
         $email = filter_var($check_email, FILTER_SANITIZE_EMAIL);
         $user=[];
@@ -247,6 +311,14 @@ class UsersController extends Controller
         return true;
     }
     
+    /**
+    *
+    * Check the exists of an Tax ID code
+    * 
+    * @param String $check_codfis Tax ID code
+    * @return BOOL
+    *
+    */
     private function checkExistCodfis($check_codfis){
         $codfis = trim(stripslashes(htmlspecialchars(strtoupper($check_codfis))));
         $user=[];
@@ -259,7 +331,7 @@ class UsersController extends Controller
     /**
     *
     * Method for checking and verifying registration emails
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function checkconfirmationemail(){

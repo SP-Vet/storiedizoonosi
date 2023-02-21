@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
@@ -27,28 +53,23 @@ use DateTime;
 use DB;
 use Carbon\Carbon;
 
+/**
+ * Manages all the functions that an administrator 
+ * can use regarding the stories that are uploaded to the system
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class AdminStoriesController extends Controller
 {
-     /*
-    |--------------------------------------------------------------------------
-    | Admin Stories Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller manages all the functions that an administrator 
-    | can use regarding the stories that are uploaded to the system
-    |
-    */
     public $mod_stories;
     public $mod_storiessubmit;
     private $request;
     public $menuactive='storie';
     public $errorsFormSubmission='';
     
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(Request $request)
     {
         $this->request=$request;
@@ -70,7 +91,7 @@ class AdminStoriesController extends Controller
     *
     * List all the stories in the system
     *   
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function list(){
@@ -95,8 +116,7 @@ class AdminStoriesController extends Controller
     /**
     *
     * Manage the editing and posting page of stories
-    *   
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function modify(){
@@ -314,7 +334,7 @@ class AdminStoriesController extends Controller
                         }
                     }
                     
-                    //memo PHASES and INSIGHTS FASI
+                    //memo PHASES and INSIGHTS PHASES
                     $ordine=1;
                     $elencosfid=[];
                     $elencoPOSTsfid=[];//it contains the numeric and non-numeric keys before and after storing the phases
@@ -416,10 +436,7 @@ class AdminStoriesController extends Controller
                     }else{
                         //delete all snippets from all phases of the story
                         Snippets::where('sfid',$elencosfid)->delete();
-                    }
-
-
-                    
+                    }                    
                     
                     DB::commit();
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT TRY] modify', $this->mod_log->getParamFrontoffice());
@@ -431,7 +448,6 @@ class AdminStoriesController extends Controller
                     echo $e->getMessage();
                     exit;
                 }
-               
             }else{
                 Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] modify', $this->mod_log->getParamFrontoffice('form errato'));
                 $this->request->session()->flash('formerrato', '<h5>Dati non corretti - RICONTROLLARE TUTTI I CAMPI INSERITI</h5>'."".$this->errorsFormSubmission);
@@ -508,7 +524,7 @@ class AdminStoriesController extends Controller
     /**
     *
     * Method for checking validation data of the insert/modify form
-    * @return boolean
+    * @return BOOL
     *
     */
     private function checkform(){
@@ -593,7 +609,7 @@ class AdminStoriesController extends Controller
     /**
     *
     * Check the uniqueness of the url for story
-    * @return json
+    * @return JSON
     *
     */
     public function checkslug(){
@@ -611,7 +627,7 @@ class AdminStoriesController extends Controller
     /**
     *
     * Publish the story
-    * @return json
+    * @return JSON
     *
     */
     public function publishstory(){
@@ -629,8 +645,8 @@ class AdminStoriesController extends Controller
     *
     * Prepare the text to be published for errors
     * 
-    * @param $arrayErr array with the list of form errors
-    * @return boolean
+    * @param Array $arrayErr array with the list of form errors
+    * @return BOOL
     *
     */
     private function setVisualErrors($arrayErr){
@@ -645,7 +661,7 @@ class AdminStoriesController extends Controller
     * Prepare the data for storage
     * 
     * @param $data string value to set
-    * @return string
+    * @return STRING
     *
     */
     private function dataready($data) {

@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use App\Models\Admin;
@@ -17,7 +43,14 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
-
+/**
+ * Manages the integrations of the platform
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class AdminIntegrationsController extends Controller
 {
     public $mod_integrations;
@@ -37,7 +70,7 @@ class AdminIntegrationsController extends Controller
     *
     * List of all integrations in the system
     *   
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function list(){
@@ -58,6 +91,11 @@ class AdminIntegrationsController extends Controller
                 ]);
     }
     
+    /**
+     * Manage all parameters of an integration.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function manage(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] manage', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin')return redirect('/admin');
@@ -127,7 +165,7 @@ class AdminIntegrationsController extends Controller
   /**
     *
     * Method for checking the validity of the management form data
-    * @return boolean
+    * @return BOOL
     *
     */
     private function checkform(){
@@ -144,6 +182,12 @@ class AdminIntegrationsController extends Controller
      
     }
     
+    /**
+    *
+    * Method for quickly publishing an integration
+    * @return JSON
+    *
+    */
     public function publishintegrations(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] publishintegrations', $this->mod_log->getParamFrontoffice());
         if(!preg_match('/^[1-9][0-9]*$/',$this->request->said)){
@@ -166,6 +210,12 @@ class AdminIntegrationsController extends Controller
         return response()->json(['error'=>false,'message'=>'']);
     }
     
+    /**
+    *
+    * Method for get all integrations of a phase
+    * @return JSON
+    *
+    */
     public function getphaseintegrations(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] getphaseintegrations', $this->mod_log->getParamFrontoffice());
         if($this->request->sfid!='' && !preg_match('/^[1-9][0-9]*$/',$this->request->sfid)){
@@ -175,12 +225,19 @@ class AdminIntegrationsController extends Controller
         $integrazioni=$this->mod_integrations->getAll(['sa.sfid'=>$this->request->sfid]);
         return response()->json(['error'=>false,'message'=>'','integrazioni'=>$integrazioni]);
     }
-    
+
+    /**
+    *
+    * Method for set up all form errors
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
 }

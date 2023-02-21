@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
@@ -7,15 +33,21 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
 use App\Models\Reviews;
 use App\Models\Admin;
-
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
+/**
+ * Manage all functions related to the review of zoonoses present in the system 
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class ReviewsController extends Controller
 {
     public $mod_integrations;
@@ -28,6 +60,13 @@ class ReviewsController extends Controller
         $this->mod_log=new LogPersonal($request);
     }
         
+    /**
+    *
+    * Remove a review stored into the DB and folder
+    *
+    * @return JSON
+    *
+    */
     public function eliminareview(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] eliminareview', $this->mod_log->getParamFrontoffice());
         if(($this->request->srid!='' && !preg_match('/^[1-9][0-9]*$/',$this->request->srid) )|| $this->request->srid=='' ){
@@ -45,7 +84,7 @@ class ReviewsController extends Controller
             $pathpdf = storage_path('app/public/reviews/'.$review->zid.'/'. $review->file_memorizzato);
             if(file_exists($pathpdf))
                 unlink($pathpdf);
-            //eliminazione da DB
+            //delete from DB
             Reviews::destroy($this->request->srid);           
             DB::commit();
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] eliminareview', $this->mod_log->getParamFrontoffice());
@@ -57,7 +96,13 @@ class ReviewsController extends Controller
         }
     }
     
-    
+    /**
+    *
+    * Add a review into the system
+    *
+    * @return JSON
+    *
+    */
     public function aggiungireview(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] aggiungireview', $this->mod_log->getParamFrontoffice());
         //echo'<pre>';print_r($this->request->file('review'));exit;

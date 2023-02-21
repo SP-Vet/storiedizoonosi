@@ -204,10 +204,11 @@
         <button type="button" class="btn bg-success-pastel fw-bold w-100 hover-color-white" onclick="getdaticontesto();" data-bs-toggle="modal" data-bs-target="#modalQuesiti">
             DATI DI CONTESTO
         </button> 
-        <!--<button type="button" class="btn bg-orange-pastel fw-bold w-100 hover-color-white" onclick="getreview();" data-bs-toggle="modal" data-bs-target="#modalReview">
-            REVIEW <?= strtoupper($storia->nomezoonosi);?>
-        </button>-->
-        <?php if($storia->linkraccoltereview!=''){ ?>
+        <?php if(isset($revfiles[$storia->zid])){?>
+            <button type="button" class="btn bg-orange-pastel fw-bold w-100 hover-color-white" onclick="getreview();" data-bs-toggle="modal" data-bs-target="#modalReview">
+                REVIEW <?= strtoupper($storia->nomezoonosi);?>
+            </button>
+        <?php }elseif($storia->linkraccoltereview!=''){ ?>
             <a target="_blank" href="<?=$storia->linkraccoltereview;?>" title="Raccolta delle review per la zoonosi">
                <button type="button" class="btn bg-orange-pastel fw-bold bg-gradient blob w-100 h-100 hover-color-white"><strong>"SHORT" NARRATIVE REVIEW <i class="fa fa-database" style="vertical-align: middle;"></i></strong></button>
             </a>

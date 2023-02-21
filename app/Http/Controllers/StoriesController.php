@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
@@ -19,10 +45,20 @@ use App\Models\Home;
 use App\Models\Privacy;
 use App\Http\Controllers\LogPersonal;
 Use App\Models\Multimediaelements;
+Use App\Models\Reviews;
 
+/**
+ * Manage all functions available to the user 
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class StoriesController extends Controller
 {
     public $mod_stories;
+    public $mod_review;
     private $request;
     private $og_url='';
     private $og_type='article';
@@ -32,7 +68,6 @@ class StoriesController extends Controller
     private $art_author='';
     private $art_description='';
     private $art_abstract='';
-    
     public $errorsFormSubmission='';
 
     public function __construct(Request $request)
@@ -43,13 +78,14 @@ class StoriesController extends Controller
         $this->mod_privacy = new Privacy();
         $this->mod_multimediaelements= new Multimediaelements();
         $this->mod_log=new LogPersonal($request);
+        $this->mod_review= new Reviews();
     }
     
     /**
     *
     * Lists all the stories present in the system according to the parameters
-    *   @param $slugzoonosi slug of zoonosi
-    * @return view
+    * @param String $slugzoonosi slug of zoonosi
+    * @return \Illuminate\Http\Response
     *
     */
     public function list($slugzoonosi=''){
@@ -106,6 +142,12 @@ class StoriesController extends Controller
                 ->with('art_description','Risultati ricerca storie '.$listastorie);
     }
     
+    /**
+    *
+    * Check if all parameters used to search a story are correct
+    * @return BOOL
+    *
+    */
     private function checkSearchform(){
         $request_post=$this->request->all();
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] checkSearchform', $this->mod_log->getParamFrontoffice());
@@ -222,6 +264,17 @@ class StoriesController extends Controller
         return true;
     }
     
+    /**
+    *
+    * Lists all the stories present in the system according to the parameters
+    * @param Array $where all conditions can be interpretate with a where condition
+    * @param Array $whereand all conditions can be interpretate with a whereand condition
+    * @param Array $whereor all conditions can be interpretate with a whereor condition
+    * @param Array $wherenot all conditions can be interpretate with a wherenot condition
+    * @param Array $wheresame all conditions can be interpretate with a wheresame condition
+    * @return BOOL
+    *
+    */
     private function setSearchParameters(&$where,&$whereand,&$whereor,&$wherenot,&$wheresame){
         $request_post=$this->request->all();
         if($request_post['data_dal']!='')$where[]=['s.anno_ambientazione','>=',Carbon::createFromFormat('d/m/Y', $request_post['data_dal'])->format('Y')];
@@ -258,16 +311,17 @@ class StoriesController extends Controller
                 }
             } 
         }
+        return true;
     }
+
     /**
     *
     * Landing page with search form
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */  
     public function search(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] search', $this->mod_log->getParamFrontoffice());
-
         $title_page='Ricerca storie';
         $order=[];
         $order['zu.nome']='ASC';
@@ -284,8 +338,8 @@ class StoriesController extends Controller
     /**
     *
     * Extract all the details of a story
-    *   @param $sid id of the story 
-    * @return view
+    * @param String $slug slug of the story 
+    * @return \Illuminate\Http\Response
     *
     */
     public function storydetail($slug=''){
@@ -295,7 +349,7 @@ class StoriesController extends Controller
         if(count($storia)==0){
             return back()->withInput()->with('messageinfo', 'Storia non trovata.');
         }
-        
+
         $collaboratori=[];
         $collaboratori=$this->mod_stories->getStoryCollaborators($storia[0]->sid,1)->toArray();
         
@@ -338,6 +392,13 @@ class StoriesController extends Controller
             }
         }
        
+        $review=$revfiles=[];
+        $review=$this->mod_review->getAllReview()->toArray();
+        if(count($review)>0){
+            foreach ($review AS $document)
+                $revfiles[$document->zid]=$document;
+        }
+
         //metadata for article
         $this->setMetadataStory($storia[0],$collaboratori);
         
@@ -367,13 +428,21 @@ class StoriesController extends Controller
                 ->with('approfondimenti_genitori',$approfondimenti_genitori)
                 ->with('numero_approfondimenti_fasi',$numero_approfondimenti_fasi)
                 ->with('snippetfase',$snippetfase)
-                ->with('video',$video)->with('podcast',$podcast)->with('pdfstoria',$pdfstoria)
+                ->with('video',$video)->with('podcast',$podcast)->with('pdfstoria',$pdfstoria)->with('revfiles',$revfiles)
                 ->with('og_url',$this->og_url)->with('og_title',$this->og_title)->with('og_description',$this->og_description)->with('og_type',$this->og_type)
                 ->with('art_type_dc',$this->art_type_dc)
                 ->with('art_author',$this->art_author)->with('art_title',$this->art_title)->with('art_description',$this->art_description)->with('art_abstract',$this->art_abstract)
                 ->with('art_datapublic',$this->art_datapublic);
     }
     
+    /**
+    *
+    * Set all metadata for the header of the story
+    * @param Object $storia params of the story
+    * @param Array $collaboratori optional array with all collaborators of the story
+    * @return BOOL
+    *
+    */
     private function setMetadataStory($storia,$collaboratori=''){
         $this->og_url=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->og_title=$storia->titolo;
@@ -387,9 +456,15 @@ class StoriesController extends Controller
         $this->art_type_dc='Text';
         if(isset($collaboratori) && count($collaboratori)>0)
             $this->art_author=$collaboratori[0]->nome.' '.$collaboratori[0]->cognome;
-        return;
+        return true;
     }
     
+    /**
+    *
+    * Get (if exists) the context data of a story
+    * @return JSON
+    *
+    */
     public function getcontextdatastory(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getcontextdatastory', $this->mod_log->getParamFrontoffice());
         if(preg_match('/^[1-9][0-9]*$/',$this->request->sid)){
@@ -411,6 +486,12 @@ class StoriesController extends Controller
         }
     }
     
+    /**
+    *
+    * Get (if exists) the informations and the link of a review
+    * @return JSON
+    *
+    */
     public function getreviewzoonosi(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getreviewzoonosi', $this->mod_log->getParamFrontoffice());
         if(preg_match('/^[1-9][0-9]*$/',$this->request->zid)){
@@ -428,6 +509,12 @@ class StoriesController extends Controller
         }
     }
     
+    /**
+    *
+    * Get (if exists) the snippet's data
+    * @return JSON
+    *
+    */
     public function getsnippet(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] getsnippet', $this->mod_log->getParamFrontoffice());
         if(preg_match('/^[1-9][0-9]*$/',$this->request->snid)){
@@ -446,6 +533,12 @@ class StoriesController extends Controller
         }
     }
     
+    /**
+    *
+    * Add a new story proposal and notified to the administrators and to the user
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function reportstory(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] reportstory', $this->mod_log->getParamFrontoffice());
         $title_page='Crowdsourcing storie';
@@ -604,6 +697,7 @@ class StoriesController extends Controller
                         $message->subject('Nuova storia inserita');
                         $message->to('e.rivosecchi@izsum.it');
                         $message->cc('r.ciappelloni@izsum.it');
+                        $message->cc('m.roccetti@izsum.it');
                     });
                             
                     //sending email to user
@@ -640,6 +734,12 @@ class StoriesController extends Controller
                 ->with('art_description','Compilare il form per sottomettere a revisione una nuova storia di zoonosi');
     }
     
+    /**
+    *
+    * Check if all parameters used to submit a story are correct
+    * @return BOOL
+    *
+    */
     private function checkSubmissionform(){
         $request_post=$this->request->all();
         $lang=($request_post['language']=='EN')?'_en':'';
@@ -778,12 +878,19 @@ class StoriesController extends Controller
         return true;
     }
     
-     private function setVisualErrors($arrayErr){
+    /**
+    *
+    * Prepare the text to be published for errors
+    * 
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
+    private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
-  
 }

@@ -1,3 +1,30 @@
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
+
 $(document).ready(function(){
     initDeletePart();
     initDeleteCollaboratore();
@@ -22,14 +49,12 @@ $(document).ready(function(){
     
     initChiudiSnippet();
 
-    //aggiunta parti
+    //adding parts
     $('.button-add-part').click(function(e){
         e.preventDefault();
         let numparti=$('.contenitore-parte').length;
         let numnuovaparte=numparti+1;
-        
         let casualstring=makeidletter(15);
-
         let parte='';
         parte+='<div class="contenitore-parte border rounded overflow-hidden flex-md-row m-3 p-3">';
             parte+='<div class="row">';
@@ -83,7 +108,7 @@ $(document).ready(function(){
             case 'undefined':
                 break;
             case '0':
-                //nuovo collaboratore da aggiungere
+                //new collaborator to add
                 let txtcoll='';
                 txtcoll='<div class="collaboratore d-flex mb-2">';
                 txtcoll+='<input type="hidden" name="collid[]" value="" />';
@@ -104,7 +129,7 @@ $(document).ready(function(){
 
                 break;
             default:
-                //get dati collaboratore da chiamata ajax
+                //get collaborator data from ajax call
                 if($.isNumeric(collid)){
                     $.ajax({
                         type:'POST',
@@ -154,8 +179,6 @@ $(document).ready(function(){
                 </div>*/
                 break;
         }
-        
-        //$('.elenco-collaboratori').append();
     })
     
 
@@ -213,20 +236,17 @@ $(document).ready(function(){
 
 function checkValidityCKEDITORGestionestoria(){
     let flagerr=0;
-    
     let textbox_abstract = CKEDITOR.instances.abstract.getData();
     if (textbox_abstract===''){
         flagerr=1;
         aggiungiErroreMSGError('<p><strong>L&apos;Abstract è obbligatorio</strong></p>');
     }
-    
     let textbox_copyright = CKEDITOR.instances.copyright.getData();
     if (textbox_copyright===''){
         flagerr=1;
         aggiungiErroreMSGError('<p><strong>Il Copyright è obbligatorio</strong></p>');
     }
-    
-    //descrizioni parti storia
+    //story parts descriptions
     if($('.contenitore-parte').length==='undefined' || $('.contenitore-parte').length==0){
         flagerr=1;
         aggiungiErroreMSGError('<p><strong>Inserire almeno una parte della storia</strong></p>');
@@ -241,7 +261,7 @@ function checkValidityCKEDITORGestionestoria(){
         })
     }
     
-    //testo snippet
+    //snippet text
     if($('.blocco-snippet').length!=='undefined' && $('.blocco-snippet').length>0){
         $('.blocco-snippet').each(function(){
             let iddescsnip=$(this).find('textarea.testosnippet').attr('id');
@@ -264,12 +284,9 @@ function checkValidityCollaboratori(){
     }
     return true;
 }
-
-
 function aggiungiErroreMSGError(msg){
     $('.msgContainerError').append(msg);
 }
-
 function svuotaContainerMSGError(){
     $('.msgContainerError').html('');
 }
@@ -284,36 +301,32 @@ function visualizzaContainerMSGError(){
         if($(this).hasClass('d-none'))$(this).removeClass('d-none');
     })
 }
-
 function initNuovoSnippet(obj){
     if(obj){
         $(obj).find('.nuovo-snippet').click(function(){
             let sfid=$(this).closest('.contenitore-parte').find('input[name="sfid[]"]').val();
-            //alert(sfid);
             creaBloccoSnippet(sfid,$(this).closest('.contenitore-parte'));
         })
     }else{
         $('.nuovo-snippet').click(function(){
             let sfid=$(this).closest('.contenitore-parte').find('input[name="sfid[]"]').val();
-            //alert(sfid);
             creaBloccoSnippet(sfid,$(this).closest('.contenitore-parte'));
         })
     }
 }
-
 function initEliminaSnippet(obj){
     if(obj){
         $(obj).find('.elimina-snippet').click(function(){
             let snid=$(this).closest('.contenitore-parte').find('select.snippetsfase').val();
             if($.isArray(snid))snid=snid[0];
             if(snid!=='undefined' && snid!=''){
-                //rimuovi opzione select
+                //remove select option
                 $(this).closest('.contenitore-parte').find('select.snippetsfase option[value="'+snid+'"]').remove();
-                //deselezionare la select
+                //uncheck the select
                 $(this).closest('.contenitore-parte').find('select.snippetsfase option:selected').prop("selected", false);
-                //nascondere tutti blocchi snippets
+                //hide all block snippets
                 chiudiTuttiSnippetFase($(this).closest('.contenitore-parte'));
-                //cancellare blocco snippets
+                //clear block snippets
                 $('.blocco-snippet[snid="'+snid+'"]').remove();
             }
         })
@@ -322,19 +335,18 @@ function initEliminaSnippet(obj){
             let snid=$(this).closest('.contenitore-parte').find('select.snippetsfase').val();
             if($.isArray(snid))snid=snid[0];
             if(snid!=='undefined' && snid!=''){
-                //rimuovi opzione select
+                //remove select option
                 $(this).closest('.contenitore-parte').find('select.snippetsfase option[value="'+snid+'"]').remove();
-                //deselezionare la select
+                //uncheck the select
                 $(this).closest('.contenitore-parte').find('select.snippetsfase option:selected').prop("selected", false);
-                //nascondere tutti blocchi snippets
+                //hide all block snippets
                 chiudiTuttiSnippetFase($(this).closest('.contenitore-parte'));
-                //cancellare blocco snippets
+                //clear block snippets
                 $('.blocco-snippet[snid="'+snid+'"]').remove();
             }
         })
     }
 }
-
 function creaSelectSnippetfase(){
     let txtbloccosnip='';
     txtbloccosnip+='<div class="col-md-5">';
@@ -346,18 +358,15 @@ function creaSelectSnippetfase(){
                     txtbloccosnip+='<input type="button" class="btn btn-sm btn-outline-danger elimina-snippet" value="Elimina Snippet" />';
                 txtbloccosnip+='</div>';
             txtbloccosnip+='</div>';
-
             txtbloccosnip+='<select class="form-control snippetsfase" multiple></select>';
-
             txtbloccosnip+='<hr />';
         txtbloccosnip+='</div>';  
     txtbloccosnip+='</div>';
     return txtbloccosnip;
 }
-
 function initSelectSnippetfase(obj){
     if(obj){
-        //gestione visualizzazione snippet fase
+        //stage snippet display management
         $(obj).find('select.snippetsfase').change(function(){
             let snid=$(this).val();
             if($.isArray(snid))snid=snid[0];
@@ -372,7 +381,7 @@ function initSelectSnippetfase(obj){
             }
         })
     }else{
-        //gestione visualizzazione snippet fase
+        //stage snippet display management
         $('select.snippetsfase').change(function(){
             let snid=$(this).val();
             if($.isArray(snid))snid=snid[0];
@@ -388,8 +397,6 @@ function initSelectSnippetfase(obj){
         })
     }
 }
-
-
 function initChiudiSnippet(obj){
     if(obj){
         $(obj).find('input.chiudi-snippet').click(function(){
@@ -406,7 +413,6 @@ function initChiudiSnippet(obj){
         })
     }else{
         $('input.chiudi-snippet').click(function(){
-            //chiudiSnippets($(this).closest('.blocco-snippet'),0);
             //check values snip
             if(checkValidSnip($(this).closest('.blocco-snippet'))){
                 chiudiSnippets($(this).closest('.blocco-snippet'),1);
@@ -426,7 +432,6 @@ function chiudiTuttiSnippetFase(bloccosnippets){
         if(!$(this).hasClass('d-none'))$(this).addClass('d-none');
     })
 }
-
 function makeid(length) {
     var result= '';
     var characters= '0123456789';
@@ -436,7 +441,6 @@ function makeid(length) {
    }
    return result;
 }
-
 function makeidletter(length) {
     var result= '';
     var characters= 'abcdefghijklmnopqrstuvwxyz';
@@ -446,12 +450,11 @@ function makeidletter(length) {
    }
    return result;
 }
-
 function creaBloccoSnippet(sfid,contenitoreparte,){
     let bloccosnip='';
     let casualstring=makeidletter(15);
     
-    //chiusura di tutti gli snippet aperti per la parte di storia
+    //closing all open snippets for the story part
     chiudiSnippets($(contenitoreparte).find('.blocco-snippet'),0);
     
     bloccosnip+='<div class="blocco-snippet row" snid="'+casualstring+'">';
@@ -481,9 +484,7 @@ function creaBloccoSnippet(sfid,contenitoreparte,){
             bloccosnip+='<input type="button" class="btn btn-sm btn-warning chiudi-snippet" value="Chiudi Snippet" />';
         bloccosnip+='</div>';
     bloccosnip+='</div>';
-    
-    //console.log($('input[name="sfid[]"][value="'+sfid+'"]').closest('.contenitore-parte').find('.contenitoresnippetfase'));
-    //console.log(casualstring);
+
     $('input[name="sfid[]"][value="'+sfid+'"]').closest('.contenitore-parte').find('.contenitoresnippetsfase').append(bloccosnip);
     
     let idtextarea= 'testosnippet-'+casualstring;
@@ -498,12 +499,11 @@ function creaBloccoSnippet(sfid,contenitoreparte,){
 }
 
 function creaNuovaOpzioneSnippet(selsnip,id){
-        $(selsnip).append($('<option>', {
-            value: id,
-            text: 'NUOVO SNIPPET'
-        }));
-    }
-
+    $(selsnip).append($('<option>', {
+        value: id,
+        text: 'NUOVO SNIPPET'
+    }));
+}
 function checkValidSnip(snip){    
     if($(snip).find('.titolosnippet').val()==='' 
         || $(snip).find('.chiavesnippet').val()==='' 
@@ -511,7 +511,6 @@ function checkValidSnip(snip){
     return false;
     return true;
 }
-
 function chiudiSnippets(snip,salva){
     $(snip).closest('.contenitoresnippetsfase').find('.snippetsfase').prop("selected", false);
     $(snip).closest('.contenitoresnippetsfase').find('.snippetsfase').val('').change();
@@ -544,7 +543,6 @@ function initChooseVideo(){
         }
     })
 }
-
 function initDeletePart(obj){
     if(typeof obj !== 'undefined'){
         $(obj).find('.deletePart').click(function(){
@@ -574,7 +572,6 @@ function confermaEliminazioneParte(parte){
         }
     }) 
 }
-
 function initDeleteCollaboratore(obj){
     if(typeof obj !== 'undefined'){
         $(obj).find('.deleteCollaboratore').click(function(){
@@ -603,7 +600,6 @@ function confermaEliminazioneCollaboratore(collaboratore){
         }
     }) 
 }
-
 function ricalcolaNumerazioneParti(){
     let numparti=1;
     $('.contenitore-parte').each(function(){

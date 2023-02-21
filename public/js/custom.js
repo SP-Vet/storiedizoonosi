@@ -1,3 +1,31 @@
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
+
+
 /* START toggle menu */
 /*window.addEventListener('DOMContentLoaded', event => {
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -38,9 +66,7 @@ $(document).ready(function(){
         format: "dd/mm/yyyy",
         showWeekDays: false
     });
-  
-
-    
+      
     $('#catzoonosi').change(function(){
         let idzon=$(this).val();
         if($.isNumeric(idzon)){
@@ -57,8 +83,7 @@ $(document).ready(function(){
         $('.container-form-sub-'+ln).show();
     });
 
-
-    //rimozione della classe show per far comprimere il blocco degli approfondimenti
+    //removing the show class to collapse the insights block
     if($(window).width() < 700){
         $('.collapse-approfondimenti').removeClass("show");
         $('.collapse-approfondimenti').addClass("collapse");
@@ -133,9 +158,6 @@ $(document).ready(function(){
         /*END DA TESTARE FUNZIONAMENTO SU MOBILE */
     }
 
-    
-
-
     $('.elimina-suggerimento').click(function(){
         let blocco=$(this).closest('.accordion-item');
         cancellaSelezione();
@@ -147,8 +169,6 @@ $(document).ready(function(){
         cancellaRisposta(blocco);
         chiudiSuggerimentoRisposta();
     })
-
-
 
     $('.invia-approfondimento').click(function(){
         //alert("La funzione non è ancora disponibile.");return;
@@ -207,16 +227,13 @@ $(document).ready(function(){
                             /*footer: '<a href="">Why do I have this issue?</a>'*/
                         })
                     }
-                    
                 }
             })
-          
         }
     })
 
     $('.toggle h3').on('click', function(e){
         var answer = $(this).next('.toggle-info');
-        
         if(!$(answer).is(":visible")) {
             $(this).parent().addClass('open');
         } else {
@@ -258,8 +275,6 @@ function hideloader(){
     $('.custom-loader-title').html('Attendere');
     $('.custom-loader-text').html('');
 }
-
-
 function ricalcolaNumApprBlocchi(){
     let numappr=0;
     $('.approfondimenti-blocco').each(function(){
@@ -268,7 +283,6 @@ function ricalcolaNumApprBlocchi(){
         $(this).find('span.tot-approfondimenti').html(numappr);
     })
 }
-
 function initRispondiApprofondimento(bloccco=""){
     if(typeof blocco !== 'undefined' && blocco !== null && blocco!=""){
         $(blocco).find('.rispondi-approfondimento').click(function(e){
@@ -282,7 +296,6 @@ function initRispondiApprofondimento(bloccco=""){
         })
     }
 }
-
 function preparaRispondi(obj){
     let idcom=$(obj).attr("idcom");
     let idappro_container=$(obj).closest('.containergenerale-approfondimento').find(".approfondimento-commento").attr("idcom");
@@ -293,11 +306,9 @@ function preparaRispondi(obj){
     setIdRisposta(blocco,idcom);
 
 }
-
 function setIdRisposta(blocco,idcom){
     $(blocco).find(".testo-risposta").attr("idcomrisp",idcom);
 }
-
 function initEvidenziatesto(blocco,bl){
     if(typeof blocco !== 'undefined' && blocco !== null){
         $(blocco).find('.approfondimento-commento').unbind( "click" );
@@ -314,7 +325,6 @@ function initEvidenziatesto(blocco,bl){
         })
     }
 }
-
 function selezionaCommento(commento){
     $(commento).closest('.approfondimenti-blocco').find('.commento-select').removeClass('commento-select');
     $(commento).addClass('commento-select');
@@ -322,7 +332,6 @@ function selezionaCommento(commento){
 function replaceAllSpecialChars(str){
     let stringreplaced='';
     stringreplaced=str.replace("'",'&#39;');
-    
     stringreplaced==stringreplaced.replace("à",'&agrave;');
     stringreplaced==stringreplaced.replace("À",'&Agrave;');
     stringreplaced==stringreplaced.replace("è",'&egrave;');
@@ -333,7 +342,6 @@ function replaceAllSpecialChars(str){
     stringreplaced==stringreplaced.replace("Ò",'&Ograve;');
     stringreplaced==stringreplaced.replace("ù",'&ugrave;');
     stringreplaced==stringreplaced.replace("Ù",'&Ugrave;');
-
     return stringreplaced;
 }
 
@@ -362,7 +370,6 @@ function evidenziaEventoJQ(elemento,bl) {
             }
         }    
     }
-    
 }
 
 function stripHtml(html)
@@ -371,7 +378,6 @@ function stripHtml(html)
    tmp.innerHTML = html;
    return tmp.textContent || tmp.innerText || "";
 }
-
 function cancellaSelezioneBlocco(bl){
     let idblo=$(bl).find('.testo-blocco').attr("idblocco");
     //console.log($.testoBlo[idblo]);
@@ -381,7 +387,6 @@ function cancellaSelezioneBlocco(bl){
         $(bl).find('.testo-blocco').html(oldtesto);
     }
 }
-
 function getSelectedText() {
     if (window.getSelection) {
         //console.log(window.getSelection().toString());
@@ -391,7 +396,6 @@ function getSelectedText() {
     }
     return '';
 }
-
 function getSelectionHtml() {
     var html = "";
     if (typeof window.getSelection != "undefined") {
@@ -410,16 +414,13 @@ function getSelectionHtml() {
     }
     return html;
 }
-
 function cancellaSelezione(){$('.testo-approfondimento').html('');}
 function cancellaRisposta(blocco){
     $(blocco).find('.testo-risposta').html('');
     $(blocco).find('.testo-risposta').attr("idcomrisp","");
 }
-
 function chiudiSuggerimentoSelezione(){$('.container-testo-approfondimento').hide('slow');}
 function chiudiSuggerimentoRisposta(){$('.container-testo-risposta').hide('slow');}
-
 function apriSuggerimentoSelezione(blocco){
     $(blocco).find('.container-testo-approfondimento').show('slow',function(){
             $(blocco).find('.messaggio-approfondimento').focus();
@@ -427,21 +428,16 @@ function apriSuggerimentoSelezione(blocco){
             $(window).scrollTop($(blocco).find('.inserisci-approfondimento').offset().top);
     });
 }
-
 function apriSuggerimentoRisposta(blocco){
-    //
     let commento=$(blocco).find('.containergenerale-approfondimento p').html();
     $(blocco).find('.container-testo-risposta figcaption').html(commento);
-
 	$(blocco).find('.container-testo-risposta').show('slow',function(){
 		$(blocco).find('.messaggio-approfondimento').focus();
 		//scroll al riepilogo della selezione e proposta di approfondimento
 		$(window).scrollTop($(blocco).find('.inserisci-approfondimento').offset().top);
 	});
 }
-
 function pulisciTestoApprofondimento(blocco){$(blocco).find('.messaggio-approfondimento').val('');}
-
 function convertToSlug(Text) {
   return Text.toLowerCase()
              .replace(/[^\w ]+/g, '')

@@ -1,12 +1,45 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use DB;
 
+/**
+ * Manages all functions of the stories
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class Stories extends Model
 {
     public $whereand=[];
@@ -15,56 +48,44 @@ class Stories extends Model
     public $wheresame=[];
     public $keyindex=0;
     
-    /*
-     *status stories: 0-pending approval,1-under processing,2-published,3-hidden 
-     *      */
-    
     //don't save created_at ed updated_at
     public $timestamps = false;
-    
     use HasFactory;
     protected $table='meoh_storie';
     protected $primaryKey='sid';
     protected $table_storielingue='meoh_storielingue_ass';
     protected $table_storie_review='meoh_storie_review';
-    
     protected $table_storie_approfondimenti='meoh_storie_approfondimenti';
-
     protected $table_storie_submitutente='meoh_storie_submit_utente';
-    protected $table_storie_submitfiles='meoh_storie_submit_files';
-
-        
+    protected $table_storie_submitfiles='meoh_storie_submit_files';   
     protected $table_storie_snippets='meoh_storie_snippets';
     protected $table_storie_snippetslingue='meoh_storie_snippetslingue_ass';
-    
-    
     protected $table_storiefasi='meoh_storiefasi';
     protected $table_storiefasilingue='meoh_storiefasilingue_ass';
-
     protected $table_ruoli='meoh_ruoli';
     protected $table_ruolilingue='meoh_ruolilingue_ass';
-    
     protected $table_storiecollaboratori='meoh_storiecollaboratori';
     protected $table_collaboratori='meoh_storie_collaboratori';
     protected $table_zoonosi='meoh_zoonosi';
     protected $table_zoonosilingue='meoh_zoonosilingue_ass';
-    
     protected $table_datibase='meoh_datibase';
-    protected $table_daticontesto='meoh_quesitichiavelingue_ass';
-    //protected $table_zoonosi='meoh_zoonosi';
- 
+    protected $table_daticontesto='meoh_quesitichiavelingue_ass'; 
     protected $table_utenti='users';
     protected $lang=1;
     
     /**
+     * STORIES STATUS: 0-pending approval,1-under processing,2-published,3-hidden 
+     *      
+     */
+
+    /**
      * Method for searches stories in the system
      *
-     *  @param array $where the conditions of where in query
-     *  @param array $order the sorting conditions in queries
-     *  @return 
+     *  @param Array $where the conditions of where in query
+     *  @param Array $order the sorting conditions in query
+     *  @return Object
      */
     public function getAll($where=[],$order=[]){
-        
         $queryBuilder=DB::table($this->table.' AS s')->select('s.*','sl.titolo','sl.slug','u.name AS nomeutente','ssu.titolo_inserito','ssu.tipozoonosi_inserito','zl.nome AS nome_zoonosi')
                 ->leftJoin($this->table_storielingue.' AS sl','s.sid','sl.sid')
                 ->leftJoin($this->table_utenti.' AS u','s.uid','u.id')
@@ -72,31 +93,33 @@ class Stories extends Model
                 ->leftJoin($this->table_zoonosi.' AS z','z.zid','s.zid')
                 ->leftJoin($this->table_zoonosilingue.' AS zl','zl.zid','z.zid')
                 ->where('sl.lid',$this->lang)->orWhereNull('sl.lid');
-                
         if(!empty($where))
-            $queryBuilder->where($where);
-                
+            $queryBuilder->where($where);    
         if(!empty($order))
             foreach ($order AS $key2=>$ord)
                 $queryBuilder->orderBy($key2,$ord);
-   
+
         return $queryBuilder->get();
     }
     
     /**
      * Method for searches stories in the system
      *
-     *  @param array $where the conditions of where in query
-     *  @param array $order the sorting conditions in queries
-     *  @return array
+     *  @param Array $where the conditions of where in query
+     *  @param Array $whereand the conditions of whereand in query
+     *  @param Array $whereor the conditions of whereor in query
+     *  @param Array $wherenot the conditions of wherenot in query
+     *  @param Array $wheresame the conditions of wheresame in query
+     *  @param Array $order the sorting conditions in query
+     *  @return Object
+     * 
      */
     public function getStories($where=[],$whereand=[],$whereor=[],$wherenot=[],$wheresame=[],$order=[]){
         $this->whereand=$whereand;
         $this->whereor=$whereor;
         $this->wherenot=$wherenot;
         $this->wheresame=$wheresame;
-        
-        
+    
         $queryBuilder=DB::table($this->table.' AS s')->select('s.*','sl.*','zl.nome AS nome_zoonosi','z.linktelegram',DB::raw('CONCAT(coll.nome,\' \',coll.cognome) AS autore'),'coll.grado','u.email')->distinct()
                 ->leftJoin($this->table_storielingue.' AS sl','s.sid','sl.sid')
                 ->leftJoin($this->table_storiecollaboratori.' AS scoll', function ($join) {
@@ -113,7 +136,6 @@ class Stories extends Model
                 ->where('sfl.lid',$this->lang)
                 ->where('zl.lid',$this->lang);
                 
-        
         if(!empty($where))
             $queryBuilder->where($where);
                 
@@ -125,7 +147,6 @@ class Stories extends Model
             if(isset($this->whereand[$i]) && array_key_exists($i,$this->whereand)){
                 $queryBuilder->where(function ($query) {
                     foreach ($this->whereand[$this->keyindex] AS $tw=>$valori_and){
-                        //echo '<pre>';print_r($valori_and);exit;
                         switch($valori_and[0]){
                             case 'Autore':
                                 $query->where(DB::raw("LOWER(CONCAT(coll.nome,' ',coll.cognome))"),(string)$valori_and[1],(string)$valori_and[2]);
@@ -141,7 +162,6 @@ class Stories extends Model
                             default:
                                 break;
                         }
-                        //$query->where((string)$valori_and[0],(string)$valori_and[1],'\''.(string)$valori_and[2].'\'');
                     }
                 });
             }
@@ -163,7 +183,6 @@ class Stories extends Model
                             default:
                                 break;
                         }
-                        //$query->orWhere((string)$valori_or[0],(string)$valori_or[1],'\''.(string)$valori_or[2].'\'');
                     }
                 });
             }
@@ -185,11 +204,9 @@ class Stories extends Model
                             default:
                                 break;
                         }
-                        //$query->where((string)$valori_not[0],(string)$valori_not[1],'\''.(string)$valori_not[2].'\'');
                     }
                 });
             }
-            //echo '<pre>';print_r($this->wheresame);exit;
             if(isset($this->wheresame[$i]) && array_key_exists($i,$this->wheresame)){
                 $queryBuilder->where(function ($query) {
                     foreach ($this->wheresame[$this->keyindex] AS $tw=>$valori_same){
@@ -208,20 +225,11 @@ class Stories extends Model
                             default:
                                 break;
                         }
-                        //$query->where((string)$valori_same[0],(string)$valori_same[1],'\''.(string)$valori_same[2].'\'');
                     }
                 });
             }
         }
         
-       /* if(!empty($where))
-            foreach ($where AS $key=>$wh)
-                if(is_array($wh))
-                    $queryBuilder->where($key,$wh[0],$wh[1]);
-                else
-                    $queryBuilder->where($key,$wh);*/
-        
-        //$queryBuilder->groupBy('sl.sid');
         if(!empty($order))
             foreach ($order AS $key2=>$ord)
                 $queryBuilder->orderBy($key2,$ord);
@@ -230,9 +238,10 @@ class Stories extends Model
      }
      
     /**
-     * Method search for a specific story
+     * Method that search for a specific story
      *
-     *  @param int $sid id of the story
+     *  @param Integer $sid id of the story
+     *  @return Object
      *  
      */
     public function getStory($sid){
@@ -247,13 +256,12 @@ class Stories extends Model
         return $queryBuilder->get();
     }
     
-    
-    
     /**
-     * Method search for a specific story via slug
+     * Method search for a specific story from slug
      *
-     *  @param str $slug slug of the story
-     *  
+     *  @param String $slug slug of the story
+     *  @return Object
+     * 
      */
     public function getStoryFromSlug($slug){
         $queryBuilder=DB::table($this->table.' AS s')->select('s.*','sl.*','zl.nome AS nomezoonosi','z.linktelegram','z.linkraccoltereview')
@@ -267,7 +275,13 @@ class Stories extends Model
         return $queryBuilder->get();
     }
     
-    
+    /**
+     * Method search for a specific story from phase's ID
+     *
+     *  @param String $sfid id of the phases
+     *  @return Object
+     * 
+     */
     public function getStoryFromPhaseID($sfid){
         $queryBuilder=DB::table($this->table_storiefasilingue.' AS sfl')->select('sfl.titolofase','sfl.testofase','zl.nome AS nomezoonosi','sl.titolo')
             ->leftJoin($this->table_storiefasi.' AS sf','sf.sfid','sfl.sfid')
@@ -285,8 +299,10 @@ class Stories extends Model
     /**
      * Method that searches for all collaborators linked to a story
      *
-     *  @param int $sid id of the story
-     *  @param int $order if 1 order ASC, if 2 ordr DESC, default random
+     *  @param Integer $sid id of the story
+     *  @param Integer $order [1: order ASC, 2: order DESC, default random]
+     *  
+     *  @return Object
      *  
      */
     public function getStoryCollaborators($sid,$order=0){
@@ -302,7 +318,6 @@ class Stories extends Model
         }elseif($order==2){
             $queryBuilder->orderBy('ru.ordine_ruolo','DESC');
         }
-    
         return $queryBuilder->get();
     }
     
@@ -310,7 +325,8 @@ class Stories extends Model
     /**
      * Method that searches for all the phases of the story
      *
-     *  @param int $sid id of the story
+     *  @param Integer $sid id of the story
+     *  @return Object
      *  
      */
     public function getStoryPhases($sid){
@@ -326,8 +342,9 @@ class Stories extends Model
     /**
      * Method that searches all the integrations starting from a list of id phases
      *
-     *  @param array $elencofasi id list of story phases
-     *  @param array $stati [default 0 = all]
+     *  @param String $elencofasi id list of story phases
+     *  @param String $stati status list [default 0 = all]
+     *  @return Object
      *  
      */
     public function getIntegrationsPhases($elencofasi,$stati=0){
@@ -342,7 +359,13 @@ class Stories extends Model
          return $queryBuilder->get();
     }
     
-    
+    /**
+     * Method that get Context data from a story
+     *
+     *  @param Integer $sid id of the story
+     *  @return Object
+     *  
+     */
     public function getContextdataFromStory($sid){
         $queryBuilder=DB::table($this->table_datibase.' AS dtb')->select('dtb.ordine','dtc.*')
                 ->leftJoin($this->table_daticontesto.' AS dtc','dtc.dbid','dtb.dbid')
@@ -352,6 +375,13 @@ class Stories extends Model
          return $queryBuilder->get();
     }
     
+    /**
+     * Method that get reviews from a zoonosi
+     *
+     *  @param Integer $zid id of the zoonosi
+     *  @return Object
+     *  
+     */
     public function getReviewsFromZoonosi($zid){
         $queryBuilder=DB::table($this->table_storie_review.' AS sr')->select('sr.*')
                  ->where('sr.zid',$zid)
@@ -359,6 +389,13 @@ class Stories extends Model
          return $queryBuilder->get();
     }
     
+    /**
+     * Method that get a snippet from its id
+     *
+     *  @param Integer $snid id of the snippet
+     *  @return Object
+     *  
+     */
     public function getSnippet($snid){
         $queryBuilder=DB::table($this->table_storie_snippetslingue.' AS sn')->select('sn.*')
                  ->where('sn.snid',$snid)
@@ -366,6 +403,13 @@ class Stories extends Model
          return $queryBuilder->get();
     }
     
+    /**
+     * Method that get the snippets from a story
+     *
+     *  @param Integer $sid id of the story
+     *  @return Object
+     *  
+     */
     public function getSnippetsFromStory($sid){
         $queryBuilder=DB::table($this->table_storie_snippetslingue.' AS sn')->select('sn.*','ss.sfid')
                 ->leftJoin($this->table_storie_snippets.' AS ss','ss.snid','sn.snid')
@@ -375,8 +419,15 @@ class Stories extends Model
          return $queryBuilder->get();
     }
     
-    
-    
+    /**
+     * Method that insert or update a story's data
+     *
+     *  @param Integer $sid id of the story
+     *  @param Array $dati array of story's data 
+     *  [if sid exist then update the story otherwise insert]
+     *  @return Object
+     *  
+     */
     public function setStorylanguageAss($sid,$dati){
         if (DB::table($this->table_storielingue)->where('lid', 1)->where('sid',$sid)->exists()) {
             //update
@@ -389,8 +440,17 @@ class Stories extends Model
             $dati['lid']=$this->lang;
             DB::table($this->table_storielingue)->insert($dati);
         }
+        return true;
     }
     
+    /**
+     * Method that update a story's data
+     *
+     *  @param Integer $sid id of the story
+     *  @param Array $dati array of story's data 
+     *  @return BOOL
+     *  
+     */
     public function publishStory($sid,$dati=[]){
         DB::table($this->table)
             ->where('sid', $sid)
@@ -398,6 +458,15 @@ class Stories extends Model
         return true;
     }
     
+     /**
+     * Method that check if already exists a slug in the DB
+     *
+     *  @param String $slug slug to search
+     *  @param Integer $sid id of the story
+     *  [if a sid is provided, exclude it from the search]
+     *  @return Object
+     *  
+     */
     public function checkExistSlug($slug,$sid=0){
         $queryBuilder=DB::table($this->table_storielingue.' AS sl')->select('sl.*')
                 ->where('sl.slug',$slug);
@@ -405,10 +474,4 @@ class Stories extends Model
             $queryBuilder->where('sl.sid','!=',$sid);
          return $queryBuilder->get();
     }
-     
-    
-   
-
-
-
 }

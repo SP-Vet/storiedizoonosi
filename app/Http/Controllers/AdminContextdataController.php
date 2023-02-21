@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
@@ -17,6 +43,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
+/**
+ * Manages the platform's context data
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class AdminContextdataController extends Controller
 {
     public $mod_stories;
@@ -34,10 +68,8 @@ class AdminContextdataController extends Controller
     }
     
     /**
-    *
-    * data management context of a story
-    *   
-    * @return view
+    * Context data management of a story
+    * @return \Illuminate\Http\Response
     *
     */
     public function contextdatastory(){
@@ -47,6 +79,7 @@ class AdminContextdataController extends Controller
             return redirect('/admin');
         }
         $title_page='Dati contesto storia';
+        //if POST insert/update/delete data
         if($this->request->isMethod('post')){
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] contextdatastory', $this->mod_log->getParamFrontoffice('invio post dati di contesto')); 
             if($this->checkform()){
@@ -119,7 +152,7 @@ class AdminContextdataController extends Controller
     /**
     *
     * Method for checking validation data of the insert/modify form
-    * @return boolean
+    * @return BOOL
     *
     */
     private function checkform(){
@@ -127,7 +160,7 @@ class AdminContextdataController extends Controller
         //check for missing required data
         $datimancanti=[];
         if(!$request_post['sid'])$datimancanti[]='Storia non selezionata';
-        //check dati storie fasi
+        //check context data values
         if(!is_array($request_post['dbid']) || count($request_post['dbid'])==0)$datimancanti[]='Inserire almeno un dato di contesto per storia';
         if(!is_array($request_post['domanda']) || count($request_post['domanda'])==0)$datimancanti[]='Inserire i titoli delle dei dati di contesto della storia';
         if(!is_array($request_post['risposta']) || count($request_post['risposta'])==0)$datimancanti[]='Inserire le descrizion dei dati di contesto della storia';
@@ -146,14 +179,28 @@ class AdminContextdataController extends Controller
         return true;
     }
 
+    /**
+    *
+    * Method for set up all form errors
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
     
+    /**
+    *
+    * Method to prepare data for storage
+    * @param STRING $data string value to set
+    * @return STRING
+    *
+    */
     private function dataready($data) {
         if(!$data)return '';
         $data = trim($data);

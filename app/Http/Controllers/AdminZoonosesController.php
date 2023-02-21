@@ -1,4 +1,30 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
 use App\Models\Admin;
@@ -17,6 +43,14 @@ Use App\Models\Reviews;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 
+/**
+ * Manages all zoonoses entered into the system 
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class AdminZoonosesController extends Controller
 {
     public $mod_zoonoses;
@@ -36,7 +70,7 @@ class AdminZoonosesController extends Controller
     *
     * List all zoonoses in the system
     *   
-    * @return view
+    * @return \Illuminate\Http\Response
     *
     */
     public function list(){
@@ -65,7 +99,14 @@ class AdminZoonosesController extends Controller
                 ]);;
     }
     
-     public function adding(){
+    /**
+    *
+    * Add a zoonoses to the system
+    *   
+    * @return \Illuminate\Http\Response
+    *
+    */
+    public function adding(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] add', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] add', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
@@ -116,6 +157,13 @@ class AdminZoonosesController extends Controller
                 ]);;
     }
     
+    /**
+    *
+    * Modify a zoonoses into the system
+    *   
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function modify(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] modify', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
@@ -168,6 +216,13 @@ class AdminZoonosesController extends Controller
                 ]);
     }
   
+    /**
+    *
+    * Delete a zoonoses from the system
+    *   
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function erase(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] erase', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->role!=='admin'){
@@ -181,6 +236,13 @@ class AdminZoonosesController extends Controller
         return redirect(route('adminListZoonoses'));
     }
     
+    /**
+    *
+    * Check if there is almost a slug for a zoonoses
+    *   
+    * @return JSON
+    *
+    */
     public function checkslugzoonosi(){
         $zid=0;
         if(preg_match('/^[1-9][0-9]*$/',$this->request->zid))$zid=$this->request->zid;
@@ -194,7 +256,7 @@ class AdminZoonosesController extends Controller
     /**
     *
     * Method for checking validation data of the insert/modify form
-    * @return boolean
+    * @return BOOL
     *
     */
     private function checkform(){
@@ -220,11 +282,19 @@ class AdminZoonosesController extends Controller
         return true;
     }
     
+    /**
+    *
+    * Prepare the text to be published for errors
+    * 
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
 }

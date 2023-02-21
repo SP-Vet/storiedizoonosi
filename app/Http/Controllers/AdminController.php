@@ -1,7 +1,32 @@
 <?php
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
 
 namespace App\Http\Controllers;
-
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -13,11 +38,18 @@ use DB;
 use Session;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
-
 use App\Models\Stories;
 use App\Models\Storiessubmit;
 use App\Models\Integrations;
 
+/**
+ * Manages the platform's admin data
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class AdminController extends Controller
 {    
     
@@ -31,7 +63,7 @@ class AdminController extends Controller
     }
     
     /**
-     * Show the application dashboard.
+     * Show the application admin dashboard.
      *
      * @return \Illuminate\Http\Response
      */
@@ -58,7 +90,11 @@ class AdminController extends Controller
                 ])->with('storie_sottomesse',$storie_sottomesse)->with('storie_bozze',$storie_bozze)->with('approf_inseriti',$approf_inseriti);
     }
     
-    
+    /**
+     * Change the admin log in password
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function cambiapassword(){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] cambiapassword', $this->mod_log->getParamFrontoffice());
         if(auth()->guard('admin')->user()->id!=$this->request->id){
@@ -94,6 +130,11 @@ class AdminController extends Controller
                 ]);
     }
     
+    /**
+     * Check validation of the input password submitted
+     *
+     * @return BOOL
+     */
     private function checkControlPassword(){
         $request_post=$this->request->all();
         //check for missing required data
@@ -107,12 +148,19 @@ class AdminController extends Controller
         return true;
     }
     
+    /**
+    *
+    * Method for set up all form errors
+    * @param Array $arrayErr Array with error strings
+    * @return BOOL
+    *
+    */
     private function setVisualErrors($arrayErr){
         foreach ($arrayErr AS $key=>$textErrore){
             $this->errorsFormSubmission.='<b>'.$textErrore.'</b><br />';
         }
         unset($arrayErr);
-        return;
+        return true;
     }
 
 }

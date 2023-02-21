@@ -1,5 +1,32 @@
+/*
+ * Italian Ministry of Health Research Project: MEOH/2021-2022 - IZS UM 04/20 RC
+ * Created on 2023
+ * @author Eros Rivosecchi <e.rivosecchi@izsum.it>
+ * @author IZSUM Sistema Informatico <sistemainformatico@izsum.it>
+ * 
+ * @license 
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+
+ * http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * @version 1.0
+ */
+
 $(document).ready(function(){
-    //evento click snippet
+    //click snippet event
     $('.snippet-link').click(function(){
         let snid=$(this).attr("snippet");
         getsnippet(snid);
@@ -8,7 +35,7 @@ $(document).ready(function(){
 $.idstoria=$('#storiaid').val();
 $.idzoonosi=$('#zoonosiid').val();
 
-/*estrazione dati di contesto*/
+/*context data extraction*/
 function getdaticontesto(){
     $.ajax({
         type:'POST',
@@ -19,7 +46,7 @@ function getdaticontesto(){
             if(data.error){
                 alert(data.message);
             }else{
-                //preparazione dati estratti + apertura modal
+                //extracted data preparation + modal opening
                 let corpohtml='';
                 if(data.quesiti.length>0){
                     for(let i in data.quesiti){
@@ -48,7 +75,7 @@ function getdaticontesto(){
     });
 } 
 
-/*estrazione reviews*/
+/*extraction reviews*/
 function getreview(){
      $.ajax({
         type:'POST',
@@ -59,7 +86,7 @@ function getreview(){
             if(data.error){
                 alert(data.message);
             }else{
-                //preparazione dati estratti + apertura modal
+                //extracted data preparation + modal opening
                 let corpohtml='';
                 if(data.reviews.length>0){
                     corpohtml+='<ul>';
@@ -85,7 +112,7 @@ function getreview(){
     });
 }
 
-/*estrazione snippets*/
+/*snippet extraction*/
 function getsnippet(snid){
     $.ajax({
         type:'POST',
@@ -96,7 +123,7 @@ function getsnippet(snid){
             if(data.error){
                 alert(data.message);
             }else{
-                //preparazione dati estratti + apertura modal
+                //extracted data preparation + modal opening
                 let corpo='';
                 let titolo='Snippets';
                 if(data.snippet){

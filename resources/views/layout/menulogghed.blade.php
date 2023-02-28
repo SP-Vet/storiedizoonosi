@@ -1,8 +1,12 @@
 <div class="container">
     <div>
-        <a class="font-white" href="https://spvet.it" title="SPVet.it" style="white-space: nowrap;">
-            <img class="d-inline-block" src="/images/spvet_1.jpg" style="width:100%;max-width: 200px;height: auto;max-height: 50px;" title="SPVet.it" alt="SPVet.it" />
-            <img class="d-inline-block ms-3" src="/images/logo_izsum_big.png" style="width:100%;max-width: 30px;height: auto;max-height: 50px;" title="Istituto Zooprofilattico Sperimentale dell'Umbria e delle Marche" alt="IZSUM" />
+        <a class="font-white" href="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo 'Storie di Zoonosi'; ?>" style="white-space: nowrap;">
+            <?php if(isset($settings) && isset($settings['image_one_home'])){?>
+                <img class="d-inline-block" src="/images/<?=$settings['image_one_home']->valueconfig;?>" style="width:100%;max-width: 200px;height: auto;max-height: 50px;" title="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo 'Storie di Zoonosi'; ?>" alt="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo 'Storie di Zoonosi'; ?>" />
+            <?php } ?>
+            <?php if(isset($settings) && isset($settings['image_two_home'])){?>
+                <img class="d-inline-block  ms-3" src="/images/<?=$settings['image_two_home']->valueconfig;?>" style="width:100%;max-width: 30px;height: auto;max-height: 50px;" title="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo 'Storie di Zoonosi'; ?>" alt="<?php if(isset($settings) && isset($settings['link_images_home'])){?><?=$settings['link_images_home']->valueconfig;?><?php }else echo 'Storie di Zoonosi'; ?>" />
+            <?php } ?>
         </a>
     </div>
     <div class="d-inline-block ps-md-4 pe-4">Benvenuto, <b>{{ Auth::user()->name }}</b></div>

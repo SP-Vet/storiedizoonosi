@@ -1,7 +1,7 @@
 <footer class="text-center text-lg-start bg-footer" id="includefooter">
     <div class="container p-4 pb-0">
         <div class="row">
-            <!-- colonna 1-->
+            <!-- column 1 -->
             <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3 text-center">
                 <a class="text-decoration-none" href="https://plos.org/" target="_blank">
                     <img src="/images/open_access_logo.png" alt="Open Access Logo" style="width: 100%;max-width: 30px;" />
@@ -9,29 +9,53 @@
                 </a>
             </div>
             <hr class="w-100 clearfix d-md-none" />
-            <!-- colonna 2-->
-            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3 text-center">   
-                <h6><a href="https://www.izsum.it/IZSUM//" target="_blank" class="text-white"><img src="/images/logo_izsum_transp.png" style="max-width: 50px;" /><br /><br />Istituto Zooprofilattico Sperimentale dell&apos;Umbria e delle Marche</a></h5>
-                <h6 class="mt-5"><strong>Sviluppo: <a class="text-white" href="/developmentby">Eros Rivosecchi</a></strong></h6>
+            <!-- column 2 -->
+            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3 text-center"> 
+                <?php if(isset($settings) && isset($settings['logo_footer_column_2']) && $settings['logo_footer_column_2']->valueconfig!=''){?>
+                    <a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo ''; ?>" style="white-space: nowrap;">
+                        
+                            <img class="d-inline-block" src="/images/<?=$settings['logo_footer_column_2']->valueconfig;?>" style="max-width: 50px;" title="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo ''; ?>" />
+                    
+                        <?php if(isset($settings) && isset($settings['text_logo_footer_column_2'])){?>
+                            <br /><br /><h6 class="text-wrap"><?=$settings['text_logo_footer_column_2']->valueconfig;?></h6>
+                        <?php } ?>
+                    </a>
+                <?php } ?>
+                <?php if(isset($settings) && isset($settings['show_developer_footer']) && $settings['show_developer_footer']->valueconfig==1){?>    
+                    <h6 class="mt-5"><strong>Sviluppo: <a class="text-white" href="/developmentby">Eros Rivosecchi</a></strong></h6>
+                <?php } ?>
             </div>
             <hr class="w-100 clearfix d-md-none" />
-            <!-- colonna3 -->
+            <!-- column 3 -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3 text-center">
                 <p><a class="text-white" href="/faq">FAQ</a></p>
                 <p><a class="text-white" href="/privacy-policy">Privacy policy</a></p>
                 <p><a class="text-white" href="/contatti">Contatti</a></p>
             </div>
             <hr class="w-100 clearfix d-md-none" />
+            <!-- column 4 -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3 mb-3 text-center">
                 <img src="/images/open_data_logo.png" alt="Open Data Logo" style="width: 100%;max-width: 200px;" />
-                <a href="http://spvet.it/zoodiac.html" target="_blank" title="Progetto ZOODIAC - Sanità Pubblica Veterinaria - Biblioteca Istituto Zooprofilattico Sperimentale dell'Umbria e delle Marche"><img class="pt-3"  src="/images/logo_zoodiac_white.png" width="250" alt="Zoodiac SPVet.it" /></a>
-                <h6 class="text-white mt-5">Last Update: 22 August 2022</h5>
+                <?php if(isset($settings) && isset($settings['logo_footer_column_4']) && $settings['logo_footer_column_4']->valueconfig!=''){?>
+                    <br /><br /><a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_column_4'])){?><?=$settings['link_logo_footer_column_4']->valueconfig;?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_column_4'])){?><?=$settings['link_logo_footer_column_4']->valueconfig;?><?php }else echo ''; ?>" style="white-space: nowrap;">
+                        <img class="d-inline-block" src="/images/<?=$settings['logo_footer_column_4']->valueconfig;?>" width="250" title="<?php if(isset($settings) && isset($settings['link_logo_footer_column_4'])){?><?=$settings['link_logo_footer_column_4']->valueconfig;?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_column_4'])){?><?=$settings['link_logo_footer_column_4']->valueconfig;?><?php }else echo ''; ?>" />                        
+                    </a>         
+                <?php } ?>       
+                <?php if(isset($settings) && isset($settings['last_update_text'])){?>
+                    <h5 class="text-white mt-5">Last Update: <?=$settings['last_update_text']->valueconfig;?></h5>
+                <?php } ?>
             </div>
             <hr class="w-100 clearfix d-md-none" />
-            <div class="col-md-12 mx-auto mt-3 text-center">
-                <div class="d-flex justify-content-center">
-                    <a href="http://spvet.it/" title="Library of the Zooprofilattico Sperimentale Institute UM - Biblioteca dell'Istituto Zooprofilattico Sperimentale dell'Umbria e delle Marche"><img class=""  src="/images/spvet_header.jpg" width="250" alt="SPVet.it" /></a>
-            </div>
+
+            <?php if(isset($settings) && isset($settings['logo_footer_bottom']) && $settings['logo_footer_bottom']->valueconfig!=''){?>
+                <div class="col-md-12 mx-auto mt-3 text-center">
+                    <div class="d-flex justify-content-center">
+                        <a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" style="white-space: nowrap;">
+                            <img class="d-inline-block" src="/images/<?=$settings['logo_footer_bottom']->valueconfig;?>" width="250" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" />
+                        </a>
+                    </div>         
+                </div>
+            <?php } ?>
             <div class="col-12 pb-3">
             </div>
         </div>

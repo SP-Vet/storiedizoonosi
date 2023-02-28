@@ -28,7 +28,7 @@
 <?php 
 /*all admin routes*/
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController};
+use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController};
 
 Route::get('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('adminCambiapassword');
 Route::post('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('admincheckCambiapassword');
@@ -59,15 +59,21 @@ Route::post('/aggiungiutente',[AdminWorkgroupController::class,'adding'])->name(
 Route::get('/modificautente/{id?}',[AdminWorkgroupController::class,'modify'])->where(['id'=>'[1-9][0-9]?+'])->name('adminModifyUser');
 Route::post('/modificautente/{id?}',[AdminWorkgroupController::class,'modify'])->where(['id'=>'[1-9][0-9]?+'])->name('adminSaveModifiedUser');
 
-/*sezione approfondimenti*/
+/*section integrations*/
 Route::get('/elencoapprofondimenti',[AdminIntegrationsController::class,'list'])->name('adminListIntegrations');
 Route::get('/gestisciapprofondimenti/{said?}',[AdminIntegrationsController::class,'manage'])->where(['said'=>'[1-9][0-9]?+'])->name('adminManageIntegration');
 Route::post('/gestisciapprofondimenti/{said?}',[AdminIntegrationsController::class,'manage'])->where(['said'=>'[1-9][0-9]?+'])->name('adminSaveManagementIntegration');
 
-/*sezione log*/
+/*section log*/
 Route::get('/elencolog',[LogPersonal::class,'elenco'])->name('listLog');
 Route::post('/elencolog',[LogPersonal::class,'elenco'])->name('postlistLog');
 Route::get('/logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
+/*section settings*/
+Route::get('/elencoimpostazioni',[AdminSettingsController::class,'list'])->name('adminListSettings');
+Route::get('/modificaimpostazione/{confid?}',[AdminSettingsController::class,'modify'])->where(['confid'=>'[1-9][0-9]?+'])->name('adminModifySetting');
+Route::post('/modificaimpostazione/{confid?}',[AdminSettingsController::class,'modify'])->where(['confid'=>'[1-9][0-9]?+'])->name('adminSaveManagementSetting');
+
 
 /*ajax calls*/
 Route::post('/ajx-checkslugzoonosi', [AdminZoonosesController::class, 'checkslugzoonosi']);

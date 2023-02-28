@@ -29,6 +29,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController};
+use App\Models\Settings;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,9 +68,21 @@ Route::post('/crowdsourcing/submission',[StoriesController::class,'reportstory']
 /*other*/
 Route::get('/comingsoon', function () {return view('comingsoon')->with('title_page','Coming Soon');});
 Route::get('/privacy-policy',[PrivacyController::class,'view']);
-Route::get('/faq',function () {return view('faq')->with('title_page','FAQ');});
-Route::get('/developmentby', function () {return view('developmentby')->with('title_page','Sviluppatore');});
-Route::get('/contatti', function () {return view('contacts')->with('title_page','Contatti');});
+Route::get('/faq',function () {
+    $mod_settings= new Settings();
+    $settings=[];
+    $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+    return view('faq')->with('title_page','FAQ')->with('settings',$settings);});
+Route::get('/developmentby', function () {
+    $mod_settings= new Settings();
+    $settings=[];
+    $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+    return view('developmentby')->with('title_page','Sviluppatore')->with('settings',$settings);});
+Route::get('/contatti', function () {
+    $mod_settings= new Settings();
+    $settings=[];
+    $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+    return view('contacts')->with('title_page','Contatti')->with('settings',$settings);});
 
 /*ajax calls*/
 Route::post('ajx-getcontextdata', [StoriesController::class, 'getcontextdatastory']);
@@ -139,4 +152,6 @@ Route::get('storageviewimage/{sid}/{file}', function ($sid,$file) {
 });*/
 
 Route::post('/ckeditor/upload', [CkeditorController::class, 'upload'])->name('ckeditor.upload');
+Route::post('/ckeditor/uploadpublicimage', [CkeditorController::class, 'uploadpublicimage'])->name('ckeditor.uploadpublicimage');
+
 

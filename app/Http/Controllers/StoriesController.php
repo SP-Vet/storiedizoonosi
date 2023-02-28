@@ -46,6 +46,7 @@ use App\Models\Privacy;
 use App\Http\Controllers\LogPersonal;
 Use App\Models\Multimediaelements;
 Use App\Models\Reviews;
+use App\Models\Settings;
 
 /**
  * Manage all functions available to the user 
@@ -59,6 +60,7 @@ class StoriesController extends Controller
 {
     public $mod_stories;
     public $mod_review;
+    public $mod_settings;
     private $request;
     private $og_url='';
     private $og_type='article';
@@ -77,8 +79,9 @@ class StoriesController extends Controller
         $this->mod_home = new Home();
         $this->mod_privacy = new Privacy();
         $this->mod_multimediaelements= new Multimediaelements();
-        $this->mod_log=new LogPersonal($request);
         $this->mod_review= new Reviews();
+        $this->mod_settings = new Settings();
+        $this->mod_log=new LogPersonal($request);
     }
     
     /**
@@ -133,7 +136,9 @@ class StoriesController extends Controller
             $arr_st[$story->nome_zoonosi]=$story->nome_zoonosi;
         $listastorie=implode(', ',$arr_st);
 
-        return view('listsstories')->with('storie',$storie)
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([],[0,1])->toArray(),NULL,'nameconfig');
+        return view('listsstories')->with('storie',$storie)->with('settings',$settings)
                 ->with('title_page',$title_page)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Elenco storie')
@@ -326,8 +331,11 @@ class StoriesController extends Controller
         $order=[];
         $order['zu.nome']='ASC';
         $zoonosi=$this->mod_home->getZoonosi('',$order);
-        
-        return view('searchstories')->with('title_page',$title_page)->with('zoonosi',$zoonosi)
+
+
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([],[0,1])->toArray(),NULL,'nameconfig');
+        return view('searchstories')->with('title_page',$title_page)->with('zoonosi',$zoonosi)->with('settings',$settings)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Motore di ricerca')
                 ->with('art_title','Motore di ricerca')
@@ -422,7 +430,9 @@ class StoriesController extends Controller
             }
         }
         
-        return view('story')->with('title_page',$storia[0]->titolo)->with('storia',$storia[0])->with('collaboratori',$collaboratori)->with('fasi',$fasi)
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([],[0,1])->toArray(),NULL,'nameconfig');
+        return view('story')->with('title_page',$storia[0]->titolo)->with('storia',$storia[0])->with('collaboratori',$collaboratori)->with('fasi',$fasi)->with('settings',$settings)
                 ->with('approfondimenti',$approfondimenti)
                 ->with('approfondimenti_figli',$approfondimenti_figli)
                 ->with('approfondimenti_genitori',$approfondimenti_genitori)
@@ -725,8 +735,11 @@ class StoriesController extends Controller
             }
         }
         
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([],[0,1])->toArray(),NULL,'nameconfig');
+
         $privacy_policy=$this->mod_privacy->getCurrentPrivacy();
-        return view('reportstory')->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('datapost',$datisubmit)
+        return view('reportstory')->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('datapost',$datisubmit)->with('settings',$settings)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Sottomissione nuova storia')
                 ->with('art_title','Sottomissione nuova storia')

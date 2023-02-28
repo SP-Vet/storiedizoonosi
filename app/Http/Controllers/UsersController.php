@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use App\Models\Settings;
 use DB;
 
 /**
@@ -52,6 +53,7 @@ use DB;
 class UsersController extends Controller
 {
     public $mod_user;
+    public $mod_settings;
     public $formRegistrationError='';
     private $request;
     public $tmpmail='';
@@ -62,6 +64,7 @@ class UsersController extends Controller
         $this->mod_user = new User();
         $this->mod_confirm = new Confirm();
         $this->mod_privacy = new Privacy();
+        $this->mod_settings = new Settings();
         $this->mod_log = new LogPersonal($request);
     }
     
@@ -75,8 +78,9 @@ class UsersController extends Controller
     public function login(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] login', $this->mod_log->getParamFrontoffice());
         
-        
-        return view('login');
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+        return view('login')->with('settings',$settings);
     }
     
     /**
@@ -220,7 +224,10 @@ class UsersController extends Controller
             }            
         }
         $privacy_policy=$this->mod_privacy->getCurrentPrivacy();
-        return view('registration')->with('datapost',$datireg)->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)
+        
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+        return view('registration')->with('datapost',$datireg)->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('settings',$settings)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Registrazione Utente')
                 ->with('art_title','Registrazione Utente')

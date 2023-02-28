@@ -130,5 +130,10 @@ $(document).ready(function(){
             }
         })
     })
+
+    $('span.removeimg').click(function(){
+        $('#oldvalueconfig').val('');
+        $(this).parent().remove();
+    })
 })
 

@@ -57,7 +57,7 @@
         @yield('modal_3')
         @yield('modal_4')
         <!-- END modal -->
-        <div class="text-center w-98 p-2 m-2 border-blue-dark border-1">DEBUG VERSIONE 1.0 - PUBBLICAZIONE PROVVISORIA IN FASE DI TEST. La versione funzionante sarà disponibile il 15 Aprile 2023.<br />ALLEGATO ALL'E-JOURNAL SPVET.IT [ISSN 1592-1581] -  redazione-spvet@izsum.it  Tel. 075-343207.</div>
+        <?php if(isset($settings) && isset($settings['testo_debug_top']) && $settings['testo_debug_top']->valueconfig!=''){?><?=$settings['testo_debug_top']->valueconfig;?><?php } ?>
         <div class="d-flex" id="wrapper">
           <!-- Page content wrapper-->
           <div id="page-content-wrapper">
@@ -100,7 +100,7 @@
         <script type="text/javascript" src="/libraries/bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript" src="/libraries/bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.it.min.js" charset="UTF-8"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="/js/custom.js" /></script>
+        <script type="text/javascript" src="/js/custom.js"></script>
         <!-- Core theme JS-->
         @show
     </body>

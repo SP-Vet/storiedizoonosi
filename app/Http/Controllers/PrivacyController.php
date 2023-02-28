@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
+use App\Models\Settings;
 
 /**
  * Manage the privacy policy of the systemn 
@@ -47,12 +48,14 @@ use App\Http\Controllers\LogPersonal;
 class PrivacyController extends Controller
 {
     public $mod_privacy;
+    public $mod_settings;
     private $request;
     
     public function __construct(Request $request)
     {
         $this->request=$request;
         $this->mod_privacy = new Privacy();
+        $this->mod_settings = new Settings();
         $this->mod_log=new LogPersonal($request);
     }
     
@@ -67,7 +70,11 @@ class PrivacyController extends Controller
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] view', $this->mod_log->getParamFrontoffice());
         $title_page='Privacy Policy';
         $data=$this->mod_privacy->getCurrentPrivacy();
-        return view('privacy')->with('data',$data)->with('title_page',$title_page);       
+
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+
+        return view('privacy')->with('data',$data)->with('title_page',$title_page)->with('settings',$settings);       
     }
   
 }

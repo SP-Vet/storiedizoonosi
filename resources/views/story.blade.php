@@ -244,7 +244,8 @@
         if(isset($snippetfase[$fase->sfid])){
             foreach ($snippetfase[$fase->sfid] AS $snippet){
                 $newword='<span class="snippet-link" snippet="'.$snippet->snid.'" data-bs-toggle="modal" data-bs-target="#modalProbResp">'.$snippet->chiave.'</span>';
-                $fase->testofase= str_replace($snippet->chiave, $newword, $fase->testofase);
+                //$fase->testofase= str_replace($snippet->chiave, $newword, $fase->testofase);
+                $fase->testofase= implode($newword, explode($snippet->chiave, $fase->testofase, 2));
             }
         }
         ?>

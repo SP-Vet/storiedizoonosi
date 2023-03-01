@@ -19,7 +19,7 @@
 <section class="gradient-form h-100" style="background-color: #eee;">
 <div class="container py-5 h-100">
 
-    <?php if(isset($settings) && isset($settings['testo_debug_top']) && $settings['testo_debug_top']->valueconfig!=''){?><?=$settings['testo_debug_top']->valueconfig;?><?php } ?>
+    <?php if(isset($settings) && isset($settings['testo_debug_top']) && $settings['testo_debug_top']->valueconfig!=''){?><?=html_entity_decode($settings['testo_debug_top']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?>
       @if (session('messageinfo'))
           <div class="container-fluid pb-2 pt-2">
               <div class="alert alert-success">
@@ -74,11 +74,7 @@
                   </div>
                 </div>
                 <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                  <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                    <h4 class="mb-4"><strong></strong>Micro Epidemic One Health (ME.OH)</strong></h4>
-                    <p class="small mb-0">Sanit&agrave; animale - Approccio One Health per lo studio delle zoonosi emergenti.</p>
-                    <p class="small mb-0">Sviluppiamo una elevata cultura di <strong>Sanit&agrave; Pubblica</strong></p>
-                  </div>
+                    <?php if(isset($settings) && isset($settings['text_login_column_two']) && $settings['text_login_column_two']->valueconfig!=''){?><?=html_entity_decode($settings['text_login_column_two']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?>
                 </div>
               </div>
             </div>
@@ -95,8 +91,8 @@
     <?php if(isset($settings) && isset($settings['logo_footer_bottom']) && $settings['logo_footer_bottom']->valueconfig!=''){?>
                 <div class="col-md-12 mx-auto mt-3 text-center">
                     <div class="d-flex justify-content-center">
-                        <a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" style="white-space: nowrap;">
-                            <img class="d-inline-block" src="/images/<?=$settings['logo_footer_bottom']->valueconfig;?>" width="250" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=$settings['link_logo_footer_bottom']->valueconfig;?><?php }else echo ''; ?>" />
+                        <a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" style="white-space: nowrap;">
+                            <img class="d-inline-block" src="/images/<?=html_entity_decode($settings['logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?>" width="250" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" />
                         </a>
                     </div>         
                 </div>

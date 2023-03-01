@@ -57,7 +57,7 @@
         @yield('modal_3')
         @yield('modal_4')
         <!-- END modal -->
-        <?php if(isset($settings) && isset($settings['testo_debug_top']) && $settings['testo_debug_top']->valueconfig!=''){?><?=$settings['testo_debug_top']->valueconfig;?><?php } ?>
+        <?php if(isset($settings) && isset($settings['testo_debug_top']) && $settings['testo_debug_top']->valueconfig!=''){?><?=html_entity_decode($settings['testo_debug_top']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?>
         <div class="d-flex" id="wrapper">
           <!-- Page content wrapper-->
           <div id="page-content-wrapper">

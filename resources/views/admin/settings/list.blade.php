@@ -34,7 +34,7 @@
                                 if($conf->valueconfig==1)echo 'SI';else echo 'NO';
                                 break;
                             default:
-                                echo $conf->valueconfig;
+                                echo html_entity_decode($conf->valueconfig,ENT_QUOTES,'utf-8');
                             break;
                         }    
                         ?>

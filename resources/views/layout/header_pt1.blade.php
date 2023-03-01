@@ -1,1 +1,1 @@
-<div class="mb-2"><?php if(isset($settings) && isset($settings['openacces_desc_header'])){?><?=$settings['openacces_desc_header']->valueconfig;?><?php } ?></div>
+<div class="mb-2"><?php if(isset($settings) && isset($settings['openacces_desc_header'])){?><?=html_entity_decode($settings['openacces_desc_header']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?></div>

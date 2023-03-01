@@ -17,7 +17,7 @@
                             <img class="d-inline-block" src="/images/<?=$settings['logo_footer_column_2']->valueconfig;?>" style="max-width: 50px;" title="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_column_2'])){?><?=$settings['link_logo_footer_column_2']->valueconfig;?><?php }else echo ''; ?>" />
                     
                         <?php if(isset($settings) && isset($settings['text_logo_footer_column_2'])){?>
-                            <br /><br /><h6 class="text-wrap"><?=$settings['text_logo_footer_column_2']->valueconfig;?></h6>
+                            <br /><br /><h6 class="text-wrap"><?=html_entity_decode($settings['text_logo_footer_column_2']->valueconfig,ENT_QUOTES,'utf-8');?></h6>
                         <?php } ?>
                     </a>
                 <?php } ?>
@@ -42,7 +42,7 @@
                     </a>         
                 <?php } ?>       
                 <?php if(isset($settings) && isset($settings['last_update_text'])){?>
-                    <h5 class="text-white mt-5">Last Update: <?=$settings['last_update_text']->valueconfig;?></h5>
+                    <h5 class="text-white mt-5">Last Update: <?=html_entity_decode($settings['last_update_text']->valueconfig,ENT_QUOTES,'utf-8');?></h5>
                 <?php } ?>
             </div>
             <hr class="w-100 clearfix d-md-none" />

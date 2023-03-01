@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between">
         <h2><strong>STORIE DI ZOONOSI</strong></h2>
     </div>
-    <p>Avete raggiunto il repository narrativo dedicato ai «casi di Zoonosi». Qui troverete, in forma di racconto, esperienze raccolte dalla voce degli Operatori del Servizio Sanitario che hanno affrontato questi casi di studio, con l'aggiunta di commenti di esperti, informazioni di contesto, riferimenti alla letteratura scientifica e strumenti per partecipare in crowdsourcing alla elaborazione delle «storie di zoonosi» e del software gestionale associato. Questa antologia è stata promossa nell’ambito del <a style="color: #000;" href="https://spvet.it/microepidemic.html">Progetto Micro Epidemic One Health</a> per sostenere la ricerca, lo studio, l’aggiornamento professionale ed ampliare la condivisione di informazioni biomediche sulle malattie che si trasmettono dagli animali all’uomo.  <a href="/ilprogetto" style="color: #000;">[presentazione dell’iniziativa «Storie di Zoonosi»]</a>.</p>
+    <?php if(isset($settings) && isset($settings['subtitle_text']) && $settings['subtitle_text']->valueconfig!=''){?><?=html_entity_decode($settings['subtitle_text']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?>
 </div>
 @endsection
 @section('content')

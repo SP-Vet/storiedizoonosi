@@ -22,9 +22,6 @@ class Authenticate extends Middleware
             if (in_array ('admin',$rotte)) {
                 return route('adminLogin');
             }
-            /*if ($request->routeIs('admin.*')) {
-                return route('admin.login');
-            }*/
 
             //return redirect('/login');
             return route('homepage');

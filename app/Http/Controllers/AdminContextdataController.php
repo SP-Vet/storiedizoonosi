@@ -91,31 +91,36 @@ class AdminContextdataController extends Controller
                     $ordine=1;
                     $elencodbid=[];
                     $elencoPOSTdbid=[];//contains numeric and non-numeric keys before and after storing the context data
-                    foreach ($request_post['dbid'] AS $ks=>$dbid){
-                        $datidbid=[];
-                        if(!is_numeric($dbid)){
-                            //insert storiafase
-                            $daticontesto=new Contextdata();
-                            $daticontesto->sid=$this->request->sid;
-                            $daticontesto->ordine=$ordine;
-                            $daticontesto->save();
-                            $iddbid=$daticontesto->dbid;
-                        }else{
-                            $daticontesto = Contextdata::find($dbid);
-                            $daticontesto->ordine = $ordine;
-                            $daticontesto->save();
-                            $iddbid=$dbid;
-                        }
+                    if(isset($request_post['dbid']) && is_array($request_post['dbid']) && count($request_post['dbid'])>0){
+                        foreach ($request_post['dbid'] AS $ks=>$dbid){
+                            $datidbid=[];
+                            if(!is_numeric($dbid)){
+                                //insert storiafase
+                                $daticontesto=new Contextdata();
+                                $daticontesto->sid=$this->request->sid;
+                                $daticontesto->ordine=$ordine;
+                                $daticontesto->save();
+                                $iddbid=$daticontesto->dbid;
+                            }else{
+                                $daticontesto = Contextdata::find($dbid);
+                                $daticontesto->ordine = $ordine;
+                                $daticontesto->save();
+                                $iddbid=$dbid;
+                            }
 
-                        //update-insert context data questions / answers
-                        $elencodbid[]=$elencoPOSTdbid[$dbid]=$iddbid;
-                        $datidbid['domanda']=$this->dataready($request_post['domanda'][$ks]);
-                        $datidbid['risposta']=$this->dataready($request_post['risposta'][$ks]);
-                        $this->mod_contextdata->setContextdatalanguageAss($iddbid,$datidbid);
-                        $ordine++;
+                            //update-insert context data questions / answers
+                            $elencodbid[]=$elencoPOSTdbid[$dbid]=$iddbid;
+                            $datidbid['domanda']=$this->dataready($request_post['domanda'][$ks]);
+                            $datidbid['risposta']=$this->dataready($request_post['risposta'][$ks]);
+                            $this->mod_contextdata->setContextdatalanguageAss($iddbid,$datidbid);
+                            $ordine++;
+                        }
                     }
                     //delete all dbid not in insert and update
-                    Contextdata::whereNotIn('dbid',$elencodbid)->where('sid',$this->request->sid)->delete();
+                    if(count($elencodbid)>0)
+                        Contextdata::whereNotIn('dbid',$elencodbid)->where('sid',$this->request->sid)->delete();
+                    else
+                        Contextdata::where('sid',$this->request->sid)->delete();
                     unset($elencobdid);
                     unset($ordine);
                     unset($dbid);
@@ -161,15 +166,17 @@ class AdminContextdataController extends Controller
         $datimancanti=[];
         if(!$request_post['sid'])$datimancanti[]='Storia non selezionata';
         //check context data values
-        if(!is_array($request_post['dbid']) || count($request_post['dbid'])==0)$datimancanti[]='Inserire almeno un dato di contesto per storia';
-        if(!is_array($request_post['domanda']) || count($request_post['domanda'])==0)$datimancanti[]='Inserire i titoli delle dei dati di contesto della storia';
-        if(!is_array($request_post['risposta']) || count($request_post['risposta'])==0)$datimancanti[]='Inserire le descrizion dei dati di contesto della storia';
-        else{
-            foreach ($request_post['domanda'] AS $tf=>$domanda){
-                if(!$domanda)$datimancanti[]='Titolo mancante nel Dato '.($tf+1).' di contesto della storia';
-            }
-            foreach ($request_post['risposta'] AS $ttf=>$risposta){
-                if(!$risposta)$datimancanti[]='Descrizione mancante nel Dato '.($ttf+1).' di contesto della storia';
+        //if(!is_array($request_post['dbid']) || count($request_post['dbid'])==0)$datimancanti[]='Inserire almeno un dato di contesto per storia';
+        if(isset($request_post['dbid']) && is_array($request_post['dbid']) && count($request_post['dbid'])>0){
+            if(!is_array($request_post['domanda']) || count($request_post['domanda'])==0)$datimancanti[]='Inserire i titoli delle dei dati di contesto della storia';
+            if(!is_array($request_post['risposta']) || count($request_post['risposta'])==0)$datimancanti[]='Inserire le descrizion dei dati di contesto della storia';
+            else{
+                foreach ($request_post['domanda'] AS $tf=>$domanda){
+                    if(!$domanda)$datimancanti[]='Titolo mancante nel Dato '.($tf+1).' di contesto della storia';
+                }
+                foreach ($request_post['risposta'] AS $ttf=>$risposta){
+                    if(!$risposta)$datimancanti[]='Descrizione mancante nel Dato '.($ttf+1).' di contesto della storia';
+                }
             }
         }
         if(count($datimancanti)>0){

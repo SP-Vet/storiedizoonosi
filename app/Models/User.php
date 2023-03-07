@@ -107,6 +107,20 @@ class User extends Authenticatable
     
         return $queryBuilder->get();
     }
+
+    /**
+     * Method that searches for users with the id passed in the parameters
+     *
+     *  @param String  $id id to search in DB
+     *  @return Object
+     *  
+     */
+    public function getUserFromID($id){
+        $queryBuilder=DB::table($this->table.' AS u')->select('u.*')
+                ->where('u.id',$id);
+        return $queryBuilder->get();
+    }
+
      
      /**
      * Method that set the verification date for a user

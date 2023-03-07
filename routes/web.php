@@ -68,6 +68,9 @@ Route::post('/crowdsourcing/submission',[StoriesController::class,'reportstory']
 /*other*/
 Route::get('/comingsoon', function () {return view('comingsoon')->with('title_page','Coming Soon');});
 Route::get('/privacy-policy',[PrivacyController::class,'view']);
+Route::get('/privacyacceptance/{uid?}',[PrivacyController::class,'privacyacceptance'])->where(['uid'=>'^[1-9][0-9]*$'])->name('showPrivacy');
+Route::post('/privacyacceptance/{uid?}',[PrivacyController::class,'privacyacceptance'])->where(['uid'=>'^[1-9][0-9]*$'])->name('savePrivacy');
+
 Route::get('/faq',function () {
     $mod_settings= new Settings();
     $settings=[];

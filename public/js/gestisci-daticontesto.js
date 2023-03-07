@@ -85,10 +85,25 @@ $(document).ready(function(){
 function checkValidityCKEDITORContextdata(){
     let flagerr=0;
     //context data descriptions
-    if($('.contenitore-parte').length==='undefined' || $('.contenitore-parte').length==0){
+
+    if($('.contenitore-parte').length!=='undefined' && $('.contenitore-parte').length>0){
+        $('.contenitore-parte').each(function(){
+            let iddesc=$(this).find('textarea.risposta').attr('id');
+            let textbox_descrizioneparte=CKEDITOR.instances[iddesc].getData();
+            if (textbox_descrizioneparte===''){
+                flagerr=1;
+                aggiungiErroreMSGError('<p><strong>La descrizione del Dato '+$(this).find('span.numero-parte').html()+' di contesto della storia è obbligatoria</strong></p>');
+            }
+        })
+    }
+
+    if(flagerr==1)return false;
+    return true;
+
+    /*if($('.contenitore-parte').length==='undefined' || $('.contenitore-parte').length==0){
         flagerr=1;
         aggiungiErroreMSGError('<p><strong>Inserire almeno una descrizione</strong></p>');
-    }else{
+    }else {
         $('.contenitore-parte').each(function(){
             let iddesc=$(this).find('textarea.risposta').attr('id');
             let textbox_descrizioneparte=CKEDITOR.instances[iddesc].getData();
@@ -99,7 +114,7 @@ function checkValidityCKEDITORContextdata(){
         })
     }
     if(flagerr==1)return false;
-    return true;
+    return true;*/
 }
 
 function aggiungiErroreMSGError(msg){

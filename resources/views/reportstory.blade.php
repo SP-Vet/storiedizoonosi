@@ -168,17 +168,6 @@
                     </div>
                     <hr>
                     <?php if(Auth::check()){ ?>
-                    <div class="mb-3 col-12 mt-3">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="terminiecondizioni" required>
-                        <label class="form-check-label fw-bold" for="terminiecondizioni">
-                          Accetta <a href="#" onclick="apricondizioni();">termini e condizioni di utilizzo</a>
-                        </label>
-                        <div class="invalid-feedback">
-                          Devi accettare per proseguire.
-                        </div>
-                      </div>  
-                    </div>
                     <div class="col-12 text-center">
                         <button type="submit" class="btn bg-primary text-white ps-5 pe-5 text-center btn-showloader" title-loader="ATTENDERE..." text-loader="Il sistema sta memorizzando le informazioni<br />Non chiudere la finestra del browser...<br />(potrebbe volerci qualche minuto)">INVIA LA STORIA</button>
                     </div>
@@ -303,17 +292,6 @@
                 </div>
                 <hr>
               <?php if(Auth::check()){ ?>
-              <div class="mb-3 col-12 mt-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="1" id="terminiecondizioni_en" required>
-                  <label class="form-check-label fw-bold" for="terminiecondizioni_en">
-                    Accept <a href="#" onclick="apricondizioni();">terms and conditions of use</a>
-                  </label>
-                  <div class="invalid-feedback">
-                    You have to accept to continue.
-                  </div>
-                </div>  
-              </div>
               <div class="col-12 text-center">
                     <button type="submit" class="btn bg-primary text-white ps-5 pe-5 text-center btn-showloader">SEND THE STORY</button>
                 </div>

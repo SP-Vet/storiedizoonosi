@@ -85,10 +85,10 @@
                             <?php break;?>
                             <?php case 3: ?>
                                 <div class="btn-group" role="group" aria-label="Seleziona una risposta">
-                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" <?php if($configuration->valueconfig==1)echo 'checked="checked"';?> />
+                                    <input type="radio" class="btn-check" name="valueconfig" id="btnradio1" autocomplete="off" <?php if($configuration->valueconfig==1)echo 'checked="checked"';?> />
                                     <label class="btn btn-outline-primary" for="btnradio1">SI</label>
 
-                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" <?php if($configuration->valueconfig==0)echo 'checked="checked"';?> />
+                                    <input type="radio" class="btn-check" name="valueconfig" id="btnradio2" autocomplete="off" <?php if($configuration->valueconfig==0)echo 'checked="checked"';?> />
                                     <label class="btn btn-outline-primary" for="btnradio2">NO</label>
                                 </div>
                             <?php break;?>

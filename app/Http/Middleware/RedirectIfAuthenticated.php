@@ -30,7 +30,6 @@ class RedirectIfAuthenticated
                     //default guard.
                     return redirect(RouteServiceProvider::HOME);
                 }
- 
                 //return redirect(RouteServiceProvider::HOME);
             }
         }

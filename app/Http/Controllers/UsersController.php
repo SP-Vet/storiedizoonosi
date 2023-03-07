@@ -117,10 +117,34 @@ class UsersController extends Controller
 
             if (Auth::attempt($credentials)) {
                 if (Auth::user()->email_verified_at != '') {
+                    $uid=Auth::user()->id;
+                    Auth::logout();
+                    /*
+                    * Check if privacy policy has benn accepted by the user or needs a new acceptance
+                    *
+                    * User will be redirected to new privacy policy acceptance if:
+                    * 1 - there's no privacy accepted record
+                    * 2 - privacy accepted != actual privacy
+                    * 3 - actual privacy have reflag && data_publication privacy > user's data_acceptance privacy
+                    */
+                    //get privacy accepted by the user
+                    $current_privacy=$this->mod_privacy->getCurrentPrivacy();
+                    $privacy_accepted_user=$this->mod_privacy->getLastAcceptedPrivacyFromUser($uid);
+                    
+                    //testare funzionamento
+                    if(!isset($privacy_accepted_user->ppid) || 
+                        (isset($privacy_accepted_user->ppid) && $privacy_accepted_user->ppid!=$current_privacy->ppid) ||
+                        (isset($privacy_accepted_user->ppid) && $current_privacy->reflag==1 && (Carbon::createFromFormat('Y-m-d H:i:s', $current_privacy->data_pubblicazione) > Carbon::createFromFormat('Y-m-d H:i:s', $privacy_accepted_user->data_accettazione_visione))))
+                    {
+                        //redirect to privacy acceptance
+                        return redirect()->route('showPrivacy', ['uid' => $uid]);
+                       
+                    }
+
+                    Auth::attempt($credentials);
                     $request->session()->regenerate();
                     Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[OUT] checklogin', $this->mod_log->getParamFrontoffice());
                     return redirect('/');
-
                 }else{
                     Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->warning('[OUT] checklogin', $this->mod_log->getParamFrontoffice('email non verificata'));
                     $this->request->session()->flash('messagedanger', '<h2>Email non ancora confermata. Controlla la tua casella email.</h2>');
@@ -226,7 +250,7 @@ class UsersController extends Controller
         $privacy_policy=$this->mod_privacy->getCurrentPrivacy();
         
         $settings=[];
-        $settings=array_column($this->mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+        $settings=array_column($this->mod_settings->getAll([],[0,5])->toArray(),NULL,'nameconfig');
         return view('registration')->with('datapost',$datireg)->with('privacy_policy',$privacy_policy)->with('title_page',$title_page)->with('settings',$settings)
                 ->with('og_url',$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'])
                 ->with('og_title','Registrazione Utente')

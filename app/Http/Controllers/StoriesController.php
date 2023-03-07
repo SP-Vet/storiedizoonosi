@@ -601,7 +601,7 @@ class StoriesController extends Controller
                     $storiasubmit->save();
                     
                     //set privacy policy acknowledgment
-                    $this->mod_privacy->setAccept(Auth::id(),1);
+                    //$this->mod_privacy->setAccept(Auth::id(),1);
                     
                     //folder creation for files
                     $path = storage_path('app/storiesubmit/'.$storiasubmit->ssid);

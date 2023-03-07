@@ -11,7 +11,8 @@
                     <button type="button" class="btn-close btn-close-white closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <?=$privacy_policy->testoprivacy;?>
+                    <?=html_entity_decode($privacy_policy->testoprivacy,ENT_QUOTES,'utf-8');?>
+                    <div class="d-flex justify-content-end mb-5"><?php if(isset($settings) && isset($settings['city_privacy']) && $settings['city_privacy']->valueconfig!=''){?><?=html_entity_decode($settings['city_privacy']->valueconfig,ENT_QUOTES,'utf-8');?><?php } ?>, <?=Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $privacy_policy->data_pubblicazione)->format('d/m/Y');?></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="presovisionetermini" class="btn bg-success font-white closeModal" data-bs-dismiss="modal">Ho preso visione</button>

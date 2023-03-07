@@ -28,7 +28,7 @@
 <?php 
 /*all admin routes*/
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController};
+use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController,AdminPrivacyController};
 
 Route::get('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('adminCambiapassword');
 Route::post('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('admincheckCambiapassword');
@@ -63,6 +63,13 @@ Route::post('/modificautente/{id?}',[AdminWorkgroupController::class,'modify'])-
 Route::get('/elencoapprofondimenti',[AdminIntegrationsController::class,'list'])->name('adminListIntegrations');
 Route::get('/gestisciapprofondimenti/{said?}',[AdminIntegrationsController::class,'manage'])->where(['said'=>'[1-9][0-9]?+'])->name('adminManageIntegration');
 Route::post('/gestisciapprofondimenti/{said?}',[AdminIntegrationsController::class,'manage'])->where(['said'=>'[1-9][0-9]?+'])->name('adminSaveManagementIntegration');
+
+/*section privacy*/
+Route::get('/elencoprivacy',[AdminPrivacyController::class,'list'])->name('adminListPrivacy');
+Route::get('/modificaprivacy/{ppid?}',[AdminPrivacyController::class,'modify'])->where(['ppid'=>'[1-9][0-9]?+'])->name('adminModifyPrivacy');
+Route::post('/modificaprivacy/{ppid?}',[AdminPrivacyController::class,'modify'])->where(['ppid'=>'[1-9][0-9]?+'])->name('adminSaveModifyPrivacy');
+Route::get('/aggiungiprivacy',[AdminPrivacyController::class,'modify'])->name('adminAddPrivacy');
+Route::post('/aggiungiprivacy',[AdminPrivacyController::class,'modify'])->name('adminSaveNewprivacy');
 
 /*section log*/
 Route::get('/elencolog',[LogPersonal::class,'elenco'])->name('listLog');

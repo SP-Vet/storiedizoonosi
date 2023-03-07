@@ -43,6 +43,8 @@ use DB;
 class Privacy extends Model
 {
    
+    //don't save created_at ed updated_at
+    public $timestamps = false;
     use HasFactory;
     protected $table='meoh_privacypolicy';
     protected $primaryKey='ppid';
@@ -51,6 +53,35 @@ class Privacy extends Model
   
     public function __construct(){}
     
+    /**
+     * Method for searches all privacy policy in the system
+     *
+     *  @param Array $where the conditions of where in query
+     *  @param Array $order the sorting conditions in query
+     *  @return Object
+     */
+    public function getAll($where=[],$order=[]){
+        $queryBuilder=DB::table($this->table.' AS p')->select('p.*');
+        if(!empty($where))
+            $queryBuilder->where($where);    
+        if(!empty($order))
+            foreach ($order AS $key2=>$ord)
+                $queryBuilder->orderBy($key2,$ord);
+
+        return $queryBuilder->get();
+    }
+
+    /**
+     * Method for get a privacy from its id
+     *
+     *  @param Integer $ppid if of a privacy
+     *  @return Object
+     */
+    public function getPrivacyFromID($ppid){
+        $queryBuilder=DB::table($this->table.' AS p')->select('p.*')->where('p.ppid',$ppid);
+        return $queryBuilder->get();
+    }
+
      /**
      * Method that get the current privacy of the system
      *  @return Object
@@ -58,6 +89,20 @@ class Privacy extends Model
      */
     public function getCurrentPrivacy(){
         $queryBuilder=DB::table($this->table.' AS pp')->select('pp.*')->where('pp.attuale',1);
+        return $queryBuilder->first();
+    }
+
+    /**
+     * Method that get the last privacy accepted by a user
+     * 
+     *  @param Integer $uid if of the user
+     *  @return Object
+     * 
+     */
+    public function getLastAcceptedPrivacyFromUser($uid){
+        $queryBuilder=DB::table($this->table_privacy_accettazione.' AS pa')->select('pa.*','p.testoprivacy')
+            ->leftJoin($this->table.' AS p','p.ppid','pa.ppid')
+            ->where('pa.uid',$uid)->orderBy('pa.data_accettazione_visione','DESC');
         return $queryBuilder->first();
     }
     
@@ -71,4 +116,18 @@ class Privacy extends Model
         $queryBuilder=DB::table($this->table_privacy_accettazione)->insert(array('ppid' => $privacyattuale->ppid, 'uid' => $uid,'data_accettazione_visione'=>DB::raw('CURRENT_TIMESTAMP'),'tipologia'=>$tipologia));
         return true;  
     }
+
+    /**
+     * Method that set to false old actual privacy
+     * 
+     *  @param Integer $ppid if of a privacy
+     *  @return BOOL
+     * 
+     */
+    public function deactivateOldPrivacy($ppid){
+        DB::table($this->table)->whereNotIn('ppid', [$ppid])->update(['attuale'=>0]);
+        return true;
+    }
+
+
 }

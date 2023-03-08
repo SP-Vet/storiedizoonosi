@@ -125,7 +125,7 @@ function getphaseintegrations(sfid){
                         corpohtml+='</div>';
                     }
                 }else{
-                    corpohtml+='<h3>Non ci sono dati di contesto disponibili per questa storia.</h3>';
+                    corpohtml+='<h3>Non ci sono dati biografici disponibili per questa storia.</h3>';
                 }
                 $('div#elenco-integrazioni').html(corpohtml);   
                 $('div#elenco-integrazioni').find('.collapse').collapse();

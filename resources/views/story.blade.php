@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down modal-animation-special">
         <div class="modal-content">
             <div class="modal-header bg-wheat">
-                <h2 class="modal-title font-dark">Dati di contesto</h2>
+                <h2 class="modal-title font-dark">Dati biografici</h2>
                 <button type="button" class="btn-close btn-close-white closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -202,7 +202,7 @@
     </div>
     <div class="col-12 col-sm-4 border text-center p-3 d-grid gap-2">
         <button type="button" class="btn bg-success-pastel fw-bold w-100 hover-color-white" onclick="getdaticontesto();" data-bs-toggle="modal" data-bs-target="#modalQuesiti">
-            DATI DI CONTESTO
+            DATI BIOGRAFICI
         </button> 
         <?php if(isset($revfiles[$storia->zid])){?>
             <button type="button" class="btn bg-orange-pastel fw-bold w-100 hover-color-white" onclick="getreview();" data-bs-toggle="modal" data-bs-target="#modalReview">

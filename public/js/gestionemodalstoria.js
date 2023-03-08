@@ -60,7 +60,7 @@ function getdaticontesto(){
                         corpohtml+='</div>';
                     }
                 }else{
-                    corpohtml+='<h3>Non ci sono dati di contesto disponibili per questa storia.</h3>';
+                    corpohtml+='<h3>Non ci sono dati biografici disponibili per questa storia.</h3>';
                 }
                 $('div#questions').html(corpohtml);   
                 $('div#questions').find('.collapse').collapse();

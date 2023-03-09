@@ -37,6 +37,14 @@ use App\Http\Controllers\LogPersonal;
 use App\Models\Admin;
 use DB;
 
+/**
+ * Manage the exipers of administrator's password 
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0
+ * @version Release: 1.0
+ * @since   Class available since Release 1.0
+ * 
+ */
 class PwdExpirationController extends Controller
 {
     private $request;
@@ -46,6 +54,14 @@ class PwdExpirationController extends Controller
         $this->request=$request;
     }
 
+    /**
+    *
+    * View the change password form
+    *
+    * @param Request $request
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function showPasswordExpiration(Request $request){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] showPasswordExpirationForm', $this->mod_log->getParamFrontoffice());
         $password_expired_id = $request->session()->get('password_expired_id');
@@ -56,6 +72,14 @@ class PwdExpirationController extends Controller
         return view('admin.expired');
     }
 
+    /**
+    *
+    * Check and save the new password
+    *
+    * @param Request $request
+    * @return \Illuminate\Http\Response
+    *
+    */
     public function postPasswordExpiration(Request $request){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] postPasswordExpiration', $this->mod_log->getParamFrontoffice());
         $password_expired_id = $request->session()->get('password_expired_id');

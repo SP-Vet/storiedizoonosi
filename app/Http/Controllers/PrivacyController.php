@@ -84,8 +84,9 @@ class PrivacyController extends Controller
 
     /**
     *
-    * manage the page for the privacy acceptance
+    * Manage the page for the privacy acceptance
     *
+    * @param Integer $uid id of the user
     * @return \Illuminate\Http\Response
     *
     */

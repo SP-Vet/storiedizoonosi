@@ -35,7 +35,6 @@
         <!-- MTCaptcha javascript configuration and import, copy end -->
     </head>
   <body>
-    
         @yield('content')
             
         @yield('footerlogin')  

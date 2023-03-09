@@ -28,7 +28,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController};
+use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController,PwdExpirationController};
 use App\Models\Settings;
 
 /*
@@ -115,6 +115,10 @@ Route::group(['prefix' => 'admin','middleware' => 'adminauth'], function () {
 	// Admin Dashboard
 	Route::get('dashboard',[AdminController::class, 'dashboard'])->name('dashboard');
 });
+
+/*section password expired*/
+Route::get('/passwordExpiration',[PwdExpirationController::class,'showPasswordExpiration'])->name('showPasswordExpiration');
+Route::post('/passwordExpiration',[PwdExpirationController::class,'postPasswordExpiration'])->name('postPasswordExpiration');
 
 Route::get('storagestoriesubmit/{ssid}/{file}/{filename}', function ($ssid,$file,$filename) {
     $path = storage_path('app' . DIRECTORY_SEPARATOR . 'storiesubmit' . DIRECTORY_SEPARATOR  . $ssid . DIRECTORY_SEPARATOR . $file);

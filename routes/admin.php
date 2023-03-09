@@ -28,7 +28,7 @@
 <?php 
 /*all admin routes*/
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController,AdminPrivacyController};
+use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController,AdminPrivacyController,PwdExpirationController};
 
 Route::get('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('adminCambiapassword');
 Route::post('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('admincheckCambiapassword');

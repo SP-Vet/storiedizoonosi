@@ -191,7 +191,7 @@ class UsersController extends Controller
                         if($codfis_esistente==0){
                             DB::beginTransaction();
                             try {
-                                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[IN TRY] registrazione', $this->mod_log->getParamFrontoffice());
+                                Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->critical('[IN TRY] registration', $this->mod_log->getParamFrontoffice());
                                 //user storage NOT verified
                                 $user = new User;
                                 $user->name = $request_post['nome'].' '.$request_post['cognome'];

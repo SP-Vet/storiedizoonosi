@@ -20,6 +20,16 @@
                         {{ \Session::get('error') }}
                     </div>
                 @endif  
+                @if (session('messageinfo'))
+                <div class="alert alert-success">
+                    {!!session('messageinfo')!!}
+                </div>
+                @endif
+                @if (session('messagedanger'))
+                    <div class="alert alert-danger">
+                        {!!session('messagedanger')!!}
+                    </div>
+                @endif
                 <div class="form-outline mb-4">
                     <input type="email" name="email" id="email" class="form-control form-control-lg" required />
                     <label class="form-label" for="email">Email</label>

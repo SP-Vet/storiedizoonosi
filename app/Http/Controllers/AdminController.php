@@ -41,6 +41,7 @@ use App\Http\Controllers\LogPersonal;
 use App\Models\Stories;
 use App\Models\Storiessubmit;
 use App\Models\Integrations;
+use Carbon\Carbon;
 
 /**
  * Manages the platform's admin data
@@ -108,7 +109,7 @@ class AdminController extends Controller
                 DB::beginTransaction();
                 try {
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] cambiapasswrod', $this->mod_log->getParamFrontoffice());
-                    Admin::find(auth()->guard('admin')->user()->id)->update(['password'=> Hash::make($this->request->password)]);
+                    Admin::find(auth()->guard('admin')->user()->id)->update(['password'=> Hash::make($this->request->password),'password_changed_at'=>Carbon::now()]);
                     DB::commit();
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT TRY] cambiapasswrod', $this->mod_log->getParamFrontoffice());
                     $this->request->session()->flash('messageinfo', 'Password modificata correttamente');

@@ -1,13 +1,26 @@
 @extends('admin.layout.loginadmin')
+@section('additionaljs')
+    @parent
+    <script type="text/javascript">
+        function showFormRecuperoPassword(){
+            $('div#formlogin').hide();
+            $('div#formrecuperopassword').show();
+        }
+        function showFormLogin(){
+            $('div#formlogin').show();
+            $('div#formrecuperopassword').hide();
+        }
+    </script>
+@endsection
 @section('content')
 <section class="vh-100" style="background-color: #508bfc;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card shadow-2-strong" style="border-radius: 1rem;">
-          <div class="card-body p-5 text-center">
+          <div class="card-body p-5 text-center"  id="formlogin">
             <h3 class="mb-5">Login Amministrazione<br><i>Storie di Zoonosi</i></h3>
-            <form action="{{ route('adminLoginPost') }}" method="post">
+            <form action="{{ route('adminLoginPost') }}" method="post" >
                 {!! csrf_field() !!}
                 @if(\Session::get('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -55,8 +68,24 @@
                     <!-- MTCaptcha Anchor DOM, copy end -->
                 </div>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+                <p class="mt-5"><h4><a class="mt-2" onclick="showFormRecuperoPassword();" href="#">Password dimenticata?</a></h4></p>
             </form>
+            
+            
           </div>
+            <div class="card-body p-5 text-center"  id="formrecuperopassword" style="display:none;">
+                <h3 class="mb-5">Recupera password<br><i>Storie di Zoonosi</i></h3>
+                <form action="{{route('adminRecuperoPassword')}}" method="post" >
+                    {!! csrf_field() !!}
+                    <div class="form-outline mb-4">
+                        <input type="email" name="email" id="email" class="form-control form-control-lg" required />
+                        <label class="form-label" for="email">Email di Login</label>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Reimposta password</button>
+                    <a href="#" class="btn btn-secondary btn-lg btn-block" onclick="showFormLogin();">Torna al Login</a>
+                </form>
+            </div>
         </div>
       </div>
     </div>

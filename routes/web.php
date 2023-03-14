@@ -118,7 +118,7 @@ Route::group(['prefix' => 'admin','middleware' => 'adminauth'], function () {
 });
 Route::get('/checkresetpasswordadmin/{first?}/{second?}/{third?}',[AdminWorkgroupController::class,'checkResetPassword'])->where(['second'=>'^[1-9][0-9]*$'])->name('checkResetPasswordAdmin');
 Route::post('/checkresetpasswordadmin/{first?}/{second?}/{third?}',[AdminWorkgroupController::class,'checkResetPassword'])->where(['second'=>'^[1-9][0-9]*$'])->name('postcheckResetPasswordAdmin');
-
+Route::post('/passwordrecovery',[AdminAuthController::class, 'passwordrecovery'])->name('adminRecuperoPassword');
 
 
 /*section password expired*/

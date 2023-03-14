@@ -9,11 +9,13 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Admin;
+use App\Models\ConfirmAdmin;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\LogPersonal;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AdminAuthController extends Controller
 {
@@ -101,6 +103,42 @@ class AdminAuthController extends Controller
         
         
 
+    }
+
+
+    public function passwordrecovery(Request $request){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] passwordrecovery', $this->mod_log->getParamFrontoffice('recupero password'));
+        $request_post=json_decode(json_encode($request->all()));
+        if(!isset($request_post->email) || $request_post->email=='' || !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/",strtolower(trim($request_post->email)))){
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] passwordrecovery', $this->mod_log->getParamFrontoffice('indirizzo email non valido'));
+            return redirect(route('adminLogin'));
+        }
+        $mod_admin=new Admin();
+        
+        $admin=$mod_admin->getAll(['a.email'=>$request_post->email])->first();
+        if(!isset($admin->email)){
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] passwordrecovery', $this->mod_log->getParamFrontoffice('indirizzo email non esistente'));
+            return redirect(route('adminLogin'));
+        }
+
+        $amministratore=Admin::find($admin->id);
+        $amministratore->reset_password=1;
+        $amministratore->save();
+
+        $confirm=new ConfirmAdmin();
+        $linkreset=$confirm->getEmailResetLink($admin->id,$admin->email);
+        $linkreset_clean= str_replace('//', 'https://', $confirm->getEmailResetLink($admin->id,$admin->email));
+
+        //sending email with reset password link
+        $datimail=array('linkreset' => $linkreset,'linkreset_clean'=>$linkreset_clean,'email'=>$admin->email,'nome_sito'=>config('app.name'));
+        $this->email_admin=$admin->email_real;
+        Mail::send('emails.resetpasswordadmin', $datimail, function($message){
+            $message->subject('Reimposta password');
+            $message->to($this->email_admin);
+        });
+        unset($this->email_admin);
+        $request->session()->flash('messageinfo', '<h3>Link reset password inviato con successo!</h3><h4>Controlla la casella di posta legata all\'account per cui hai fatto richiesta di recupero password.</h4>');   
+        return redirect(route('adminLogin'));
     }
 
     /**

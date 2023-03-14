@@ -149,7 +149,7 @@ class AdminWorkgroupController extends Controller
             $message->to($this->email_admin);
         });
         unset($this->email_admin);
-        $this->request->session()->flash('messageinfo', '<h2>Link reset email inviato con successo!</h2><h3>L\'amministratore riceverà un mail con il link per reimpostare la password.</h3>');   
+        $this->request->session()->flash('messageinfo', '<h2>Link reset password inviato con successo!</h2><h3>L\'amministratore riceverà un mail con il link per reimpostare la password.</h3>');   
         return redirect(route('adminListWorkgroup'));
     }
 
@@ -170,13 +170,16 @@ class AdminWorkgroupController extends Controller
             }
             if(strcmp(trim($this->request->get('password')), trim($this->request->get('ripetipassword'))) != 0){
                 //The passwords entered do not match
-                return redirect()->back()->with("error","Le nuove password inserite non coincidono. Rioprovare.");
+                return redirect()->back()->with("error","Le nuove password inserite non coincidono. Riprovare.");
             }
             if(Session::get('second')!=$second)return redirect('/admin/login');
+
+            $admin=Admin::find($second);
+            if($admin->reset_password==0)return redirect(route('adminLogin'));
             DB::beginTransaction();
             try {
                 Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] checkResetPassword', $this->mod_log->getParamFrontoffice());
-                $admin=Admin::find($second);
+                //$admin=Admin::find($second);
                 $admin->reset_password=0;
                 $admin->password=Hash::make($this->request->password);
                 $admin->password_changed_at=Carbon::now();

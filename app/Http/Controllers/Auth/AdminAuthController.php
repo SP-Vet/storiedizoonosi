@@ -60,7 +60,7 @@ class AdminAuthController extends Controller
     }
 
     /**
-     * Show the application loginprocess.
+     * Show the application login process.
      *
      * @return \Illuminate\Http\Response
      */
@@ -76,22 +76,18 @@ class AdminAuthController extends Controller
             ]);
             if (auth()->guard('admin')->attempt(['email' => $request->input('email'), 'password' => $request->input('password')]))
             {
-                //$user = auth()->guard('admin')->user();
-                //\Session::put('success','You are Login successfully!!');
                 $user = auth()->guard('admin')->user();
                 $to = Carbon::createFromFormat('Y-m-d H:s:i', date('Y-m-d H:i:s'));
                 $from = Carbon::createFromFormat('Y-m-d H:s:i', $user->password_changed_at);
                 $diff_in_days = $to->diffInDays($from);
                
                 if($diff_in_days>0 && $diff_in_days>config('auth.password_expires_days')){
-                    //auth()->logout();
                     auth()->guard('admin')->logout();
                     \Session::flush();
                     $request->session()->put('password_expired_id',$user->id);
                     Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] postLogin', $this->mod_log->getParamFrontoffice('password scaduta'));
                     return redirect(route('showPasswordExpiration'))->with('error', "La password è scaduta, inserisci una nuova password.");
                 }
-
                 Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT] postLogin', $this->mod_log->getParamFrontoffice('utente autenticato'));
                 return redirect()->route('dashboard');
             } else {

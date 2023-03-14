@@ -58,6 +58,8 @@ Route::get('/aggiungiutente',[AdminWorkgroupController::class,'adding'])->name('
 Route::post('/aggiungiutente',[AdminWorkgroupController::class,'adding'])->name('adminSaveNewUser');
 Route::get('/modificautente/{id?}',[AdminWorkgroupController::class,'modify'])->where(['id'=>'[1-9][0-9]?+'])->name('adminModifyUser');
 Route::post('/modificautente/{id?}',[AdminWorkgroupController::class,'modify'])->where(['id'=>'[1-9][0-9]?+'])->name('adminSaveModifiedUser');
+Route::get('/resetpasswordadmin/{id?}/{email?}/{email_real}',[AdminWorkgroupController::class,'resetpassword'])->where(['id'=>'[1-9][0-9]?+'])->name('resetPasswordAdmin');
+
 
 /*section integrations*/
 Route::get('/elencoapprofondimenti',[AdminIntegrationsController::class,'list'])->name('adminListIntegrations');

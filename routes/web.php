@@ -107,6 +107,7 @@ Route::get('sitemap',[SitemapController::class, 'show']);
 
 /*admin login routes*/
 use App\Http\Controllers\Auth\{AdminAuthController};
+use App\Http\Controllers\{AdminWorkgroupController};
 
 Route::get('admin/login',[AdminAuthController::class, 'getLogin'])->name('adminLogin');
 Route::post('admin/login',[AdminAuthController::class, 'postLogin'])->name('adminLoginPost');
@@ -115,6 +116,10 @@ Route::group(['prefix' => 'admin','middleware' => 'adminauth'], function () {
 	// Admin Dashboard
 	Route::get('dashboard',[AdminController::class, 'dashboard'])->name('dashboard');
 });
+Route::get('/checkresetpasswordadmin/{first?}/{second?}/{third?}',[AdminWorkgroupController::class,'checkResetPassword'])->where(['second'=>'^[1-9][0-9]*$'])->name('checkResetPasswordAdmin');
+Route::post('/checkresetpasswordadmin/{first?}/{second?}/{third?}',[AdminWorkgroupController::class,'checkResetPassword'])->where(['second'=>'^[1-9][0-9]*$'])->name('postcheckResetPasswordAdmin');
+
+
 
 /*section password expired*/
 Route::get('/passwordExpiration',[PwdExpirationController::class,'showPasswordExpiration'])->name('showPasswordExpiration');

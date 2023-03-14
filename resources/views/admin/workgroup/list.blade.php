@@ -1,5 +1,10 @@
 @extends('admin.layout.base')
 
+@section('additionaljs')
+    @parent
+    <script type="text/javascript" src="/js/workgroup.js"></script>
+@endsection
+
 @section('content')
 <div class="d-flex justify-content-between mt-2">
     <div class="d-inline-flex"><h5 class="pt-2">{{$title_page}}</h5></div>
@@ -13,6 +18,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Email Reale</th>
                     <th scope="col">Ruolo</th>
                     <th scope="col">Data inserimento</th>
                     <th scope="col">Azioni</th>
@@ -24,10 +30,13 @@
                     <td><?=$utente->id;?></td>
                     <td><?=$utente->name;?></td>
                     <td><?=$utente->email;?></td>
+                    <td><?=$utente->email_real;?></td>
                     <td><?=$utente->role;?></td>
                     <td><?=($utente->created_at)?Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $utente->created_at)->format('d/m/Y'):'';?></td>
                     <td>
-                        <?php if($utente->id==$admin->id){ ?>
+                        <?php if($utente->id!=$admin->id){ ?>
+                            <a href="#" class="font-dark conferma-resetpassword" idadmin="<?=$utente->id;?>" email="<?=$utente->email;?>" email_real="<?=$utente->email_real;?>" title="Reset Password"><i class="fa fa-key fa-lg"></i></a>
+
                             <!--<a href="{{route('adminModifyUser')}}/{{$utente->id}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>-->
                         <?php } ?>
                         <!--<a href="#" class="font-red conferma-elimina" idvalore="{{$utente->id}}" sezione="storie"  title="Elimina"><i class="fa fa-trash fa-lg"></i></a>-->

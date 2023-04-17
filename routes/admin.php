@@ -28,7 +28,7 @@
 <?php 
 /*all admin routes*/
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController,AdminPrivacyController,PwdExpirationController};
+use App\Http\Controllers\{AdminZoonosesController,AdminStoriesController,AdminController,AdminWorkgroupController,AdminIntegrationsController,AdminCollaboratorsController,CkeditorController,ReviewsController,AdminContextdataController,AdminSettingsController,AdminPrivacyController,PwdExpirationController,AdminServiceevaluationController};
 
 Route::get('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('adminCambiapassword');
 Route::post('/cambiapassword/{id?}',[AdminController::class,'cambiapassword'])->where(['id'=>'[1-9][0-9]?+'])->name('admincheckCambiapassword');
@@ -83,6 +83,9 @@ Route::get('/elencoimpostazioni',[AdminSettingsController::class,'list'])->name(
 Route::get('/modificaimpostazione/{confid?}',[AdminSettingsController::class,'modify'])->where(['confid'=>'[1-9][0-9]?+'])->name('adminModifySetting');
 Route::post('/modificaimpostazione/{confid?}',[AdminSettingsController::class,'modify'])->where(['confid'=>'[1-9][0-9]?+'])->name('adminSaveManagementSetting');
 
+/*settings evaluation*/
+Route::get('/reportvalutazioni',[AdminServiceevaluationController::class,'list'])->name('adminListEvaluation');
+
 
 /*ajax calls*/
 Route::post('/ajx-checkslugzoonosi', [AdminZoonosesController::class, 'checkslugzoonosi']);
@@ -93,6 +96,10 @@ Route::post('/ajx-getcollaborator', [AdminCollaboratorsController::class, 'getco
 Route::post('/ajx-removereview', [ReviewsController::class, 'eliminareview']);
 Route::post('/ajx-uploadreview', [ReviewsController::class, 'aggiungireview']);
 Route::post('/ajx-getphaseintegrations', [AdminIntegrationsController::class, 'getphaseintegrations']);
+Route::post('/ajx-checkemailadminexists', [AdminWorkgroupController::class, 'checkemailadminexists']);
+Route::post('/ajx-checkemailrealadminexists', [AdminWorkgroupController::class, 'checkemailrealadminexists']);
+
+
 
 Route::get('storagestoriesubmit/{ssid}/{file}', function ($ssid,$file) {
     $path = storage_path('app' . DIRECTORY_SEPARATOR . 'storiesubmit' . DIRECTORY_SEPARATOR  . $ssid . DIRECTORY_SEPARATOR . $file);

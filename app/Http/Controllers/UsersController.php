@@ -173,7 +173,7 @@ class UsersController extends Controller
         if($this->request->isMethod('post')){
             Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] registration', $this->mod_log->getParamFrontoffice('invio del post'));
             $datireg=$this->request->all();      
-            $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$request->input('mtcaptcha-verifiedtoken'));
+            $responseMTCaptcha = Http::get('https://service.mtcaptcha.com/mtcv1/api/checktoken?privatekey='.config('app.MTCAPTCHAprivate').'&token='.$this->request->input('mtcaptcha-verifiedtoken'));
             $dataRresponse=$responseMTCaptcha->json();
             if($dataRresponse['success']){
                 if($this->checkRegistrationform()){
@@ -198,7 +198,7 @@ class UsersController extends Controller
                                 $user->email =$this->tmpmail= $request_post['email'];
                                 //$user->password=bcrypt($request_post['password']);
                                 $user->password=Hash::make($request_post['password']);
-                                $user->role='member';
+                                //$user->role='member';
                                 $user->save();
 
                                 //tax code set if existing
@@ -210,7 +210,8 @@ class UsersController extends Controller
 
                                 //confirmation link
                                 $link_conferma=$this->mod_confirm->getEmailConfirmationLink($user->id,$user->email);
-                                $link_conferma_clean= str_replace('//', 'http://', $this->mod_confirm->getEmailConfirmationLink($user->id,$user->email));
+                                //$link_conferma_clean= str_replace('//', 'https://', $this->mod_confirm->getEmailConfirmationLink($user->id,$user->email));
+				$link_conferma_clean=$link_conferma;
 
                                 //sending email with confirmation link
                                 $datimail=array('link_conferma' => $link_conferma,'link_conferma_clean'=>$link_conferma_clean,'email'=>$user->email,'nome_sito'=>env('NOME_SITO'));

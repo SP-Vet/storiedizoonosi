@@ -13,7 +13,7 @@
           </div>
           <h2>Ricerca utilizzando i criteri sottostanti</h2>
           <hr>
-          <form id="search-story" action="/elencostorie" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
+          <form id="search-story" action="{{route('listStories')}}" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
               {{ csrf_field() }}
               <div class="container-search p-2 rounded mt-3">
                   <div class="row form-group av-search-row p-2">

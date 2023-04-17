@@ -5,5 +5,6 @@
     <a class="list-group-item list-group-item-action list-group-item-light p-3 <?=(isset($menuactive) && $menuactive=='gruppodilavoro')?'active':'';?>" href="{{route('adminListWorkgroup')}}"><i class="fa fa-user-o"></i>&nbsp;Gruppo di lavoro</a>
     <a class="list-group-item list-group-item-action list-group-item-light p-3 <?=(isset($menuactive) && $menuactive=='privacy')?'active':'';?>" href="{{route('adminListPrivacy')}}"><i class="fa fa-comment-o"></i>&nbsp;Privacy<span class="badge bg-danger fRight menu-notificaprivacy"></span></a>
     <a class="list-group-item list-group-item-action list-group-item-light p-3 <?=(isset($menuactive) && $menuactive=='settings')?'active':'';?>" href="{{route('adminListSettings')}}"><i class="fa fa-wrench"></i>&nbsp;Impostazioni</a>
+    <a class="list-group-item list-group-item-action list-group-item-light p-3 <?=(isset($menuactive) && $menuactive=='evaluation')?'active':'';?>" href="{{route('adminListEvaluation')}}"><i class="fa fa-pie-chart"></i>&nbsp;Valutazioni Servizio</a>
     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/logs"><i class="fa fa-cog"></i>&nbsp;Visualizza Log</a>
 </div>

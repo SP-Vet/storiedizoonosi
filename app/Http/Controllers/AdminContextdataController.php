@@ -78,7 +78,7 @@ class AdminContextdataController extends Controller
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] contextdatastory', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
-        $title_page='Dati contesto storia';
+        $title_page='Dati biografici storia';
         //if POST insert/update/delete data
         if($this->request->isMethod('post')){
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] contextdatastory', $this->mod_log->getParamFrontoffice('invio post dati di contesto')); 

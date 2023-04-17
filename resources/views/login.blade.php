@@ -44,7 +44,7 @@
                     <div class="text-center">
                       <h2 class="mt-1 mb-5 pb-1">Login</h4>
                     </div>
-                    <form action="/checklogin" id="login-form" method="POST" class="needs-validation" novalidate >
+                    <form action="{{route('postcheckLogin')}}" id="login-form" method="POST" class="needs-validation" novalidate >
                         {{ csrf_field() }}
                       <p>Effettua il login al tuo account</p>
                       <div class="form-outline mb-4">
@@ -68,7 +68,7 @@
                       <hr>
                       <div class="row pb-4 pt-4">
                           <div class="col-12 col-sm-6 text-center text-sm-end"><p class="mb-0 me-2"><strong>Non hai un account?</strong></p></div>
-                          <div class="col-12 col-sm-6 text-center text-sm-start"><a href="/registrazione" class="btn btn-outline-danger"><strong>Richiedi un account</strong></a></div>
+                          <div class="col-12 col-sm-6 text-center text-sm-start"><a href="{{route('getRegistration')}}" class="btn btn-outline-danger"><strong>Richiedi un account</strong></a></div>
                       </div>
                     </form>
                   </div>

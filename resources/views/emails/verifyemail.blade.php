@@ -234,19 +234,6 @@ a[x-apple-data-detectors] {
                  </tr> 
                </table></td> 
              </tr> 
-             <tr> 
-              <td align="left" style="padding:20px;Margin:0"> 
-               <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                 <tr> 
-                  <td valign="top" align="center" style="padding:0;Margin:0;width:660px"> 
-                   <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                     <tr> 
-                      <td align="center" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Montserrat, sans-serif;line-height:18px;color:#333333;font-size:12px">Ricevi quest&apos;email perchè ti sei registrato a {{$nome_sito}}<br><a target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#134F5C;font-size:12px;line-height:18px" href="#">Privacy police</a><br></p></td> 
-                     </tr> 
-                   </table></td> 
-                 </tr> 
-               </table></td> 
-             </tr> 
            </table></td> 
          </tr> 
        </table> 

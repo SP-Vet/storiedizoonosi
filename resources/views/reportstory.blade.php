@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-12 alert alert-warning">
                     <h4>ATTENZIONE!</h4>
-                    <h5>Devi effettuare il <a style="text-decoration: underline;color: #842029 !important;" href="/login"><b>Log in o l&apos;autenticazione</b></a>  per poter segnalare una storia.</h5>
+                    <h5>Devi effettuare il <a style="text-decoration: underline;color: #842029 !important;" href="{{route('loginUser')}}"><b>Log in o l&apos;autenticazione</b></a>  per poter segnalare una storia.</h5>
                 </div> 
             </div>
         </div>
@@ -62,7 +62,7 @@
                   </div>
                   <h2>Inserite la vostra Storia di Zoonosi</h2>
                   <hr>
-                  <form action="/crowdsourcing/submission" id="form-submitstory-IT" method="POST" enctype="multipart/form-data"  class="needs-validation" novalidate>
+                  <form action="{{route('postReportStory')}}" id="form-submitstory-IT" method="POST" enctype="multipart/form-data"  class="needs-validation" novalidate>
                       {{ csrf_field() }}
                       <input type="hidden" name="language" id="language-IT" value="IT" />
                     <div class="row">
@@ -187,7 +187,7 @@
                     </div>
                     <h2>Enter your zoonosis story</h2>
                     <hr>
-            <form action="/crowdsourcing/submission" id="form-submitstory-EN" method="POST" enctype="multipart/form-data"  class="needs-validation" novalidate>
+            <form action="{{route('postReportStory')}}" id="form-submitstory-EN" method="POST" enctype="multipart/form-data"  class="needs-validation" novalidate>
                 {{ csrf_field() }}
                 <input type="hidden" name="language" id="language-EN" value="EN" />
                 <div class="row">
@@ -303,7 +303,7 @@
                     <div class="row">
                         <div class="col-12 alert alert-warning">
                             <h4>ATTENZIONE!</h4>
-                            <h5>Devi effettuare il <a style="text-decoration: underline;color: #842029 !important;" href="/login"><b>Log in o l&apos;autenticazione</b></a>  per poter segnalare una storia.</h5>
+                            <h5>Devi effettuare il <a style="text-decoration: underline;color: #842029 !important;" href="{{route('loginUser')"><b>Log in o l&apos;autenticazione</b></a>  per poter segnalare una storia.</h5>
                         </div> 
                     </div>
                 </div>

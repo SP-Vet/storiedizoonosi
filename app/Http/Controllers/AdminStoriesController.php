@@ -577,7 +577,7 @@ class AdminStoriesController extends Controller
         //CHECK VALIDITY OF ANY UPLOAD OF VIDEO / PODCAST / PDF
         $allowed_text = array('pdf');
         $allowed_video = array('mp4','mov','avi');
-        $allowed_audio = array('pcm', 'wav', 'mp3', 'ogg', 'flac');
+        $allowed_audio = array('pcm', 'wav', 'mp3', 'ogg', 'flac','m4a');
         //controls on pdf files
         if(isset($_FILES['pdfstoria']['name']) && $_FILES['pdfstoria']['name']!=''){
             $ext_text = pathinfo($_FILES['pdfstoria']['name'], PATHINFO_EXTENSION);
@@ -587,7 +587,7 @@ class AdminStoriesController extends Controller
         //controls on podcast
         if(isset($_FILES['podcast']['name']) && $_FILES['podcast']['name']!=''){
             $ext_audio = pathinfo($_FILES['podcast']['name'], PATHINFO_EXTENSION);
-            if (!in_array($ext_audio, $allowed_audio)) {$datimancanti[]='Il file caricato come podcast della storia deve essere di un formato tra: .pcm, .wav, .mp3, .ogg, .flac';}
+            if (!in_array($ext_audio, $allowed_audio)) {$datimancanti[]='Il file caricato come podcast della storia deve essere di un formato tra: .pcm, .wav, .mp3, .ogg, .flac, .m4a';}
             if($_FILES['podcast']['size']>20971520){$datimancanti[]='Il file audio del Podcast caricato è troppo grande';}
         }
         //controls on video

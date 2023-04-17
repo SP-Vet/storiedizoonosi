@@ -88,6 +88,38 @@ class CkeditorController extends Controller
     }
 
     /**
+     * Manage the upload of a new image contextdata content.
+     * @param Request $request all parameter insert to the request
+     * @return \Illuminate\Http\Response
+     */
+
+     public function uploadcontextdataimage(Request $request)
+     {
+         if($request->hasFile('upload')) {
+             $pathst = storage_path('app/public/storietextarea');
+             if(!File::isDirectory($pathst)){
+                 File::makeDirectory($pathst, 0777, true, true);
+             }
+             
+             $originName = $request->file('upload')->getClientOriginalName();
+             $fileName = pathinfo($originName, PATHINFO_FILENAME);
+             $extension = $request->file('upload')->getClientOriginalExtension();
+             //$fileName =  random_str(8, 'abcdefghijklmnopqrstuvwxyz').'_'.time().'.'.$extension;            
+             $fileName = strtolower(str_replace(' ', '_', $fileName)).'_'.time().'.'.$extension;
+             //$request->file('upload')->move(public_path('images'), $fileName);
+             $request->file('upload')->move($pathst, $fileName);
+             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+             //$url = asset('images/'.$fileName); 
+             $url=asset('storagetextareaviewimage/'.$fileName);
+             $msg = 'Upload immagine completato'; 
+             $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
+             //@header('X-FRAME-OPTION : SAMEORIGIN');
+             @header('Content-type: text/html; charset=utf-8'); 
+             echo $response;
+         }
+     }
+
+    /**
      * Manage the upload of a new public image content.
      * @param Request $request all parameter insert to the request
      * @return \Illuminate\Http\Response

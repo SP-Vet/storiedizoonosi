@@ -3,7 +3,7 @@
 @section('additionaljs')
     @parent
     <script type="text/javascript" src="/js/form-control-daticontesto.js"></script>
-    <script type="text/javascript">var rottaupload="<?=route('ckeditor.upload', ['_token' => csrf_token() ]);?>";</script>
+    <script type="text/javascript">var rottaupload="<?=route('ckeditor.uploadcontextdataimage', ['_token' => csrf_token() ]);?>";</script>
     <script type="text/javascript" src="/js/gestisci-daticontesto.js"></script>
 @endsection
 
@@ -33,7 +33,7 @@
     {{ csrf_field() }}
     <div class="row bg-wheat-transp g-0 border rounded overflow-hidden flex-md-row mb-4 container-list-story position-relative">
         <div class="">
-            <div class="fLeft"><h5 class="ps-4 pt-4 pe-4 mb-0">Dati di contesto</h5></div>
+            <div class="fLeft"><h5 class="ps-4 pt-4 pe-4 mb-0">Dati biografici</h5></div>
             <div class="fRight ps-4 pt-4 pe-4 mb-0"><a class="btn btn-primary button-add-part"><i class="fa fa-plus"></i>Aggiungi dato</a></div>
         </div>
         <div class="container-parti">
@@ -84,7 +84,7 @@
     </div> 
     <div class="mb-3">
         <div class="ps-4 pe-4 mb-0">
-            <button type="submit" class="btn btn-success salvadaticontesto btn-showloader" title-loader="ATTENDERE..." text-loader="Il sistema sta memorizzando le informazioni<br />Non chiudere la finestra del browser...<br />(potrebbe volerci qualche minuto)"><strong>Salva dati di contesto</strong></button>
+            <button type="submit" class="btn btn-success salvadaticontesto btn-showloader" title-loader="ATTENDERE..." text-loader="Il sistema sta memorizzando le informazioni<br />Non chiudere la finestra del browser...<br />(potrebbe volerci qualche minuto)"><strong>Salva dati biografici</strong></button>
             <a href="{{ url()->previous() }}" class="btn btn-secondary"><i class="fa fa-fast-backward"></i><strong>&nbsp;Torna indietro</strong></a>
         </div>
     </div>  

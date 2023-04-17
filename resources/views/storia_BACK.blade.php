@@ -334,7 +334,7 @@
                                                 <?php if(Auth::check()){ ?>
                                                     <button class="btn btn-success send invia-approfondimento btn-sm">Invia integrazione <i class="fa fa-check ml-1"></i><!--<i class="fa fa-long-arrow-right ml-1"></i>--></button>
                                                 <?php }else{ ?>
-                                                    <p>Effettua il <a href="/login"><b>LOGIN</b></a> per lasciare un approfondimento.</p>
+                                                    <p>Effettua il <a href="{{route('loginUser')}}"><b>LOGIN</b></a> per lasciare un approfondimento.</p>
                                                 <?php } ?>
                                           </div>
                                       </div>

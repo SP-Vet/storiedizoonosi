@@ -111,4 +111,32 @@ class Admin extends Authenticatable
         }
         return $attributes;
     }
+
+    /**
+     * Method that check if already exists a log in email address in the DB
+     *
+     *  @param String $email email to search
+     *  @return Object
+     *  
+     */
+    public function checkExistAdminEmailAddress($email){
+        $queryBuilder=DB::table($this->table.' AS a')->select('a.*')
+                ->where('a.email',$email);
+         return $queryBuilder->get();
+    }
+
+    /**
+     * Method that check if already exists a real email address in the DB
+     *
+     *  @param String $email email to search
+     *  @return Object
+     *  
+     */
+    public function checkExistAdminRealEmailAddress($email){
+        $queryBuilder=DB::table($this->table.' AS a')->select('a.*')
+                ->where('a.email_real',$email);
+         return $queryBuilder->get();
+    }
+
+    
 }

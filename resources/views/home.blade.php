@@ -28,7 +28,7 @@
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 container-zoonosi position-relative">
             <div class="col-12 col-sm-6 ps-3 pt-3 pe-3">
                 <h3 class="mb-2"><?=$zoo->nome;?></h3>
-                <p style="font-size: 0.6rem;"><a href="/elencostorie/{{$zoo->slugzoonosi}}"><img style="width: 100%;overflow: hidden;max-height: 200px;object-fit: cover;" src="{{$zoo->img_url}}" alt="IMG_Zoonosi"></a><?=html_entity_decode($zoo->img_desc,ENT_QUOTES,'utf-8');?></p>
+                <p style="font-size: 0.6rem;"><a href="{{route('listStories')}}/{{$zoo->slugzoonosi}}"><img style="width: 100%;overflow: hidden;max-height: 200px;object-fit: cover;" src="{{$zoo->img_url}}" alt="IMG_Zoonosi"></a><?=html_entity_decode($zoo->img_desc,ENT_QUOTES,'utf-8');?></p>
             </div>
             <div class="col-12 col-sm-6 ps-3 pe-3 pt-2 d-flex flex-column position-static">
                 <?php if($zoo->linktelegram!=''){ ?>
@@ -44,7 +44,7 @@
                     <p class="card-text mb-auto"><?= html_entity_decode($zoo->descrizione,ENT_QUOTES,'utf-8');?></p>
                 </div>
             </div>
-            <a class="link-black" href="/elencostorie/{{$zoo->slugzoonosi}}">
+            <a class="link-black" href="{{route('listStories')}}/{{$zoo->slugzoonosi}}">
                 <div class="ps-3 pe-3 text-end pb-3">
                     <div class="btn btn-success">Vai alle storie di zoonosi</div>
                 </div>

@@ -83,7 +83,7 @@ class Confirm extends Model
         $a=$this->kpu;
         $b=$id;
         $c=sha1($a.$this->kpr.$b).md5($email);
-        $link='//'.$_SERVER['HTTP_HOST'].'/confermaemail/'.$c.'/'.$b.'/'.$a;
+        $link='https://'.$_SERVER['HTTP_HOST'].'/confermaemail/'.$c.'/'.$b.'/'.$a;
         return $link;
     }
     

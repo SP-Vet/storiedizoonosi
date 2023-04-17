@@ -105,7 +105,7 @@ class StoriesController extends Controller
                 //fields entered in the search form are invalid
                 Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] checkSearchform', $this->mod_log->getParamFrontoffice('parametri di ricerca non validi'));
                 $this->request->session()->flash('messagedanger', '<b>ATTENZIONE</b>! I parametri inseriti non sono corretti, riprovare!');
-                return redirect('/ricerca');
+                return redirect(route('searchStories'));
             }
         }elseif($this->request->isMethod('get')){
             Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] list', $this->mod_log->getParamFrontoffice('visualizzazione storie da zoonosi'));
@@ -129,7 +129,7 @@ class StoriesController extends Controller
         if($this->request->isMethod('post') && count($storie)==0){
             Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->warning('[OUT] list', $this->mod_log->getParamFrontoffice('ricerca senza risultati'));
             $this->request->session()->flash('messagedanger', '<h2>LA RICERCA NON HA FORNITO ALCUN RISULTATO</h2>');
-            return redirect('/ricerca');
+            return redirect(route('searchStories'));
         }
         $arr_st=[];
         foreach ($storie AS $story)

@@ -8,6 +8,7 @@
 @section('content')
 <div class="d-flex justify-content-between mt-2">
     <div class="d-inline-flex"><h5 class="pt-2">{{$title_page}}</h5></div>
+    <div class="d-inline-flex"><a href="{{route('adminAddUser')}}" class="btn btn-success"><i class="fa fa-plus-circle"></i><strong>Aggiungi Amministratore</strong></a></div>
 </div>
 <hr>
 <div class="row mt-2">

@@ -154,16 +154,17 @@
 <div class="row p-3">
     <div class="col-12 col-sm-4 border p-2">
         <!-- FAQ -->
-        <p>Hai delle domande? Leggi le <a href="/faq"><strong>FAQ</strong>...</a></p>
+        <p>Hai delle domande? Leggi le <a href="{{route('faq')}}"><strong>FAQ</strong>...</a></p>
         <div class="mt-2">
             <hr>
             <?php if(count($podcast->all())>0){ 
             foreach ($podcast AS $singolopodcast){
                 if(!$singolopodcast->linkurlhtml){
-                    $linkpod=asset(Storage::url('storieallegatimultimediali/'.$storia->sid.'/'.$singolopodcast->nome_file_memorizzato));
+                    $linkpod=url('storagegetaudio/'.$storia->sid.'/'.$singolopodcast->nome_file_memorizzato);
                     $pathpod = storage_path('app/public/storieallegatimultimediali/'.$storia->sid.'/'. $singolopodcast->nome_file_memorizzato);?>    
                     <div class="mt-2">
-                        <p class="mt-5 mb-0"><i>Ascolta il podcast della storia</i></p>
+                        <img class="img-responsive" style="width: 100%;" src="/images/img_predef_podcast.png" />
+                        <p class="mt-2 mb-0"><i>Ascolta il podcast della storia</i></p>
                         <audio controls>
                             <source src="{{$linkpod}}" type="<?=mime_content_type($pathpod);?>">
                             Il browser che stai utilizzando non supporta la riproduzione di questo file audio.
@@ -172,7 +173,7 @@
                 <?php } ?>
             <?php }
             }else{?>
-                <p class="mt-5 mb-0"><i><a href="/comingsoon">Ascolta il podcast della storia</a></i></p>
+                <p class="mt-5 mb-0"><i><a href="{{route('comingsoon')}}">Ascolta il podcast della storia</a></i></p>
             <?php } ?>
         </div>
     </div>
@@ -342,7 +343,7 @@
                                                 <?php if(Auth::check()){ ?>
                                                     <button class="btn btn-success send invia-approfondimento btn-sm">Invia integrazione <i class="fa fa-check ml-1"></i><!--<i class="fa fa-long-arrow-right ml-1"></i>--></button>
                                                 <?php }else{ ?>
-                                                    <p>Effettua il <a href="/login"><b>LOGIN</b></a> per lasciare un approfondimento.</p>
+                                                    <p>Effettua il <a href="{{route('loginUser')}}"><b>LOGIN</b></a> per lasciare un approfondimento.</p>
                                                 <?php } ?>
                                           </div>
                                       </div>

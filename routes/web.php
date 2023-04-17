@@ -28,7 +28,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController,PwdExpirationController};
+use App\Http\Controllers\{UsersController,HomeController,StoriesController,MailController,IntegrationsController,PrivacyController,AdminController,CkeditorController,ReviewsController,SitemapController,PwdExpirationController,ServiceevaluationController};
 use App\Models\Settings;
 
 /*
@@ -45,47 +45,47 @@ use App\Models\Settings;
 Route::resource('/',HomeController::class);
 Route::get('/ilprogetto',[HomeController::class,'project']);
 
-//Route::get('/elencostorie/{zid?}',[StoriesController::class,'elencostorie'])->where(['zid'=>'^[1-9][0-9]*$']);
 Route::get('/elencostorie/{slugzoonosi?}',[StoriesController::class,'list'])->where(['slugzoonosi'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
-//Route::get('/storia/{sid}',[StoriesController::class,'storydetail'])->where(['sid'=>'[1-9][0-9]?+']);
 Route::get('/storia/{slug}',[StoriesController::class,'storydetail'])->where(['slug'=>'^[a-z0-9]+(-?[a-z0-9]+)*$']);
 
 /*login and logout routes*/
-Route::get('/login', [UsersController::class,'login']);
-Route::get('/checklogin', [UsersController::class,'checklogin']);
-Route::post('/checklogin', [UsersController::class,'checklogin']);
+Route::get('/login', [UsersController::class,'login'])->name('loginUser');
+Route::get('/checklogin', [UsersController::class,'checklogin'])->name('getcheckLogin');
+Route::post('/checklogin', [UsersController::class,'checklogin'])->name('postcheckLogin');
 Route::get('/logout', [UsersController::class,'logout']);
 /*registration routes*/
-Route::get('/registrazione', [UsersController::class,'registration']);
-Route::post('/registrazione', [UsersController::class,'registration']);
+Route::get('/registrazione', [UsersController::class,'registration'])->name('getRegistration');
+Route::post('/registrazione', [UsersController::class,'registration'])->name('postRegistration');
 /*search routes*/
-Route::get('/ricerca', [StoriesController::class,'search']);
-Route::post('/elencostorie',[StoriesController::class,'list']);
+Route::get('/ricerca', [StoriesController::class,'search'])->name('searchStories');
+Route::post('/elencostorie',[StoriesController::class,'list'])->name('listStories');
 /*sending stories routes*/
-Route::get('/crowdsourcing/submission',[StoriesController::class,'reportstory']);
-Route::post('/crowdsourcing/submission',[StoriesController::class,'reportstory']);
+Route::get('/crowdsourcing/submission',[StoriesController::class,'reportstory'])->name('getReportStory');
+Route::post('/crowdsourcing/submission',[StoriesController::class,'reportstory'])->name('postReportStory');
 
 /*other*/
-Route::get('/comingsoon', function () {return view('comingsoon')->with('title_page','Coming Soon');});
-Route::get('/privacy-policy',[PrivacyController::class,'view']);
+Route::get('/comingsoon', function () {return view('comingsoon')->with('title_page','Coming Soon');})->name('comingsoon');
+Route::get('/privacy-policy',[PrivacyController::class,'view'])->name('privacyPolicy');
 Route::get('/privacyacceptance/{uid?}',[PrivacyController::class,'privacyacceptance'])->where(['uid'=>'^[1-9][0-9]*$'])->name('showPrivacy');
 Route::post('/privacyacceptance/{uid?}',[PrivacyController::class,'privacyacceptance'])->where(['uid'=>'^[1-9][0-9]*$'])->name('savePrivacy');
+Route::get('/serviceevaluation',[ServiceevaluationController::class,'list'])->name('serviceEvaluation');
+Route::post('/serviceevaluation',[ServiceevaluationController::class,'add'])->name('postserviceEvaluation');
 
 Route::get('/faq',function () {
     $mod_settings= new Settings();
     $settings=[];
     $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
-    return view('faq')->with('title_page','FAQ')->with('settings',$settings);});
+    return view('faq')->with('title_page','FAQ')->with('settings',$settings);})->name('faq');
 Route::get('/developmentby', function () {
     $mod_settings= new Settings();
     $settings=[];
     $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
-    return view('developmentby')->with('title_page','Sviluppatore')->with('settings',$settings);});
+    return view('developmentby')->with('title_page','Sviluppatore')->with('settings',$settings);})->name('developmentBy');
 Route::get('/contatti', function () {
     $mod_settings= new Settings();
     $settings=[];
     $settings=array_column($mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
-    return view('contacts')->with('title_page','Contatti')->with('settings',$settings);});
+    return view('contacts')->with('title_page','Contatti')->with('settings',$settings);})->name('contacs');
 
 /*ajax calls*/
 Route::post('ajx-getcontextdata', [StoriesController::class, 'getcontextdatastory']);
@@ -157,13 +157,25 @@ Route::get('storageviewimage/{sid}/{file}', function ($sid,$file) {
     $response->header("Content-Type", $type);
     return $response;
 });
-//route below to open the media within the browser
-/*Route::get('storagestoriesubmit/{ssid}/{file}/{filename}', function ($ssid,$file,$filename) {
-    $path = storage_path('app' . DIRECTORY_SEPARATOR . 'storiesubmit' . DIRECTORY_SEPARATOR  . $ssid . DIRECTORY_SEPARATOR . $file);
-    return response()->file($path)->header('Content-Disposition: attachment; filename="' . $fileName . '"');
-});*/
+
+Route::get('storagetextareaviewimage/{file}', function ($file) {
+    $path = storage_path('app' . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'storietextarea' . DIRECTORY_SEPARATOR . $file);
+        $file = File::get($path);
+    $type = File::mimeType($path);
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+    return $response;
+});
+
+Route::get('storagegetaudio/{sid}/{file}', function ($sid,$file) {
+    $path = storage_path('app' . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'storieallegatimultimediali' . DIRECTORY_SEPARATOR  . $sid . DIRECTORY_SEPARATOR . $file);
+        $file = File::get($path);
+    return $file;
+});
 
 Route::post('/ckeditor/upload', [CkeditorController::class, 'upload'])->name('ckeditor.upload');
 Route::post('/ckeditor/uploadpublicimage', [CkeditorController::class, 'uploadpublicimage'])->name('ckeditor.uploadpublicimage');
+Route::post('/ckeditor/uploadcontextdataimage', [CkeditorController::class, 'uploadcontextdataimage'])->name('ckeditor.uploadcontextdataimage');
+
 
 

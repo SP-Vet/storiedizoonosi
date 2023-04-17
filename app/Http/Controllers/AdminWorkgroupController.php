@@ -106,14 +106,97 @@ class AdminWorkgroupController extends Controller
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->warning('[OUT] adding', $this->mod_log->getParamFrontoffice('ruolo non ammesso'));
             return redirect('/admin');
         }
+        $title_page='Aggiungi nuovo amministratore';
         
-        return view('admin.workgroup.adding')->with('gruppo',$utenti)
+        if($this->request->isMethod('post')){
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] adding', $this->mod_log->getParamFrontoffice('inviato il post del nuovo utente'));
+            $datiutente=$this->request->all();
+            if($this->checkform()){
+                Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] adding', $this->mod_log->getParamFrontoffice('post corretto'));
+                //DB::beginTransaction();
+
+                DB::beginTransaction();
+                try {
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[IN TRY] adding', $this->mod_log->getParamFrontoffice());
+                    //memo admin
+                    $admin=new Admin();
+                    $admin->name = trim(htmlentities($datiutente['name'],ENT_QUOTES,'utf-8'));
+                    $admin->email = trim(strtolower(htmlentities($datiutente['email'],ENT_QUOTES,'utf-8')));
+                    $admin->email_real = trim(strtolower(htmlentities($datiutente['email_real'],ENT_QUOTES,'utf-8')));
+                    $admin->role=trim(strtolower(htmlentities($datiutente['ruolo'],ENT_QUOTES,'utf-8')));
+                    $admin->reset_password=1;
+                    $admin->password=Hash::make(Str::random(12));
+                    $admin->password_changed_at=Carbon::now();
+                    $admin->save();
+                    
+                    $confirm=new ConfirmAdmin();
+                    $linkreset=$confirm->getEmailResetLink($admin->id,$admin->email);
+                    $linkreset_clean= str_replace('//', 'https://', $confirm->getEmailResetLink($admin->id,$admin->email));
+                    //sending email with reset password link
+                    $datimail=array('linkreset' => $linkreset,'linkreset_clean'=>$linkreset_clean,'email'=>$admin->email,'email_real'=>$admin->email_real,'nome_sito'=>config('app.name'));
+                    $this->email_admin=$admin->email_real;
+                    Mail::send('emails.newadmin', $datimail, function($message){
+                        $message->subject('Nuovo account amministratore');
+                        $message->to($this->email_admin);
+                    });
+                    unset($this->email_admin);
+
+                    DB::commit();
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[OUT TRY] adding', $this->mod_log->getParamFrontoffice());
+                    $this->request->session()->flash('messageinfo', '<h2>Amministratore aggiunto con successo!</h2>');   
+                    return redirect(route('adminListWorkgroup'));
+                } catch (Throwable $e) {
+                    DB::rollBack();
+                    Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT TRY] adding', $this->mod_log->getParamFrontoffice($e->getMessage()));
+                    return back()->with('messagedanger','Errore durante l\'inserimento del nuovo amministratore, riprovare!');
+                }
+            }else{
+                Log::build(['driver' => 'single','path' => storage_path('logs/frobacknt.log')])->error('[OUT] adding', $this->mod_log->getParamFrontoffice('form errato'));
+                $this->request->session()->flash('messagedanger', '<h2>Dati non corretti</h2>'."<br />".$this->errorsFormSubmission);
+                return back();
+            }
+        }
+
+        return view('admin.workgroup.addmod')->with('form','adminSaveNewUser')
                 ->with([
                     'title_page'=>$title_page,
                     'admin'=>auth()->guard('admin')->user(),
                     'menuactive'=>$this->menuactive,
                 ]);
     }
+
+    /**
+    *
+    * Method for checking validation data of the insert/modify form
+    * @return BOOL
+    *
+    */
+    private function checkform(){
+        $request_post=$this->request->all();
+        //check for missing required data
+        $datimancanti=[];
+        if(!$request_post['name'])$datimancanti[]='Nome amministratore mancante';
+        if(!$request_post['email'])$datimancanti[]='Email di accesso mancante';
+        if(!$request_post['email_real'])$datimancanti[]='Email di notifica mancante';
+        if(!$request_post['ruolo'])$datimancanti[]='Ruolo mancante';
+        if($request_post['email']!=''){
+            $email=$this->mod_admin->checkExistAdminEmailAddress($request_post['email'].'@sdz.it');
+            if(count($email->toArray())>0)$datimancanti[]='Email di accesso già esistente';
+        }
+        if($request_post['email_real']!=''){
+            $email_real=$this->mod_admin->checkExistAdminRealEmailAddress($request_post['email_real']);
+            if(count($email_real->toArray())>0)$datimancanti[]='Email di notifica già esistente';
+        }
+
+        if(count($datimancanti)>0){
+            $this->setVisualErrors($datimancanti);
+            return false;
+        }
+        
+        return true;
+    }
+
+
 
     /**
     *
@@ -212,6 +295,40 @@ class AdminWorkgroupController extends Controller
                 'menuactive'=>$this->menuactive,
             ]);
     }
+
+    /**
+    *
+    * Check the uniqueness of the admin log in email address
+    * @return JSON
+    *
+    */
+    public function checkemailadminexists(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] checkemailadminexists', $this->mod_log->getParamFrontoffice());
+        $email=$this->mod_admin->checkExistAdminEmailAddress($this->request->email.'@sdz.it');
+        if(count($email->toArray())>0){
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT] checkemailadminexists', $this->mod_log->getParamFrontoffice('email di accesso già presente'));
+            return response()->json(['error'=>true,'message'=>'Indirizzo email di accesso già presente nel sistema, modificare l\'indirizzo']);
+        }
+        return response()->json(['error'=>false,'message'=>'']);
+    }
+
+    /**
+    *
+    * Check the uniqueness of the admin real email address
+    * @return JSON
+    *
+    */
+    public function checkemailrealadminexists(){
+        Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] checkemailrealadminexists', $this->mod_log->getParamFrontoffice());
+        $email=$this->mod_admin->checkExistAdminRealEmailAddress($this->request->email);
+        if(count($email->toArray())>0){
+            Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->critical('[OUT] checkemailrealadminexists', $this->mod_log->getParamFrontoffice('email di accesso già presente'));
+            return response()->json(['error'=>true,'message'=>'Indirizzo email di accesso già presente nel sistema, modificare l\'indirizzo']);
+        }
+        return response()->json(['error'=>false,'message'=>'']);
+    }
+    
+
   
     /**
     *

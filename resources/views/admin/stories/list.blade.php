@@ -66,7 +66,7 @@
                     <td>
                         <a href="{{route('adminModifyStory')}}/{{$storia->sid}}" class="font-dark" title="Modifica"><i class="fa fa-pencil fa-lg"></i></a>
                         <!--<a href="#" class="font-red conferma-elimina" idvalore="{{$storia->sid}}" sezione="storie"  title="Elimina"><i class="fa fa-trash fa-lg"></i></a>-->
-                        <a href="{{route('adminContextDataStory')}}/{{$storia->sid}}" class="font-dark" title="Dati di contesto"><i class="fa fa-clipboard fa-lg"></i></a>
+                        <a href="{{route('adminContextDataStory')}}/{{$storia->sid}}" class="font-dark" title="Dati biografici"><i class="fa fa-clipboard fa-lg"></i></a>
                     </td>
                 </tr>
                 <?php } ?>

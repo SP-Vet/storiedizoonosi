@@ -32,7 +32,6 @@
     <script type="text/javascript" src="/js/registrazione-utente.js"></script>
 @endsection
 @section('additionalcaptcha')
-
 <script>
     var mtcaptchaConfig = {
         "sitekey": "<?=config('app.MTCAPTCHApublic');?>",
@@ -66,7 +65,7 @@
                             </a>
                         </div>
                         <h3 class="text-center p-3 titoloform">Richiedi un nuovo account compilando il form sottostante</h3>                        
-                        <form action="/registrazione" id="registrazione" method="POST" class="needs-validation" novalidate>
+                        <form action="{{route('postRegistration')}}" id="registrazione" method="POST" class="needs-validation" novalidate>
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-sm-6">

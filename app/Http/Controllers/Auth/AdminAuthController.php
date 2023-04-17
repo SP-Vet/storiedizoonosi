@@ -83,7 +83,7 @@ class AdminAuthController extends Controller
                 $from = Carbon::createFromFormat('Y-m-d H:s:i', $user->password_changed_at);
                 $diff_in_days = $to->diffInDays($from);
                
-                if($diff_in_days>0 && $diff_in_days>config('auth.password_expires_days')){
+                if(($diff_in_days>0 && $diff_in_days>config('auth.password_expires_days')) || $user->reset_password==1){
                     auth()->guard('admin')->logout();
                     \Session::flush();
                     $request->session()->put('password_expired_id',$user->id);
@@ -105,7 +105,11 @@ class AdminAuthController extends Controller
 
     }
 
-
+    /**
+     * Send email to an admin for recovery a password.
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function passwordrecovery(Request $request){
         Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->info('[IN] passwordrecovery', $this->mod_log->getParamFrontoffice('recupero password'));
         $request_post=json_decode(json_encode($request->all()));

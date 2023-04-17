@@ -14,10 +14,10 @@
       <ul class="navbar-nav  mt-2 mt-lg-0">
           <!-- inserire classe active per voce in grasetto --> 
           <li class="nav-item"><a class="nav-link evidenzia" href="/" title="Home">Home</a></li>
-          <li class="nav-item btn-newstory me-2"><a class="btn nav-link" style="color:  #00007f !important;font-weight: 600 !important;" href="/crowdsourcing/submission" title="Segnalaci una storia">Inserimento di una nuova storia di zoonosi</a></li>
-          <li class="nav-item container-logreg me-2"><a class="nav-link evidenzia d-inline btn btn-login" href="/ricerca" title="Ricerca">Motore di Ricerca</a></li>
+          <li class="nav-item btn-newstory me-2"><a class="btn nav-link" style="color:  #00007f !important;font-weight: 600 !important;" href="{{route('getReportStory')}}" title="Segnalaci una storia">Inserimento di una nuova storia di zoonosi</a></li>
+          <li class="nav-item container-logreg me-2"><a class="nav-link evidenzia d-inline btn btn-login" href="{{route('searchStories')}}" title="Ricerca">Motore di Ricerca</a></li>
           <li class="nav-item container-logreg">
-              <a class="nav-link evidenzia d-inline btn btn-login" href="/login" title="Log in"><i class="fa fa-sign-in pe-2"></i>Log in</a><a class="nav-link evidenzia d-inline btn-registrati" href="/registrazione" title="Registrati"><i class="fa fa-user-plus pe-2"></i>Registrati</a>
+              <a class="nav-link evidenzia d-inline btn btn-login" href="/login" title="Log in"><i class="fa fa-sign-in pe-2"></i>Log in</a><a class="nav-link evidenzia d-inline btn-registrati" href="{{route('getRegistration')}}" title="Registrati"><i class="fa fa-user-plus pe-2"></i>Registrati</a>
           </li>
         </ul>
     </div>

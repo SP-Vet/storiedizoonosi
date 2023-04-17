@@ -117,12 +117,12 @@ class PrivacyController extends Controller
             }else{
 
                 Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->error('[OUT] checkform', $this->mod_log->getParamFrontoffice('parametri di accettazione non validi')."\r\n".implode(', ',$this->errors_checkform));
-                return redirect('/login');
+                return redirect(route('loginUser'));
             }
         }
 
         //checkdatauser
-        if(!isset($uid))return redirect ('/login');
+        if(!isset($uid))return redirect (route('loginUser'));
         //get privacy accepted by the user
         $current_privacy=$this->mod_privacy->getCurrentPrivacy();
         $privacy_accepted_user=$this->mod_privacy->getLastAcceptedPrivacyFromUser($uid);
@@ -137,7 +137,7 @@ class PrivacyController extends Controller
                 ->with('privacy_accepted_user',$privacy_accepted_user)->with('uid',$uid)
                 ->with('title_page',$title_page)->with('settings',$settings);  
         }else{
-            return redirect('/login');
+            return redirect(route('loginUser'));
         }
     }
 

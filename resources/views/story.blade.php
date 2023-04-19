@@ -26,8 +26,8 @@
         <?php foreach ($fasi AS $kf=>$fase){ ?>
              $.testoBlo[<?=$fase->sfid;?>]="<?=str_replace('&lt;','<',str_replace('&gt;','>',str_replace("\r\n",'',$fase->testofase)));?>";
         <?php }unset($kf);unset($fase); ?>
-    <?php } ?>
-    
+    <?php }
+?>
     </script>
     <script>
     $('.video-play-1').click(function(){
@@ -239,14 +239,16 @@
     </div>
 </div>
 <?php }*/ ?>
-<?php if(is_array($fasi) && count($fasi)>0){ ?>
+<?php if(is_array($fasi) && count($fasi)>0){ $testoB2=[];?>
 <div class="accordion mt-3" id="accordionExample">
     <?php foreach ($fasi AS $kf=>$fase){
+        $testoB2[$fase->sfid]=$fase->testofase;
         if(isset($snippetfase[$fase->sfid])){
             foreach ($snippetfase[$fase->sfid] AS $snippet){
                 $newword='<span class="snippet-link" snippet="'.$snippet->snid.'" data-bs-toggle="modal" data-bs-target="#modalProbResp">'.$snippet->chiave.'</span>';
                 //$fase->testofase= str_replace($snippet->chiave, $newword, $fase->testofase);
                 $fase->testofase= implode($newword, explode($snippet->chiave, $fase->testofase, 2));
+                $testoB2[$fase->sfid]=$fase->testofase;
             }
         }
         ?>
@@ -359,7 +361,14 @@
           </div>
         </div>
     </div>
-    <?php } ?>
+<?php } ?>
+<script type="text/javascript">
+    $.testoBlo2=[];
+    <?php 
+    foreach($testoB2 AS $kt=>$fasesnip){?>
+        $.testoBlo2[<?=$kt;?>]="<?=str_replace('"','&#34;',str_replace('&lt;','<',str_replace('&gt;','>',str_replace("\r\n",'',$fasesnip))));?>";
+    <?php }?>
+    </script>
 </div>
 
 <?php if($storia->linkzoodiac!=''){?>

@@ -330,8 +330,10 @@ function selezionaCommento(commento){
     $(commento).addClass('commento-select');
 }
 function replaceAllSpecialChars(str){
+    if(str=='' || str===undefined)return str;
     let stringreplaced='';
     stringreplaced=str.replace("'",'&#39;');
+    stringreplaced=stringreplaced.replace('"','&#34;');
     stringreplaced==stringreplaced.replace("à",'&agrave;');
     stringreplaced==stringreplaced.replace("À",'&Agrave;');
     stringreplaced==stringreplaced.replace("è",'&egrave;');
@@ -345,28 +347,48 @@ function replaceAllSpecialChars(str){
     return stringreplaced;
 }
 
+function retroreplaceAllSpecialChars(str){
+    let stringreplaced='';
+    stringreplaced=str.replaceAll('&amp;',"&");
+    stringreplaced=stringreplaced.replaceAll('&#39;',"'");
+    stringreplaced=stringreplaced.replaceAll('&#34;','"');
+    stringreplaced=stringreplaced.replaceAll('&agrave;',"à");
+    stringreplaced=stringreplaced.replaceAll('&Agrave;',"À");
+    stringreplaced=stringreplaced.replaceAll('&egrave;',"è");
+    stringreplaced=stringreplaced.replaceAll('&Egrave;',"É");
+    stringreplaced=stringreplaced.replaceAll('&igrave;',"ì");
+    stringreplaced=stringreplaced.replaceAll('&Igrave;',"Ì");
+    stringreplaced=stringreplaced.replaceAll('&ograve;',"ò");
+    stringreplaced=stringreplaced.replaceAll('&Ograve;',"Ò");
+    stringreplaced=stringreplaced.replaceAll('&ugrave;',"ù");
+    stringreplaced=stringreplaced.replaceAll('&Ugrave;',"Ù");
+    return stringreplaced;
+}
+
 function evidenziaEventoJQ(elemento,bl) {
     let textsearch=$(elemento).find('.riferimento-testo').val();
     let t=textsearch.replace(/££/g,'"'); 
     let replacedt=replaceAllSpecialChars(t);
-    //console.log('t=>'+t);
-    //console.log('rt=>'+replacedt);
     let numcom=$(elemento).attr('idcom');
     cancellaSelezioneBlocco(bl);
     if($.trim(t)!==''){
         let testob=$(bl).find('.testo-blocco');
         let idblo=$(bl).find('.testo-blocco').attr("idblocco");
-        //console.log(textsearch.replace("\"","\""));
         if ($(bl).find('.testo-blocco:contains(\"'+stripHtml(t)+'\")').length > 0) {
             //evidenziazione testo selezionato
-            let oldtesto=stripHtml(replaceAllSpecialChars($.testoBlo[idblo]));
+            //let oldtesto=stripHtml(replaceAllSpecialChars($.testoBlo2[idblo]));
+            let oldtesto=replaceAllSpecialChars($.testoBlo2[idblo]);
             //let oldtesto=$.testoBlo[idblo];
-            //console.log(stripHtml(replaceAllSpecialChars($.testoBlo[idblo])));
             if(typeof oldtesto!=='undefined' && oldtesto!==''){
-                let txtmod=oldtesto.replace(replacedt, "<span class=\"bg-marker\">"+replacedt+"</span>"); 
-                //console.log(txtmod);
-                //let txtmod=oldtesto.replace(textsearch, "<span class=\"bg-marker\">"+textsearch+"</span>"); 
-                $(testob).html(txtmod);
+                let txtmod=oldtesto.replaceAll('&amp;','&',oldtesto);
+                //let txtmod=oldtesto.replace(replacedt, "<span class=\"bg-marker\">"+replacedt+"</span>"); 
+                txtmod=txtmod.replace(replacedt, "<span class=\"bg-marker\">"+replacedt+"</span>"); 
+                console.log(retroreplaceAllSpecialChars(txtmod));
+                $(bl).find('.testo-blocco').html(retroreplaceAllSpecialChars(txtmod));
+                $(bl).find('.snippet-link').click(function(){
+                    let snid=$(this).attr("snippet");
+                    getsnippet(snid);
+                })
             }
         }    
     }
@@ -381,9 +403,9 @@ function stripHtml(html)
 function cancellaSelezioneBlocco(bl){
     let idblo=$(bl).find('.testo-blocco').attr("idblocco");
     //console.log($.testoBlo[idblo]);
-    if(typeof $.testoBlo[idblo]!== 'undefined' && $.testoBlo[idblo]!==''){
+    if(typeof $.testoBlo2[idblo]!== 'undefined' && $.testoBlo2[idblo]!==''){
         //let oldtesto=$.testoBlo[idblo];
-        let oldtesto=stripHtml(replaceAllSpecialChars($.testoBlo[idblo]));
+        let oldtesto=stripHtml(replaceAllSpecialChars($.testoBlo2[idblo]));
         $(bl).find('.testo-blocco').html(oldtesto);
     }
 }

@@ -333,17 +333,17 @@ function replaceAllSpecialChars(str){
     if(str=='' || str===undefined)return str;
     let stringreplaced='';
     stringreplaced=str.replace("'",'&#39;');
-    stringreplaced=stringreplaced.replace('"','&#34;');
-    stringreplaced==stringreplaced.replace("à",'&agrave;');
-    stringreplaced==stringreplaced.replace("À",'&Agrave;');
-    stringreplaced==stringreplaced.replace("è",'&egrave;');
-    stringreplaced==stringreplaced.replace("É",'&Egrave;');
-    stringreplaced==stringreplaced.replace("ì",'&igrave;');
-    stringreplaced==stringreplaced.replace("Ì",'&Igrave;');
-    stringreplaced==stringreplaced.replace("ò",'&ograve;');
-    stringreplaced==stringreplaced.replace("Ò",'&Ograve;');
-    stringreplaced==stringreplaced.replace("ù",'&ugrave;');
-    stringreplaced==stringreplaced.replace("Ù",'&Ugrave;');
+    stringreplaced=stringreplaced.replaceAll('"','&#34;');
+    stringreplaced=stringreplaced.replaceAll("à",'&agrave;');
+    stringreplaced=stringreplaced.replaceAll("À",'&Agrave;');
+    stringreplaced=stringreplaced.replaceAll("è",'&egrave;');
+    stringreplaced=stringreplaced.replaceAll("É",'&Egrave;');
+    stringreplaced=stringreplaced.replaceAll("ì",'&igrave;');
+    stringreplaced=stringreplaced.replaceAll("Ì",'&Igrave;');
+    stringreplaced=stringreplaced.replaceAll("ò",'&ograve;');
+    stringreplaced=stringreplaced.replaceAll("Ò",'&Ograve;');
+    stringreplaced=stringreplaced.replaceAll("ù",'&ugrave;');
+    stringreplaced=stringreplaced.replaceAll("Ù",'&Ugrave;');
     return stringreplaced;
 }
 
@@ -372,6 +372,8 @@ function evidenziaEventoJQ(elemento,bl) {
     let numcom=$(elemento).attr('idcom');
     cancellaSelezioneBlocco(bl);
     if($.trim(t)!==''){
+        //console.log(t);
+        //console.log($.testoBlo2[idblo]);
         let testob=$(bl).find('.testo-blocco');
         let idblo=$(bl).find('.testo-blocco').attr("idblocco");
         if ($(bl).find('.testo-blocco:contains(\"'+stripHtml(t)+'\")').length > 0) {
@@ -382,9 +384,11 @@ function evidenziaEventoJQ(elemento,bl) {
             if(typeof oldtesto!=='undefined' && oldtesto!==''){
                 let txtmod=oldtesto.replaceAll('&amp;','&',oldtesto);
                 //let txtmod=oldtesto.replace(replacedt, "<span class=\"bg-marker\">"+replacedt+"</span>"); 
+                console.log(replacedt);
                 txtmod=txtmod.replace(replacedt, "<span class=\"bg-marker\">"+replacedt+"</span>"); 
-                console.log(retroreplaceAllSpecialChars(txtmod));
+                console.log(txtmod);
                 $(bl).find('.testo-blocco').html(retroreplaceAllSpecialChars(txtmod));
+
                 $(bl).find('.snippet-link').click(function(){
                     let snid=$(this).attr("snippet");
                     getsnippet(snid);

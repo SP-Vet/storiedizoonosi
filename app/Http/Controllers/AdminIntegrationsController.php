@@ -222,7 +222,13 @@ class AdminIntegrationsController extends Controller
             Log::build(['driver' => 'single','path' => storage_path('logs/back.log')])->error('[OUT] getphaseintegrations', $this->mod_log->getParamFrontoffice('parametri non validi'));
             return response()->json(['error'=>true,'message'=>'Si è verificato un problema con la le integrazioni scelte.']);
         }
+       
         $integrazioni=$this->mod_integrations->getAll(['sa.sfid'=>$this->request->sfid]);
+        if(isset($integrazioni) && count($integrazioni)>0){
+            foreach($integrazioni AS $integrazione){
+                $integrazione->testoselezionato=html_entity_decode($integrazione->testoselezionato,ENT_QUOTES,'utf-8');
+            }
+        }
         return response()->json(['error'=>false,'message'=>'','integrazioni'=>$integrazioni]);
     }
 

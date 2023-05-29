@@ -35,7 +35,7 @@
     </head>
   <body>
         @yield('content')
-        @yield('footerlogin')  
+        @include('layout.footer')      
         @section('additionaljs')
         <!-- Bootstrap core JS-->
         <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>

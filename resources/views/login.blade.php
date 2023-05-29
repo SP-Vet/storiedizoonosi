@@ -83,23 +83,5 @@
     </div>
 </section>
 @endsection
-@section('footerlogin')
-<footer class="bg-header text-center text-lg-start">
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-
-    
-    <?php if(isset($settings) && isset($settings['logo_footer_bottom']) && $settings['logo_footer_bottom']->valueconfig!=''){?>
-                <div class="col-md-12 mx-auto mt-3 text-center">
-                    <div class="d-flex justify-content-center">
-                        <a class="text-white" target="_blank" href="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo '#'; ?>" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" style="white-space: nowrap;">
-                            <img class="d-inline-block" src="/images/<?=html_entity_decode($settings['logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?>" width="250" title="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" alt="<?php if(isset($settings) && isset($settings['link_logo_footer_bottom'])){?><?=html_entity_decode($settings['link_logo_footer_bottom']->valueconfig,ENT_QUOTES,'utf-8');?><?php }else echo ''; ?>" />
-                        </a>
-                    </div>         
-                </div>
-            <?php } ?>
-    </div>
-</footer>
-          
-@endsection
 
 

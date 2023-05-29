@@ -88,6 +88,8 @@ class HomeController extends Controller
     */
     public function project(){
         Log::build(['driver' => 'single','path' => storage_path('logs/front.log')])->info('[IN] project', $this->mod_log->getParamFrontoffice());
-        return view('project');
+        $settings=[];
+        $settings=array_column($this->mod_settings->getAll([['c.groupsection','0']])->toArray(),NULL,'nameconfig');
+        return view('project')->with('settings',$settings);
     }
 }

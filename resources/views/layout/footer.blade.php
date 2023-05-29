@@ -27,6 +27,9 @@
             <!-- column 3 -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3 text-center">
                 <p><a class="text-white" href="{{route('faq')}}">FAQ</a></p>
+                <?php if(isset($settings) && isset($settings['user_manual'])){?>    
+                    <p><a class="text-white" href="<?=html_entity_decode($settings['user_manual']->valueconfig,ENT_QUOTES,'utf-8');?>">Manuale Utente</a></p>
+                <?php } ?>
                 <p><a class="text-white" href="{{route('privacyPolicy')}}">Privacy policy</a></p>
                 <p><a class="text-white" href="{{route('contacs')}}">Contatti</a></p>
                 <p><a class="text-white" href="{{route('serviceEvaluation')}}">Valutazione del servizio</a></p>
